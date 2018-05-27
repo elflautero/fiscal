@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane fx:id="tabAto" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="1140.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabAtoController">
+   <children>
+      <ScrollPane prefHeight="680.0" prefWidth="1140.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="800.0" prefWidth="1140.0">
+               <children>
+                  <Pane fx:id="paneTipoAto" prefHeight="680.0" prefWidth="1140.0">
+                     <children>
+                        <TableView fx:id="tvAto" layoutX="125.0" layoutY="333.0" prefHeight="113.0" prefWidth="890.0">
+                           <columns>
+                              <TableColumn fx:id="tcTipo" prefWidth="363.0" text="Tipo" />
+                              <TableColumn fx:id="tcNumero" minWidth="0.0" prefWidth="250.0" text="Número" />
+                              <TableColumn fx:id="tcSEI" prefWidth="276.0" text="SEI" />
+                           </columns>
+                        </TableView>
+                        <Pane layoutX="138.0" layoutY="286.0" prefHeight="47.0" prefWidth="839.0">
+                           <children>
+                              <Button fx:id="btnNovo" layoutX="10.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnNovoHab" prefHeight="22.0" prefWidth="76.0" text="Novo" />
+                              <Button fx:id="btnSalvar" layoutX="97.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnSalvarHab" prefHeight="22.0" prefWidth="76.0" text="Salvar" />
+                              <Button fx:id="btnEditar" layoutX="184.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnEditarHab" prefHeight="22.0" prefWidth="76.0" text="Editar" />
+                              <Button fx:id="btnExcluir" layoutX="271.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnExcluirHab" prefHeight="22.0" prefWidth="76.0" text="Excluir" />
+                              <Button fx:id="btnCancelar" layoutX="358.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnCancelarHab" prefHeight="22.0" prefWidth="76.0" text="Cancelar" />
+                              <Button fx:id="btnPesquisar" layoutX="751.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnPesquisarHab" prefHeight="22.0" prefWidth="76.0" text="Pesquisar" />
+                              <TextField fx:id="tfPesquisar" layoutX="445.0" layoutY="11.0" prefHeight="23.0" prefWidth="295.0" />
+                           </children>
+                        </Pane>
+                        <Pane layoutX="116.0" layoutY="14.0" prefHeight="31.0" prefWidth="859.0">
+                           <children>
+                              <Label fx:id="lblVisAto" layoutX="72.0" layoutY="2.0" prefHeight="25.0" prefWidth="712.0">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="12.0" layoutY="6.0" text="Vistoria: " />
+                              <Button layoutX="796.0" layoutY="2.0" mnemonicParsing="false" text="Buscar" />
+                           </children>
+                        </Pane>
+                        <Pane layoutX="98.0" layoutY="48.0" prefHeight="64.0" prefWidth="921.0">
+                           <children>
+                              <Label layoutX="7.0" layoutY="7.0" text="Tipo de Ato:" />
+                              <ChoiceBox fx:id="cbAtoTipo" layoutX="82.0" layoutY="3.0" prefHeight="25.0" prefWidth="223.0" />
+                              <Label layoutX="317.0" layoutY="7.0" text="Número do ato: " />
+                              <TextField fx:id="tfAto" layoutX="416.0" layoutY="3.0" prefHeight="25.0" prefWidth="87.0" promptText="12/2018" />
+                              <TextField fx:id="tfAtoSEI" layoutX="565.0" layoutY="3.0" prefHeight="25.0" prefWidth="87.0" promptText="0077941" />
+                              <Label layoutX="515.0" layoutY="7.0" text="n° SEI: " />
+                              <Label layoutX="665.0" layoutY="7.0" text="Data da Fiscalização: " />
+                              <DatePicker fx:id="dpDataFiscalizacao" layoutX="788.0" layoutY="3.0" prefHeight="25.0" prefWidth="110.0" />
+                              <DatePicker fx:id="dpDataCriacaoAto" layoutX="432.0" layoutY="37.0" prefHeight="25.0" prefWidth="110.0" />
+                              <Label layoutX="291.0" layoutY="41.0" text="Data de Criação do Ato: " />
+                           </children>
+                        </Pane>
+                        <Label layoutX="170.0" layoutY="124.0" text="CARACTERIZAÇÃO: " />
+                        <TextArea fx:id="taCaracterizacao" layoutX="170.0" layoutY="141.0" prefHeight="139.0" prefWidth="800.0" />
+                        <Button layoutX="975.0" layoutY="198.0" mnemonicParsing="false" text="?" />
+                     </children>
+                  </Pane>
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
+   </children>
+</Pane>

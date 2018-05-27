@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="758.0" prefWidth="1290.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainController">
+   <children>
+   
+      <TabPane layoutX="8.0" layoutY="41.0" prefHeight="750.0" prefWidth="1140.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="142.0" AnchorPane.topAnchor="41.0">
+        
+        <tabs>
+        
+          <Tab text="  Navegador  ">
+               <content>
+                  <fx:include fx:id="tabNavegador" source="TabNavegador.fxml" />
+               </content>
+          </Tab>
+        	
+          <Tab text="  Denúncia  ">
+               <content>
+                  <fx:include fx:id="tabDenuncia" source="TabDenuncia.fxml" />
+               </content>
+          </Tab>
+          
+          <Tab text="  Endereço  ">
+           	 <content>
+                 <fx:include fx:id="tabEndereco" source="TabEndereco.fxml" />
+             </content>
+          </Tab>
+          
+          <Tab text="Interferência">
+               <content>
+                  <fx:include fx:id="tabInterferencia" source="TabInterferencia.fxml" />
+               </content>
+          </Tab>
+          <Tab text="    Usuário    ">
+               <content>
+                  <fx:include fx:id="tabUsuario" source="TabUsuario.fxml" />
+               </content>
+          </Tab>
+                
+          <Tab text="   Vistoria   ">
+               <content>
+                  <fx:include fx:id="tabVistoria" source="TabVistoria.fxml" />
+               </content>
+          </Tab>
+           
+            <Tab text="     Ato     ">
+               <content>
+                  <fx:include fx:id="tabAto" source="TabAto.fxml" />
+               </content>
+           </Tab>
+           
+        </tabs>
+   
+      </TabPane>
+      
+      <MenuBar layoutY="1.0" prefHeight="25.0" prefWidth="1290.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <Button layoutX="1160.0" layoutY="81.0" mnemonicParsing="false" prefHeight="87.0" prefWidth="121.0" text="Button" />
+      <Button layoutX="1160.0" layoutY="168.0" mnemonicParsing="false" prefHeight="87.0" prefWidth="121.0" text="Button" />
+      <Button layoutX="1160.0" layoutY="255.0" mnemonicParsing="false" prefHeight="87.0" prefWidth="121.0" text="Button" />
+      <Button layoutX="1160.0" layoutY="342.0" mnemonicParsing="false" prefHeight="87.0" prefWidth="121.0" text="Button" />
+      <Button layoutX="1160.0" layoutY="429.0" mnemonicParsing="false" prefHeight="87.0" prefWidth="121.0" text="Button" />
+      <Button layoutX="1160.0" layoutY="516.0" mnemonicParsing="false" prefHeight="87.0" prefWidth="121.0" text="Button" />
+      <Button layoutX="1160.0" layoutY="603.0" mnemonicParsing="false" prefHeight="94.0" prefWidth="121.0" text="Button" />
+   </children>
+</AnchorPane>

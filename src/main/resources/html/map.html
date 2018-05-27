@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+</head>
+
+<style>
+
+/* Always set the map height explicitly to define the size of the div
+ * element that contains the map. */
+
+ #map  {
+   height: 86% 
+   
+   }
+
+/* Optional: Makes the sample page fill the window. */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+.controls {
+  margin-top: 10px;
+  border: 1px solid transparent;
+  border-radius: 2px 0 0 2px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  height: 32px;
+  outline: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+.controlsInput{
+  margin-top: 2px;
+  margin-bottom: 4px;
+  border: 5px solid transparent;
+  border-radius: 5px 0 0 5px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  height: 35px;
+  outline: none;
+  box-shadow: 5px 5px 6px rgba(0, 0, 0, 0.3);
+}
+.controlsButtom{
+  margin-top: 2px;
+  margin-bottom: 2px;
+  border: 10px solid transparent;
+  border-radius: 2px 2px 2px 5px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  height: 35px;
+  outline: none;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+}
+.controlsLabel{
+  margin-top: 2px;
+  margin-bottom: 2px;
+  border: 5px solid transparent;
+  border-radius: 2px 2px 2px 5px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  height: 35px;
+  outline: none;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+}
+.coord {
+  margin-top: 10px;
+  border: 1px solid transparent;
+  border-radius: 2px 0 0 2px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  height: 32px;
+  outline: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+#pac-input {
+  background-color: #fff;
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: 300;
+  margin-left: 12px;
+  padding: 0 11px 0 13px;
+  text-overflow: ellipsis;
+  width: 300px;
+}
+
+#pac-input:focus {
+  border-color: #4d90fe;
+}
+
+.pac-container {
+  font-family: Roboto;
+}
+
+#type-selector {
+  color: #fff;
+  background-color: #4d90fe;
+  padding: 5px 11px 0px 11px;
+}
+
+#type-selector label {
+  font-family: Roboto;
+  font-size: 13px;
+  font-weight: 300;
+}
+#target {
+  width: 345px;
+}
+
+//-- busca reversa, coordenada para endere�o --//
+#floating-panel {
+  position: absolute;
+  top: 1px;
+  left: 25%;
+  
+  z-index: 5;
+  background-color: #fff;
+  padding: 5px;
+  border: 1px solid #999;
+  text-align: center;
+  font-family: 'Roboto','sans-serif';
+  line-height: 10px;
+  padding-left: 10px;
+}
+
+#latlng {
+  width: 300px;
+  
+}
+
+#coord_panel {
+	margin-bottom: 0.4%;
+	margin-top: 0.4%;
+	margin-left: 0.4%;
+	margin-right: 0.4%;
+	background-color: #fff;
+	border: 1.5px solid #999;
+}
+
+.btnSearchCoord span.icon {
+	background: url(../images/searchCoord.png) no-repeat;
+	float: left;
+    float: left;
+    width: 24px;
+    height: 24px;
+}
+
+.btnConverterCoord span.icon {
+	background: url(../images/convertIcon.png) no-repeat;
+	float: left;
+    float: left;
+    width: 24px;
+    height: 24px;
+    
+    /*  /FiscalizacaoSRH/src/main/resources/images/convertIcon.png  */
+}
+
+
+
+#labelLat {
+	margin-left: 5px;
+	
+}
+
+#labelBuscar {
+	margin-left: 300px;
+
+}
+
+
+.InputConvLatLng {
+ 
+ height:18px;
+ width:30px;
+ 
+ 
+}
+ 
+select {
+        
+        height:22px;
+        background:#f4f4f4;
+} 
+
+
+ 
+</style>
+
+
+<script charset="UTF-8">
+
+//-- array de shapes --//
+var layers = [];
+
+//-- fun��o para as shapes --//
+function toggleLayers(i) {
+
+    		
+
+      		if(layers[i].getMap()==null) {
+         		layers[i].setMap(map);
+      		}
+      		else {
+         			layers[i].setMap(null);
+      		}
+      	 	document.getElementById('status').innerHTML += "toggleLayers("+i+") [setMap("+layers[i].getMap()+"] returns status: "+layers[i].getStatus()+"<br>";
+    	
+    		
+    }
+
+//--INICIALIZA��O JAVASCRIPT --//
+function initAutocomplete() {
+
+	//-- inicializar as vari�veis de shapes --//
+	layers[0] = new google.maps.KmlLayer('https://sites.google.com/site/shapeskmlkmz/Unidades_Hidrograficas_70.kmz',{ preserveViewport: true });
+
+	layers[1] = new google.maps.KmlLayer('https://sites.google.com/site/shapeskmlkmz/riosDF110000.kmz',{ preserveViewport: true });
+
+	layers[2] = new google.maps.KmlLayer('https://sites.google.com/site/shapeskmlkmz/fraturadoDF.kmz',{ preserveViewport: true });
+
+	layers[3] = new google.maps.KmlLayer('https://sites.google.com/site/shapeskmlkmz/PorosoDF.kmz',{ preserveViewport: true });
+
+	layers[4] = new google.maps.KmlLayer('https://sites.google.com/site/shapeskmlkmz/riosUniao.kmz',{ preserveViewport: true });
+
+	layers[5] = new google.maps.KmlLayer('https://sites.google.com/site/shapeskmlkmz/zonasUTM.kmz',{ preserveViewport: true });
+
+	layers[6] = new google.maps.KmlLayer('https://sites.google.com/site/shapeskmlkmz/baciasHidrograficas.kmz',{ preserveViewport: true });
+	 
+	
+	//-- ADASA -15.775073004902042, -47.940351677729836    --//
+	 var defLatLng = new google.maps.LatLng(-15.790631073109617, -47.74939032660592); // coordenada para centralizar o mapa do df no google maps
+
+	//-- op��es do mapa --//
+	 var mapOptions = {
+	        center: defLatLng,
+	        zoom: 10,
+	        mapTypeId: google.maps.MapTypeId.HYBRID,
+	        scaleControl: true,
+	    	streetViewControl: false
+	    };
+	 		map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+	 		google.maps.event.addListener(map, 'click', get_click_position);
+
+	    marker = new google.maps.Marker({
+	        position: defLatLng,
+	        map: map,
+	        icon: "img/Pin.png"
+	    }
+      
+      );
+      
+        var geocoder = new google.maps.Geocoder;
+  		var infowindow = new google.maps.InfoWindow;
+
+ 		document.getElementById('submit').addEventListener('click', function() {
+   		geocodeLatLng(geocoder, map, infowindow);
+ 	});
+      
+    function geocodeLatLng(geocoder, map, infowindow) {
+	  	var input = document.getElementById('latlng').value;
+	  	var latlngStr = input.split(',', 2);
+	  	var latlng = {lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1])};
+		  geocoder.geocode({'location': latlng}, function(results, status) {
+		    if (status === 'OK') {
+		      if (results[1]) {
+		        map.setZoom(15);
+		        var marker = new google.maps.Marker({
+		          position: latlng,
+		          map: map
+		        });
+            map.setCenter(marker.getPosition());
+	        infowindow.setContent(results[1].formatted_address);
+	        infowindow.open(map, marker);
+	        //-- variável de endereço --//
+	        
+	        var endMap = results[1].formatted_address;
+	        //-- passar as coordenadas com a variável de endereço --//
+	        app.handle(latlng.lat, latlng.lng, endMap);
+	        
+	      } else {
+	        window.alert('No results found');
+	      }
+	    } else {
+	      window.alert('Geocoder failed due to: ' + status);
+	    }
+  		});
+	}
+    
+
+	  // Create the search box and link it to the UI element.
+	  var input = document.getElementById('pac-input');
+	  var searchBox = new google.maps.places.SearchBox(input);
+	  map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+	
+	  // Bias the SearchBox results towards current map's viewport.
+	  map.addListener('bounds_changed', function() {
+	    searchBox.setBounds(map.getBounds());
+	  });
+	
+	  var markers = [];
+	  // Listen for the event fired when the user selects a prediction and retrieve
+	  // more details for that place.
+	  searchBox.addListener('places_changed', function() {
+	    var places = searchBox.getPlaces();
+
+    if (places.length == 0) {
+      return;
+    }
+
+    // Clear out the old markers.
+    markers.forEach(function(marker) {
+      marker.setMap(null);
+    });
+    markers = [];
+
+    // For each place, get the icon, name and location.
+    var bounds = new google.maps.LatLngBounds();
+    places.forEach(function(place) {
+      if (!place.geometry) {
+        console.log("Returned place contains no geometry");
+        return;
+      }
+      var icon = {
+        //url: place.icon,
+        size: new google.maps.Size(71, 71),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(17, 34),
+        scaledSize: new google.maps.Size(25, 25)
+      };
+
+      // Create a marker for each place.
+      markers.push(new google.maps.Marker({
+        map: map,
+        icon: icon,
+        title: place.name,
+        position: place.geometry.location
+      }));
+
+      if (place.geometry.viewport) {
+        // Only geocodes have viewport.
+        bounds.union(place.geometry.viewport);
+      } else {
+        bounds.extend(place.geometry.location);
+      }
+    });
+    map.fitBounds(bounds);
+  });
+  
+		function get_click_position(event){
+        	var location = event.latLng;
+        	var lat = location.lat();
+        	var lng = location.lng();
+        	setMarkerPosition(lat, lng);
+
+        	//-- preencher os campos do input com as coordenas--//
+        	document.getElementById('lat').value = lat;  // não vai usar mais
+ 	    	document.getElementById('lng').value = lng;  // não  vai usar mais
+ 	    	document.getElementById('latlng').value = lat + "," + lng;
+			var endMap = "";
+ 	    	app.handle(lat, lng, endMap);
+        	//app.handle(lat, lng);
+        }
+
+        function setMarkerPosition(lat, lng) {
+            var clickLatLng = new google.maps.LatLng(lat, lng);
+            marker.setPosition(clickLatLng);
+        }
+
+        function startJumping(){
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+        }
+
+        function stopJumping(){
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+        }
+
+        function setMapCenter(lat, lng) {
+            var latlng = new google.maps.LatLng(lat, lng);
+            map.setCenter(latlng);
+        }
+
+        function switchSatellite() {
+            var mapOptions = {
+                mapTypeId: google.maps.MapTypeId.SATELLITE
+            };
+            map.setOptions(mapOptions);
+            setLightMarkerIcon();
+        }
+
+        function switchRoadmap() {
+            var mapOptions = {
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            map.setOptions(mapOptions);
+            setDarkMarkerIcon();
+        }
+
+        function switchHybrid() {
+            var mapOptions = {
+                mapTypeId: google.maps.MapTypeId.HYBRID
+            };
+            map.setOptions(mapOptions);
+            setLightMarkerIcon();
+        }
+
+        function switchTerrain() {
+            var mapOptions = {
+                mapTypeId: google.maps.MapTypeId.TERRAIN
+            };
+            map.setOptions(mapOptions);
+            setDarkMarkerIcon();
+        }
+
+        function setDarkMarkerIcon() {
+            marker.setIcon("img/Pin.png");
+        }
+
+        function setLightMarkerIcon() {
+            marker.setIcon("img/Pin_s.png");
+        }
+
+		
+	
+
+}
+</script>
+
+<body>
+<div id="coord_panel">
+		
+		<label class="controlsLabel" for="latitude" id="labelLat">
+		Latitude: 
+		<input class="controlsInput" id="lat"  type="text" name="latitude"></label>
+
+		<label class="controlsLabel" for="longitude">
+		Longitude: 
+		<input class="controlsInput" id="lng"  type="text" name="longitude"></label>
+		
+		<label class="controlsLabel" for="adasa" id="labelBuscar">
+		Buscar: 
+		<input onClick="aoClicarSelecionar()" class="controlsInput" id="latlng" type="text" value="-15.775073004902042, -47.940351677729836" name="adasa"></label>
+		
+		<button id="submit" class="btnSearchCoord"><span class="icon"></span></button>
+</div>
+
+<input id="pac-input" class="controls" type="text" placeholder="Buscar endereço...">
+
+   
+	<input type="checkbox" id="layer_01" onclick="toggleLayers(0)"> UH
+	<input type="checkbox" id="layer_01" onclick="toggleLayers(6)"> Bacias
+	<input type="checkbox" id="layer_02" onclick="toggleLayers(1)">Rios do DF
+	<input type="checkbox" id="layer_03" onclick="toggleLayers(2)">Fraturado
+	<input type="checkbox" id="layer_03" onclick="toggleLayers(3)">Poroso
+	<input type="checkbox" id="layer_03" onclick="toggleLayers(4)">Rios (União)
+	<input type="checkbox" id="layer_03" onclick="toggleLayers(5)">UTM
+	
+	&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  
+	 
+	        
+	
+	<!-- conversor de coordenadas - input -->
+	Conversor DMS para DD:
+	<input type="number" id="grauLat" class="InputConvLatLng"  placeholder="15" size="3" maxlength="3"/>
+	<input type="number" id="minLat" class="InputConvLatLng"  placeholder="46" size="3" maxlength="3"/>
+	<input type="number" id="segLat" class="InputConvLatLng"  placeholder="30" size="3" maxlength="3"/>
+
+			<select  class="cadeais" id="norteSul">
+  			<option value="s">S</option>
+  			<option value="n">N</option>
+			</select>
+
+	<input type="number" id="grauLng" class="InputConvLatLng"  placeholder="47" size="3" maxlength="3"/>
+	<input type="number" id="minLng" class="InputConvLatLng"  placeholder="56" size="3" maxlength="3"/>
+	<input type="number" id="segLng" class="InputConvLatLng"  placeholder="25" size="3" maxlength="3"/>
+
+		<select class="cadeais" id="lesteOeste">
+  		<option value="w">W</option>
+  		<option value="e">E</option>
+		</select>
+		
+	<button onClick="converterCoord()" class="btnConverterCoord"><span class="icon"></span></button>
+ 	
+
+
+<div id="map"></div>
+
+
+<script>
+//-- pegar coordenada e enviar para o textfield javafx --//
+function get_Coord (){
+    
+	var lat = document.getElementById('lat').value;
+    var lng = document.getElementById('lng').value;
+
+    var endMap = "";
+    app.handle(lat, lng, endMap);
+    //app.handle(lat, lng);
+    
+    }
+    
+    //-- ao clicar, selecionar--//
+
+    	function aoClicarSelecionar () {
+			
+			document.getElementById("latlng").select();
+			
+    }
+
+    //-- converter coordenadas DMS para DD --//
+
+    function converterCoord () {
+      var norteSul = document.getElementById("norteSul").value;
+      var latD = parseFloat(document.getElementById("grauLat").value);
+      var latM = parseFloat(document.getElementById("minLat").value);
+      var latS = parseFloat(document.getElementById("segLat").value);
+  
+  
+      var lesteOeste = document.getElementById("lesteOeste").value;
+      var lngD = parseFloat(document.getElementById("grauLng").value);
+      var lngM = parseFloat(document.getElementById("minLng").value);
+      var lngS = parseFloat(document.getElementById("segLng").value);
+ 
+      var decLat = latD + ((latM/60) + (latS/3600));
+      var decLng = lngD + ((lngM/60) + (lngS/3600));
+  
+      if (norteSul === "s") {
+  	 decLat = decLat * -1;
+      } 
+      if (lesteOeste === "w") {
+  	decLng = decLng * -1;
+      }
+      var resultadoConversor = decLat + "," + decLng;
+
+      document.getElementById('latlng').value = resultadoConversor;
+      
+      console.log (resultadoConversor);
+      
+      }
+
+</script>
+
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDnDFMB5jZdijtWMqKg29OgvnCPEtxyMkI&libraries=places&callback=initAutocomplete" async defer></script>
+
+
+</body>
+
+</html>
+
