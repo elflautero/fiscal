@@ -36,7 +36,7 @@ public class Vistoria implements Serializable{
 		
 			//-- Lista de atos vinculados --//
 			@OneToMany (mappedBy = "atoVisCodigoFK", cascade = CascadeType.MERGE,
-					fetch = FetchType.EAGER, targetEntity = Ato.class)
+					fetch = FetchType.LAZY, targetEntity = Ato.class)
 			@Fetch(FetchMode.SUBSELECT) 
 			private List<Ato> visListAtos = new ArrayList<Ato>();
 	
@@ -64,7 +64,7 @@ public class Vistoria implements Serializable{
 	@Column (name="vis_apresentacao", columnDefinition="varchar(600)")
 	private String visApresentacao;
 	
-	@Column (name="vis_relato", columnDefinition="varchar(20000)")
+	@Column (name="vis_relato", columnDefinition="varchar(5000)")
 	private String visRelato;
 	
 	@Column (name="vis_recomendacoes", columnDefinition="varchar(600)")

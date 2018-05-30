@@ -128,7 +128,7 @@ public class TabInterfController implements Initializable {
 		ChoiceBox<String> cbTipoInt = new ChoiceBox<String>();
 			ObservableList<String> olTipoInt = FXCollections
 				.observableArrayList(
-						"Subterrãnea" , 
+						"Subterrânea" , 
 						"Superficial",
 						"Canal",
 						"Caminhão Pipa",
@@ -253,7 +253,7 @@ public class TabInterfController implements Initializable {
 				
 				String tipoInt = intTab.getInter_Tipo();
 				
-				if (tipoInt.equals("Subterrãnea")) {
+				if (tipoInt.equals("Subterrânea")) {
 					
 					tabSubCon.imprimirSubterranea(intTab.getInterSub());
 					
@@ -516,7 +516,7 @@ public class TabInterfController implements Initializable {
 			
 			String strEditar = intTab.getInter_Tipo();
 			
-			if (strEditar.equals("Subterrãnea")) {
+			if (strEditar.equals("Subterrânea")) {
 				
 				InterferenciaTabela intTabEditar = tvListaInt.getSelectionModel().getSelectedItem(); //serÃ¡ que precisa desse cÃ³digo?, verificar... Sim por causa do construtor da interferencia
 				
@@ -694,7 +694,7 @@ public class TabInterfController implements Initializable {
 		
 		modularBotoes ();
 		
-		cbTipoInt.setValue(null);  // DEU NULL POINT AO CANCELAR E TENTAR SALVAR NOVA  INTERFERENCIA
+		cbTipoInt.getSelectionModel().clearSelection();  // DEU NULL POINT AO CANCELAR E TENTAR SALVAR NOVA  INTERFERENCIA
 		cbBacia.setValue(null);
 		tfUH.setText("");
 		tfCorpoHid.setText("");
@@ -717,7 +717,7 @@ public class TabInterfController implements Initializable {
 		
 		modularBotoes ();
 		
-		cbTipoInt.setValue(null);
+		cbTipoInt.getSelectionModel().clearSelection();
 		cbBacia.setValue(null);
 		tfUH.setText("");
 		tfCorpoHid.setText("");
@@ -826,7 +826,13 @@ public class TabInterfController implements Initializable {
 				{
 					try {
 						
-						abrirTabs(newString); 
+						System.out.println("nova string selecionada no  initialize " + newString);
+						if (newString == null)
+							abrirTabs("");
+						else {
+							abrirTabs(newString); 
+						}
+						
 					} catch (IOException e) {
 						
 						e.printStackTrace();
@@ -918,7 +924,7 @@ public class TabInterfController implements Initializable {
 			
 		}
 		
-		if (newString == "Subterrãnea") {
+		if (newString == "Subterrânea") {
 			
 			paneTipoInterferencia.getChildren().clear();
 			
@@ -939,23 +945,17 @@ public class TabInterfController implements Initializable {
 		
 		}
 		
-		/*
-		if (newString == null) {
-			
-			paneTipoInterferencia.getChildren().clear();
-			
-			System.out.println("valor null");  // MELHORAR, ESTÃ� DANDO ERRO NULL POINT  EXCEPTIONS
-		}
-		*/
-		
+		// ainda está dando null ao clicar em cancelar  e ao fazer nova pesquisa MELHOROU COLOCANDO "", MAS NO
+		// CHOICE BOX AINDA ESTÁ APARECENDO A ESCOLHA ANTERIOR, TIPO 'SUBTERRÂNEA'
 		
 		if (newString.equals("Caminhão Pipa") 					|| 
 				newString.equals("Lançamento de Águas Pluviais")	|| 
 					newString.equals("Lançamento de Efluentes")			|| 
 						newString.equals("Barragem")						||
 							newString.equals("Outros")					||
-								newString.equals(null) 	)	// or null para nÃ£o dar null  point ...
+								newString.equals("") 	)	// or null para nao dar null  point ...
 		{
+			System.out.println("if caminhão, superficial etc e null" + newString);
 			paneTipoInterferencia.getChildren().clear();
 		}
 		

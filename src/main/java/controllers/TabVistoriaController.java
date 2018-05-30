@@ -1,6 +1,5 @@
 package controllers;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -11,11 +10,16 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.hibernate.Hibernate;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.resource.transaction.spi.TransactionStatus;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import dao.VistoriaDao;
 import entity.Endereco;
+import entity.HibernateUtil;
 import entity.Vistoria;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -23,7 +27,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -86,10 +89,6 @@ public class TabVistoriaController implements Initializable{
 	@FXML Button btnAjudaRelatorio;
 	@FXML Button btnRecomendacoes;
 	
-	
-	//Locale.setDefault(new Locale("pt", "BR"));
-	
-	//private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	
 	DateTimeFormatter formatter = new DateTimeFormatterBuilder()
 			.parseCaseInsensitive()
@@ -164,8 +163,6 @@ public class TabVistoriaController implements Initializable{
 	String strPesquisa = "";
 
 	HTMLEditor htmlObjeto;
-	
-	
 	HTMLEditor htmlApresentacao; // = new HTMLEditor();
 	HTMLEditor htmlRelato; //  = new HTMLEditor();
 	HTMLEditor htmlRecomendacao; //   = new HTMLEditor();
@@ -596,6 +593,8 @@ public class TabVistoriaController implements Initializable{
 	
 	public void btnPesqObjHab (ActionEvent event) {
 		
+		//e se a vistoria for salva pela primeira vez? Ainda  não há as informaçoes visGeral
+				
 		String objeto = "<p>Em atendimento ao " + visGeral.getVisEndCodigoFK().getListDenuncias().get(0).getDoc_Denuncia() + 
 				", foi realizada vistoria no dia " + visGeral.getVisDataFiscalizacao() + ", para verifica&ccedil;&atilde;o de " +
 				visGeral.getVisEndCodigoFK().getListDenuncias().get(0).getDesc_Denuncia() + ", no endereço: " + 
@@ -624,84 +623,82 @@ public class TabVistoriaController implements Initializable{
 	
 	public void btnRelatorioHab (ActionEvent event) {
 		
-		
-		/*
-		//File file = new File("../fiscalizacao/src/main/resources/html/relatoriovistoria.html");
-		
 		File file = null;
+		
 		try {
-			file = new File (getClass().getResource("/html/relatoriovistoria.html").toURI());
+			file = new File (TabVistoriaController.class.getResource("/html/relatorioVistoria.html").toURI());
+			
 		} catch (URISyntaxException e) {
-			System.out.println("erro na leitura do relatório html" );
+			System.out.println("erro na leitura do relatório.html" );
 			e.printStackTrace();
 			
 		}
-		
+			
 		Document docHtml = null;
 		
 		try {
 			docHtml = Jsoup.parse(file, "UTF-8");  // retirei o  .clone()
+			
 		} catch (IOException e1) {
 			System.out.println("Erro na leitura no parse Jsoup!!!");
 			e1.printStackTrace();
 		}
-		*/
+		  
+	      
+		// inicializar o usuario //
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction tx = session.beginTransaction();
+		Endereco endereco = (Endereco) session.get(Endereco.class, eGeralVis.getCod_Endereco());
 		
-		WebView webView = new WebView();
-	       
-		WebEngine eng = webView.getEngine();
+		// inicializar as listas //
+		Hibernate.initialize(endereco.getListUsuarios());
+		Hibernate.initialize(endereco.getListInterferencias());
 		
-		eng.load(getClass().getResource("/html/relatoriovistoria.html").toExternalForm());
-        
-		eng.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>()
+		if (tx.getStatus().equals(TransactionStatus.ACTIVE)) { 
+		    tx.commit();
+		}
 		
-	        {
-	            public void changed(final ObservableValue<? extends Worker.State> observableValue,
-	                                final Worker.State oldState,
-	                                final Worker.State newState)
-	            {
-	            	
-	                if (newState == Worker.State.SUCCEEDED)
-	                {
-	                	htmlVistoria = (String) eng.executeScript("document.documentElement.outerHTML");  
-	                }
-	                
-	            }
-	        });
+		System.out.println("usuario para imprimir relatorio " + endereco.getListUsuarios().get(0).getUsNome());
 		
-		//Document docHtml = Jsoup.parse(html, "UTF-8");  // retirei o  .clone()
-        
-		//File file = new File("../fiscalizacao/src/main/resources/html/enderecoMap.html");
+		session.close();
 		
-		Document docHtml = Jsoup.parse(htmlVistoria, "UTF-8"); 
-		
-		//-- vistoria --//
+		//-- preencher a vistoria --//
 		docHtml.select("nRela").prepend(visGeral.getVisIdentificacao());
 		docHtml.select("nRelSEI").prepend(visGeral.getVisSEI());
 		
-		if (eGeralVis.getListUsuarios() != null) { // não está funcionando... melhorar
+		if (endereco.getListUsuarios() != null) { // não está funcionando... melhorar
 			
-			//-- endereço --//
-			docHtml.select("nomeUs").prepend(eGeralVis.getListUsuarios().get(0).getUsNome());
-			docHtml.select("cpfUs").prepend(eGeralVis.getListUsuarios().get(0).getUsCPFCNPJ());
-			docHtml.select("endUs").prepend(eGeralVis.getListUsuarios().get(0).getUsDescricaoEnd()); 
+			//-- usuario atraves do endereco --//
+			docHtml.select("nomeUs").prepend(endereco.getListUsuarios().get(0).getUsNome());
+			docHtml.select("cpfUs").prepend(endereco.getListUsuarios().get(0).getUsCPFCNPJ());
+			docHtml.select("endUs").prepend(endereco.getListUsuarios().get(0).getUsDescricaoEnd()); 
 			
-			if (eGeralVis.getListUsuarios().get(0).getUsRA() != null) { //se o combox diferente de null, não acontece o mesmo no textfield
-				docHtml.select("raUs").prepend(eGeralVis.getListUsuarios().get(0).getUsRA());
+			if (endereco.getListUsuarios().get(0).getUsRA() != null) { //se o combox diferente de null, não acontece o mesmo no textfield
+				docHtml.select("raUs").prepend(endereco.getListUsuarios().get(0).getUsRA());
 			}
 			
-			docHtml.select("cepUs").prepend(eGeralVis.getListUsuarios().get(0).getUsCEP());
-			docHtml.select("cidUs").prepend(eGeralVis.getListUsuarios().get(0).getUsCidade());
-			docHtml.select("ufUs").prepend(eGeralVis.getListUsuarios().get(0).getUsEstado());
-			docHtml.select("telUs").prepend(eGeralVis.getListUsuarios().get(0).getUsTelefone());
-			docHtml.select("celUs").prepend(eGeralVis.getListUsuarios().get(0).getUsCelular());
-			docHtml.select("emailUs").prepend(eGeralVis.getListUsuarios().get(0).getUsEmail());
+			// endereco do usuario atraves do endereco //
+			docHtml.select("cepUs").prepend(endereco.getListUsuarios().get(0).getUsCEP());
+			docHtml.select("cidUs").prepend(endereco.getListUsuarios().get(0).getUsCidade());
+			docHtml.select("ufUs").prepend(endereco.getListUsuarios().get(0).getUsEstado());
+			docHtml.select("telUs").prepend(endereco.getListUsuarios().get(0).getUsTelefone());
+			docHtml.select("celUs").prepend(endereco.getListUsuarios().get(0).getUsCelular());
+			docHtml.select("emailUs").prepend(endereco.getListUsuarios().get(0).getUsEmail());
+			
+			    
+			// endereco do empreedimento //  
+			 
+			docHtml.select("EndEmpDes").prepend(endereco.getDesc_Endereco());
+			docHtml.select("EndEmpRA").prepend(endereco.getRA_Endereco());
+			docHtml.select("EndEmpCep").prepend(endereco.getCEP_Endereco());
+			docHtml.select("EndEmpCid").prepend(endereco.getCid_Endereco());
+			docHtml.select("EndEmpUF").prepend(endereco.getUF_Endereco());
 			
 		}
 		
 		//-- latitude e longitude do endereço --//
-		docHtml.select("latEnd").prepend(eGeralVis.getLat_Endereco().toString());
-		docHtml.select("lngEnd").prepend(eGeralVis.getLon_Endereco().toString());
+		docHtml.select("latEnd").prepend(endereco.getLat_Endereco().toString());
+		docHtml.select("lngEnd").prepend(endereco.getLon_Endereco().toString());
 		 
 		//-- objecto, apresentação, relato e recomendações --//
 		docHtml.select("objVis").prepend(visGeral.getVisObjeto());
@@ -712,11 +709,11 @@ public class TabVistoriaController implements Initializable{
 		// <br><p>Tipo: Superficial, Bacia: Paranoá, UH: 23, Corpo Hídrico: rio das pedras, Coordenadas: -15, -48</p><br>
 		//interEnd
 		
-		if (eGeralVis.getListInterferencias() != null) {
+		if (endereco.getListInterferencias() != null) {
 			
 			docHtml.select("interEnd").prepend(
-					"<p>Tipo: " + eGeralVis.getListInterferencias().get(0).getInter_Tipo()
-				+ 	", Bacia: " + eGeralVis.getListInterferencias().get(0).getInter_Bacia()
+					"<p>Tipo: " + endereco.getListInterferencias().get(0).getInter_Tipo()
+				+ 	", Bacia: " + endereco.getListInterferencias().get(0).getInter_Bacia()
 				+ 	"</p>"
 				);
 		}
@@ -913,21 +910,10 @@ public class TabVistoriaController implements Initializable{
 			
 		}
 				
-				
 		);
 		
 		
 		ObterArtigos ();
-		
-		/*
-		Platform.runLater(new Runnable() {
-		    @Override
-		    public void run() {
-		        htmlObjeto = new HTMLEditor();
-		    }
-		});
-		
-		*/
 		
 		// -- inicitalizar o mapa -- //
 				Platform.runLater(() ->{
@@ -1153,7 +1139,7 @@ public class TabVistoriaController implements Initializable{
 								
 							}
 							
-							//System.out.println(i + " veja as infrações array selecionadas " + infrArray[i]);
+							
 							checkInfraHab(null);
 						}}
 					
@@ -1252,8 +1238,6 @@ public class TabVistoriaController implements Initializable{
 										
 									}
 									
-								
-									//System.out.println(i + " veja os atenuantes array selecionadas" + atenArray[i]);
 									checkAtenHab(null);
 								}}
 							
@@ -1261,9 +1245,7 @@ public class TabVistoriaController implements Initializable{
 											if (agra != null) {
 												
 												agraArray = agra.split("");
-												
-												//System.out.println("valor string agravantes auto selecionadas " + agra);
-												
+													
 												for (int i = 0; i<agraArray.length; i++) {
 												
 													if (agraArray[i].equals("a") ) {
@@ -1318,7 +1300,6 @@ public class TabVistoriaController implements Initializable{
 														
 													}
 													
-													//System.out.println(i + " veja os agravantes array selecionadas" + agraArray[i]);
 													checkAgraHab(null);
 												}}
 							
@@ -1345,7 +1326,6 @@ public class TabVistoriaController implements Initializable{
 					btnEditar.setDisable(false);
 					btnExcluir.setDisable(false);
 					btnCancelar.setDisable(false);
-					
 					
 				}
 				}
@@ -1640,8 +1620,32 @@ public class TabVistoriaController implements Initializable{
 		 
 		 
 	 }
-	 
 	
-	 
-
 }
+
+
+/* para ler o html, mas não precisa mais...
+WebView webView = new WebView();
+   
+WebEngine eng = webView.getEngine();
+
+eng.load(getClass().getResource("/html/relatoriovistoria.html").toExternalForm());
+
+eng.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>()
+
+    {
+        public void changed(final ObservableValue<? extends Worker.State> observableValue,
+                            final Worker.State oldState,
+                            final Worker.State newState)
+        {
+        	
+            if (newState == Worker.State.SUCCEEDED)
+            {
+            	htmlVistoria = (String) eng.executeScript("document.documentElement.outerHTML");  
+            }
+            
+        }
+    });
+
+*/
+

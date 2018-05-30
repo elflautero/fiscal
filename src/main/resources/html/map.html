@@ -153,11 +153,8 @@ html, body {
     float: left;
     width: 24px;
     height: 24px;
-    
-    /*  /FiscalizacaoSRH/src/main/resources/images/convertIcon.png  */
+  
 }
-
-
 
 #labelLat {
 	margin-left: 5px;
@@ -168,7 +165,6 @@ html, body {
 	margin-left: 300px;
 
 }
-
 
 .InputConvLatLng {
  
@@ -184,8 +180,6 @@ select {
         background:#f4f4f4;
 } 
 
-
- 
 </style>
 
 
@@ -194,10 +188,8 @@ select {
 //-- array de shapes --//
 var layers = [];
 
-//-- fun��o para as shapes --//
+//-- funcao para as shapes --//
 function toggleLayers(i) {
-
-    		
 
       		if(layers[i].getMap()==null) {
          		layers[i].setMap(map);
@@ -210,10 +202,10 @@ function toggleLayers(i) {
     		
     }
 
-//--INICIALIZA��O JAVASCRIPT --//
+//--INICIALIZACAO JAVASCRIPT --//
 function initAutocomplete() {
 
-	//-- inicializar as vari�veis de shapes --//
+	//-- inicializar as variaveis de shapes --//
 	layers[0] = new google.maps.KmlLayer('https://sites.google.com/site/shapeskmlkmz/Unidades_Hidrograficas_70.kmz',{ preserveViewport: true });
 
 	layers[1] = new google.maps.KmlLayer('https://sites.google.com/site/shapeskmlkmz/riosDF110000.kmz',{ preserveViewport: true });
@@ -228,11 +220,12 @@ function initAutocomplete() {
 
 	layers[6] = new google.maps.KmlLayer('https://sites.google.com/site/shapeskmlkmz/baciasHidrograficas.kmz',{ preserveViewport: true });
 	 
-	
+	 layers[7] = new google.maps.TrafficLayer();
+	 
 	//-- ADASA -15.775073004902042, -47.940351677729836    --//
 	 var defLatLng = new google.maps.LatLng(-15.790631073109617, -47.74939032660592); // coordenada para centralizar o mapa do df no google maps
 
-	//-- op��es do mapa --//
+	//-- opcoes do mapa --//
 	 var mapOptions = {
 	        center: defLatLng,
 	        zoom: 10,
@@ -451,13 +444,14 @@ function initAutocomplete() {
    
 	<input type="checkbox" id="layer_01" onclick="toggleLayers(0)"> UH
 	<input type="checkbox" id="layer_01" onclick="toggleLayers(6)"> Bacias
-	<input type="checkbox" id="layer_02" onclick="toggleLayers(1)">Rios do DF
+	<input type="checkbox" id="layer_02" onclick="toggleLayers(1)">Rios (DF)
 	<input type="checkbox" id="layer_03" onclick="toggleLayers(2)">Fraturado
 	<input type="checkbox" id="layer_03" onclick="toggleLayers(3)">Poroso
 	<input type="checkbox" id="layer_03" onclick="toggleLayers(4)">Rios (União)
 	<input type="checkbox" id="layer_03" onclick="toggleLayers(5)">UTM
+	<input type="checkbox" id="layer_03" onclick="toggleLayers(7)">Tráfego
 	
-	&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  
+	&nbsp &nbsp &nbsp   
 	 
 	        
 	

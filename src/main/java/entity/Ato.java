@@ -2,7 +2,6 @@ package entity;
 
 import java.io.Serializable;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import tabela.AtoTabela;
 
 
 @Entity
@@ -45,6 +46,26 @@ public class Ato implements Serializable{
 	
 	@Column (name="ato_data_criacao", columnDefinition="varchar(20)")
 	private String atoDataCriacao;
+	
+	// construtor padrão //
+
+	public Ato () {
+		
+	}
+	
+	//-- construtor  --//
+	public Ato (AtoTabela atoTab) {
+			
+			this.atoCodigo = atoTab.getAtoCodigo();
+			this.atoVisCodigoFK = atoTab.getAtoVistoriaFK();
+			this.atoTipo = atoTab.getAtoTipo();
+			this.atoIdentificacao = atoTab.getAtoIdentificacao();
+			this.atoSEI = atoTab.getAtoSEI();
+			this.atoCaracterizacao = atoTab.getAtoCaracterizacao();
+			this.atoDataFiscalizacao = atoTab.getAtoDataFiscalizacao();
+			this.atoDataCriacao = atoTab.getAtoDataCriacao();
+			
+		}
 	
 	//-- getters and setters --//
 	public int getAtoCodigo() {

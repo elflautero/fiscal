@@ -1,7 +1,12 @@
 package controllers;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import javax.imageio.ImageIO;
 
 import entity.Superficial;
 import javafx.collections.FXCollections;
@@ -88,8 +93,13 @@ public class TabSuperficialController implements Initializable{
 							"Outro"
 							); 
 			
-
-	Image imgSuper = new Image(getClass().getResourceAsStream("../images/superficial.png"));
+	@FXML ImageView	iVewSuper = new ImageView();
+	Image imgSuper = new Image(TabSuperficialController.class.getResourceAsStream("/images/superficial.png"));
+	
+	
+	//ImageView image = new ImageView(new Image(TabSuperficialController.class.getResourceAsStream("/images/space.png")));
+	
+	
 	
 //  JavaFX Application Thread" java.lang.NullPointerException: Input stream must not be null //
 	
@@ -97,7 +107,7 @@ public class TabSuperficialController implements Initializable{
 			
 			//imagem
 			
-	@FXML ImageView	iVewSuper = new ImageView();
+	
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -110,8 +120,32 @@ public class TabSuperficialController implements Initializable{
 		
 		System.out.println("TabSuperficial chamado!");
 		
+		
+		
 	}
 	 
 		
+	/*
+	try {
+	    img = ImageIO.read(new File("strawberry.jpg"));
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+	
+	
+	
+	BufferedImage img = null;
+	
+	
+	
+	//getClass().getResource("/res/bitmaps/image.png");
+	
+	//ImageIO.read(getClass().getResourceAsStream("res/drawable/image.png"));
+	
+	
+	BufferedImage img1 = ImageIO.read(getClass().getResourceAsStream("res/drawable/image.png"));
+	
+	*/
+	
 
 }

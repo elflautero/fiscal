@@ -151,10 +151,11 @@ public class TabNavegadorController implements Initializable{
 				
 			}
 			
-				for (int z = 0; z < contDocSei; z++) {
-					docsList.add(docsSei[z]); 
-				}
-	
+			// serve para que?
+			for (int z = 0; z < contDocSei; z++) {
+				docsList.add(docsSei[z]); 
+			}
+
 	
 			ObservableList<String> documentos = FXCollections.observableArrayList(docsSei);
 			ListView<String> listView = new ListView<String>(documentos);

@@ -93,8 +93,8 @@ public class TabSubterraneaController implements Initializable {
 							); 
 		
 	
-
-	Image imgSub = new Image(getClass().getResourceAsStream("../images/subterranea.png"));
+	Image imgSub = new Image(TabSubterraneaController.class.getResourceAsStream("/images/subterranea.png"));
+	//Image imgSub = new Image(getClass().getResourceAsStream("../images/subterranea.png")); // erro null
 	@FXML ImageView	iVewSubt = new ImageView();
 	
 	@FXML

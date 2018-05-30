@@ -2,7 +2,6 @@ package entity;
 
 import java.io.Serializable;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,7 +20,7 @@ public class Subterranea implements Serializable {
 	private int sub_Codigo;
 	
 		//-- OneToOne subterrâneo e interferência --//
-		@OneToOne 
+		@OneToOne
 		@JoinColumn (name = "sub_Interferencia_Codigo")
 		private Interferencia interf_SubFK;
 	

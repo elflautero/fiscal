@@ -1,6 +1,8 @@
 package controllers;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -33,9 +35,9 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
@@ -120,13 +122,13 @@ public class TabEnderecoController implements Initializable {
 						"Brasília",
 						"Gama",
 						"Taguatinga",
-						"Brazlãndia",
+						"Brazlândia",
 						"Sobradinho",
 						"Planaltina",
 						"Paranoá",
 						"Núcleo Bandeirante",
-						"Ceilãndia",
-						"Guará¡",
+						"Ceilândia",
+						"Guará",
 						"Cruzeiro",
 						"Samambaia",
 						"Santa Maria",
@@ -135,7 +137,7 @@ public class TabEnderecoController implements Initializable {
 						"Lago Sul",
 						"Riacho Fundo",
 						"Lago Norte",
-						"Candangolãndia",
+						"Candangolândia",
 						"Águas Claras",
 						"Riacho Fundo II",
 						"Sudoeste/Octogonal",
@@ -143,7 +145,7 @@ public class TabEnderecoController implements Initializable {
 						"Park Way",
 						"SCIA",
 						"Sobradinho II",
-						"Jardim Botãnico",
+						"Jardim Botânico",
 						"Itapoã",
 						"SIA",
 						"Vicente Pires",
@@ -532,16 +534,21 @@ public class TabEnderecoController implements Initializable {
 	//-- Botao atualizar mapa de acordo com as coordenadas --//
 	public void btnEndAtualizarHab (ActionEvent event) throws IOException, ScriptException {
 		
-		
+		/*
 		//-- jsoup e html maps --//
 		String latMap = tfEndLat.getText();
 		String lonMap = tfEndLon.getText();
 		
-		/*
-		File file = null;
 		
+		File file = null;
+		//Image imgSuper = new Image(TabSuperficialController.class.getResourceAsStream("/images/superficial.png"));
 		try {
-			file = new File (getClass().getResource("/html/enderecoMap.html").toURI());
+			file = new File (TabEnderecoController.class.getResource("/html/enderecoMap.html").toURI());
+			//file = new File (TabEnderecoController.class.getResourceAsStream("/html/enderecoMap.html"))
+			Document docHtmlTest = Jsoup.parse(file, "UTF-8").clone();
+			System.out.println(docHtmlTest);
+			
+			System.out.println(file);
 		} catch (URISyntaxException e) {
 			System.out.println("erro na leitura do mapa endereçoMap.html" );
 			e.printStackTrace();
@@ -549,6 +556,39 @@ public class TabEnderecoController implements Initializable {
 		}
 		*/
 		
+		//-- jsoup e html maps --//
+		
+		
+		String latMap = tfEndLat.getText();
+		String lonMap = tfEndLon.getText();
+		
+		File file = null;
+		
+		try {
+			file = new File (TabEnderecoController.class.getResource("/html/enderecoMap.html").toURI());
+		} catch (URISyntaxException e) {
+			System.out.println("erro na leitura do relatório.html" );
+			e.printStackTrace();
+			
+		}
+		
+		Document docHtml = null;
+		
+		try {
+			docHtml = Jsoup.parse(file, "UTF-8");  // retirei o  .clone()
+		} catch (IOException e1) {
+			System.out.println("Erro na leitura no parse Jsoup!!!");
+			e1.printStackTrace();
+		}
+			
+		docHtml.select("script").prepend("var uluru = {lat: " + latMap + ", lng: " + lonMap + "};");
+	
+		linkEndMap = docHtml.toString();
+		
+		getWvEndMap ();
+		
+		
+		/*
 		//trabalhar com o jSoup sem necessitar do File, pois gera erro na compilacao do .jar //
 		
 		WebView webView = new WebView();
@@ -578,20 +618,8 @@ public class TabEnderecoController implements Initializable {
 		//File file = new File("../fiscalizacao/src/main/resources/html/enderecoMap.html");
 		
 		Document docHtml = Jsoup.parse(htmlEndereco, "UTF-8"); 
-		
-		/*
-		Document docHtml = null;
-		try {
-			docHtml = Jsoup.parse(html, "UTF-8");  // retirei o  .clone()
-		} catch (IOException e1) {
-			System.out.println("Erro na leitura no parse Jsoup!!!");
-			e1.printStackTrace();
-		}
 		*/
 		
-		//docHtml = Jsoup.parse(file, "UTF-8").clone();
-	
-		docHtml.select("script").prepend("var uluru = {lat: " + latMap + ", lng: " + lonMap + "};");
 		
 		linkEndMap = docHtml.toString();
 		

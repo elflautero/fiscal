@@ -50,33 +50,33 @@ public class Endereco implements Serializable{
 	@Column
 	private Double Lon_Endereco;
 	
-	//-- Lista de endereços vinculados --//
+	//-- Lista de enderecos vinculados --//
 	@OneToMany (mappedBy = "enderecoFK", cascade = CascadeType.MERGE,
-			fetch = FetchType.EAGER, targetEntity = Denuncia.class)
+			fetch = FetchType.LAZY, targetEntity = Denuncia.class)
 	@Fetch(FetchMode.SUBSELECT) 
 	private List<Denuncia> denuncias = new ArrayList<Denuncia>();
 	
-	//-- Lista de interferências vinculadas --//
+		//-- Lista de interferencias vinculadas --//
 		@OneToMany (mappedBy = "inter_End_CodigoFK", cascade = CascadeType.MERGE,
-				fetch = FetchType.EAGER, targetEntity = Interferencia.class)
+				fetch = FetchType.LAZY, targetEntity = Interferencia.class)
 		@Fetch(FetchMode.SUBSELECT) 
 		private List<Interferencia> interferencias = new ArrayList<Interferencia>();
 	
 				//-- Lista de usuários vinculados --//
 				@OneToMany (mappedBy = "usEndCodigoFK", cascade = CascadeType.MERGE,
-						fetch = FetchType.EAGER, targetEntity = Usuario.class)
+						fetch = FetchType.LAZY, targetEntity = Usuario.class)
 				@Fetch(FetchMode.SUBSELECT) 
 				private List<Usuario> usuarios = new ArrayList<Usuario>();
 		
 						//-- Lista de fiscais vinculados --//
 						@OneToMany (mappedBy = "fis_End_Codigo", cascade = CascadeType.MERGE,
-								fetch = FetchType.EAGER, targetEntity = Fiscal.class)
+								fetch = FetchType.LAZY, targetEntity = Fiscal.class)
 						@Fetch(FetchMode.SUBSELECT) 
 						private List<Fiscal> fiscais = new ArrayList<Fiscal>();
 				
 								//-- Lista de vistorias vinculados --//
 								@OneToMany (mappedBy = "visEndCodigoFK", cascade = CascadeType.MERGE,
-										fetch = FetchType.EAGER, targetEntity = Vistoria.class)
+										fetch = FetchType.LAZY, targetEntity = Vistoria.class)
 								@Fetch(FetchMode.SUBSELECT) 
 								private List<Vistoria> vistorias = new ArrayList<Vistoria>();
 		
