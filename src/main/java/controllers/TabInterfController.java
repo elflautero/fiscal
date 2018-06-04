@@ -107,8 +107,8 @@ public class TabInterfController implements Initializable {
 	@FXML Button btnIntMaps;
 	
 	//-- trazer a coordenada do mapa --//
-	//@FXML Image imgGetCoord = new Image(getClass().getResourceAsStream("../images/getCoord.png"));
-	@FXML Button btnCoord = new Button();
+	@FXML Image imgGetCoord = new Image(TabEnderecoController.class.getResourceAsStream("/images/getCoord.png")); 
+	@FXML Button btnCoord = new Button ();
 	
 	// --- objeto para passar os valor pelo MainControoler para outro controller --- //
 	public Endereco eGeralInt;
@@ -772,8 +772,8 @@ public class TabInterfController implements Initializable {
 		
 		btnCoord.setLayoutY(8);
 		btnCoord.setLayoutX(502);
-		//btnCoord.setGraphic(new ImageView(imgGetCoord));
-		btnCoord.setText("coord");
+		btnCoord.setGraphic(new ImageView(imgGetCoord));
+		
 		
 		btnCoord.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {

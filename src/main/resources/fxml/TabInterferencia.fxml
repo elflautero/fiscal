@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="tabInterferencia" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="1140.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabInterfController">
+<Pane fx:id="tabInterferencia" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="1140.0" xmlns="http://javafx.com/javafx/8.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabInterfController">
    <children>
       <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="1140.0">
          <children>
@@ -32,11 +32,11 @@
                                     <TextField fx:id="tfIntPesq" layoutX="445.0" layoutY="11.0" prefHeight="23.0" prefWidth="295.0" />
                                  </children>
                               </Pane>
-                              <TableView fx:id="tvListaInt" layoutX="52.0" layoutY="246.0" prefHeight="113.0" prefWidth="890.0">
+                              <TableView fx:id="tvListaInt" layoutX="52.0" layoutY="246.0" prefHeight="113.0" prefWidth="889.0">
                                  <columns>
-                                    <TableColumn fx:id="tcDescEndInt" prefWidth="363.0" text="Endereço da Interferência" />
-                                    <TableColumn fx:id="tcIntCorpoHidrico" minWidth="0.0" prefWidth="250.0" text="Corpo Hídrico" />
-                                    <TableColumn fx:id="tcIntUH" prefWidth="276.0" text="UH" />
+                                    <TableColumn fx:id="tcDescEndInt" prefWidth="409.0" text="Endereço da Interferência" />
+                                    <TableColumn fx:id="tcIntCorpoHidrico" minWidth="0.0" prefWidth="232.0" text="Corpo Hídrico" />
+                                    <TableColumn fx:id="tcIntUH" prefWidth="232.0" text="UH" />
                                     
                                  </columns>
                               </TableView>

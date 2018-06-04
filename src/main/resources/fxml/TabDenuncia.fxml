@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane fx:id="tabDenuncia" minHeight="0.0" minWidth="0.0" prefHeight="750.0" prefWidth="1140.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabDenunciaController">
+<AnchorPane fx:id="tabDenuncia" minHeight="0.0" minWidth="0.0" prefHeight="750.0" prefWidth="1140.0" xmlns="http://javafx.com/javafx/8.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabDenunciaController">
    <children>
       <ScrollPane layoutY="-1.0" prefHeight="680.0" prefWidth="1140.0">
         <content>
@@ -18,8 +18,8 @@
                   <TableView fx:id="tvLista" layoutX="127.0" layoutY="209.0" prefHeight="113.0" prefWidth="889.0">
                     <columns>
                       <TableColumn fx:id="tcDocumento" prefWidth="409.0" text="Documento" />
-                      <TableColumn fx:id="tcDocSEI" minWidth="0.0" prefWidth="231.0" text="Doc SEI" />
-                        <TableColumn fx:id="tcProcSEI" prefWidth="247.0" text="Proc SEI" />
+                      <TableColumn fx:id="tcDocSEI" minWidth="0.0" prefWidth="232.0" text="Doc SEI" />
+                        <TableColumn fx:id="tcProcSEI" prefWidth="232.0" text="Proc SEI" />
                     </columns>
                   </TableView>
                   <Pane layoutX="122.0" layoutY="149.0" prefHeight="47.0" prefWidth="884.0">

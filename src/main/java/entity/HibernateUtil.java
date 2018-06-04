@@ -19,7 +19,7 @@ public class HibernateUtil {
 		
 		factory = conf.buildSessionFactory();
 		
-			System.out.println("Construiu a f�brica de sess�es");
+			System.out.println("Construiu a fabrica de sessoes");
 		
 		return factory;
 		

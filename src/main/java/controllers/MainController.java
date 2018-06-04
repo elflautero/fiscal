@@ -1,9 +1,20 @@
 package controllers;
 
+import java.io.IOException;
+
 import entity.Denuncia;
 import entity.Endereco;
 import entity.Vistoria;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Tab;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 public class MainController {
 	
@@ -15,6 +26,46 @@ public class MainController {
 	    @FXML private TabAtoController tabAtoController;
 	    @FXML private TabVistoriaController tabVistoriaController;
 	   
+	    @FXML Image imgGetLaw = new Image(MainController.class.getResourceAsStream("/images/law.png")); 
+	    @FXML Image imgGetHome = new Image(MainController.class.getResourceAsStream("/images/home.png")); 
+	    
+	    LegislacaoController legCon;
+	    
+	    @FXML Button btnLegislacao;
+	    @FXML Button btnHome;
+	    
+	    public void btnLegislacaoHab (ActionEvent event) {
+	    	
+	    	
+	    	Pane legPane = new Pane();
+	    	legCon = new LegislacaoController();
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TabLegislacao.fxml"));
+			loader.setRoot(legPane);
+			loader.setController(legCon);
+			
+			try {
+				loader.load();
+			} catch (IOException e) {
+				System.out.println("erro leitura do pane - chamada legislação");
+				e.printStackTrace();
+			}
+			
+			Scene scene = new Scene(legPane);
+			Stage stage = new Stage(); // StageStyle.UTILITY - tirei para ver como fica, se aparece o minimizar
+			stage.setWidth(960);
+			stage.setHeight(600);
+	        stage.setScene(scene);
+	        stage.setMaximized(false);
+	        stage.setResizable(false);
+	        stage.setAlwaysOnTop(true); 
+	        stage.show();
+	    	
+	    	
+	    	
+	    }
+	    public void btnHomeHab (ActionEvent event) {
+	    	
+	    }
 	    
 
 	    @FXML 
@@ -28,9 +79,9 @@ public class MainController {
 	       tabAtoController.init(this);
 	       tabVistoriaController.init(this);
 	       
-	       
-	       
-	       
+	       btnLegislacao.setGraphic(new ImageView(imgGetLaw));
+	       btnHome.setGraphic(new ImageView(imgGetHome));
+	        
 	    }
 
 	    // mudei voi para retornar  Denuncia

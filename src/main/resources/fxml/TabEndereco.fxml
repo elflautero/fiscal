@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="tabEndereco" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1140.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabEnderecoController">
+<Pane fx:id="tabEndereco" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1140.0" xmlns="http://javafx.com/javafx/8.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabEnderecoController">
    <children>
       <ScrollPane layoutY="1.0" prefHeight="680.0" prefWidth="1140.0">
         <content>
@@ -51,11 +51,11 @@
                            </children>
                         </Pane>
                         <Button fx:id="btnEndLatLon" layoutX="655.0" layoutY="127.0" mnemonicParsing="false" onAction="#btnEndLatLonHab" prefHeight="25.0" prefWidth="69.0" text="Lat Lon" />
-                        <TableView fx:id="tvListaEnd" layoutX="22.0" layoutY="209.0" prefHeight="113.0" prefWidth="890.0">
+                        <TableView fx:id="tvListaEnd" layoutX="22.0" layoutY="209.0" prefHeight="113.0" prefWidth="889.0">
                            <columns>
-                              <TableColumn fx:id="tcDesEnd" prefWidth="363.0" text="Endereço" />
-                              <TableColumn fx:id="tcEndRA" minWidth="0.0" prefWidth="250.0" text="RA" />
-                              <TableColumn fx:id="tcEndCid" prefWidth="276.0" text="Cidade" />
+                              <TableColumn fx:id="tcDesEnd" prefWidth="409.0" text="Endereço" />
+                              <TableColumn fx:id="tcEndRA" minWidth="0.0" prefWidth="232.0" text="RA" />
+                              <TableColumn fx:id="tcEndCid" prefWidth="232.0" text="Cidade" />
                            </columns>
                         </TableView>
                         <Label fx:id="lblDoc" layoutX="101.0" layoutY="3.0" prefHeight="25.0" prefWidth="750.0">
@@ -72,6 +72,7 @@
                        
                      </children>
                   </Pane>
+                  <Button fx:id="btnMap" layoutX="41.0" layoutY="279.0" mnemonicParsing="false" onAction="#btnMapHab" text="Map" />
                </children></AnchorPane>
         </content>
       </ScrollPane>

@@ -2,7 +2,6 @@ package controllers;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -625,19 +624,15 @@ public class TabVistoriaController implements Initializable{
 		
 		File file = null;
 		
-		try {
-			file = new File (TabVistoriaController.class.getResource("/html/relatorioVistoria.html").toURI());
-			
-		} catch (URISyntaxException e) {
-			System.out.println("erro na leitura do relatório.html" );
-			e.printStackTrace();
-			
-		}
-			
+		file = new File (TabVistoriaController.class.getResource("/html/relatorioVistoria.html").getFile());
+		
 		Document docHtml = null;
 		
 		try {
 			docHtml = Jsoup.parse(file, "UTF-8");  // retirei o  .clone()
+			
+			// file:\C:\Users\fabricio\eclipse-workspace\fiscalizacao\target\classes\html\relatorioVistoria.html 
+			// (A sintaxe do nome do arquivo, do nome do diretório ou do rótulo do volume está incorreta)
 			
 		} catch (IOException e1) {
 			System.out.println("Erro na leitura no parse Jsoup!!!");
@@ -923,8 +918,6 @@ public class TabVistoriaController implements Initializable{
 		
 	}
 	
- 
-	
 	public void relatarHTML () {
 	
 		htmlObjeto = new HTMLEditor();
@@ -938,6 +931,7 @@ public class TabVistoriaController implements Initializable{
 			        event.consume();
 			    }
 			});
+			htmlObjeto.setHtmlText("<p><font face='Times New Roman'> </font></p>");
 			
 			StackPane root = new StackPane();
 			root.getChildren().add(htmlObjeto);
@@ -955,6 +949,7 @@ public class TabVistoriaController implements Initializable{
 			        event.consume();
 			    }
 			});
+			htmlApresentacao.setHtmlText("<p><font face='Times New Roman'> </font></p>");
 			
 			StackPane rootAp = new StackPane();
 			rootAp.getChildren().add(htmlApresentacao);
@@ -972,6 +967,7 @@ public class TabVistoriaController implements Initializable{
 			        event.consume();
 			    }
 			});
+			htmlRelato.setHtmlText("<p><font face='Times New Roman'> </font></p>");
 			
 			
 			StackPane rootRel = new StackPane();
@@ -990,6 +986,7 @@ public class TabVistoriaController implements Initializable{
 			        event.consume();
 			    }
 			});
+			htmlRecomendacao.setHtmlText("<p><font face='Times New Roman'> </font></p>");
 			
 			StackPane rootReco = new StackPane();
 			rootReco.getChildren().add(htmlRecomendacao);
@@ -1095,7 +1092,7 @@ public class TabVistoriaController implements Initializable{
 					String agra = visTab.getVisAgravantes();
 					String aten = visTab.getVisAtenuantes();
 					
-					
+					System.out.println(htmlObjeto.getHtmlText());
 					
 					//-- infrações --//
 					if (infr != null) {
@@ -1515,7 +1512,7 @@ public class TabVistoriaController implements Initializable{
 			
 			    //--  https://docs.oracle.com/javafx/2/ui_controls/ListViewSample.java.html  --// 
 			    listView.getSelectionModel().selectedItemProperty().addListener(
-          new ChangeListener<String>() {
+			    		new ChangeListener<String>() {
               public void changed(ObservableValue<? extends String> 
               ov, String old_val, String new_val) {
             

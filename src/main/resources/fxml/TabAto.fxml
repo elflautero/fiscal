@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="tabAto" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="1140.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabAtoController">
+<Pane fx:id="tabAto" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="1140.0" xmlns="http://javafx.com/javafx/8.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabAtoController">
    <children>
       <ScrollPane prefHeight="680.0" prefWidth="1140.0">
         <content>
@@ -20,11 +20,11 @@
                <children>
                   <Pane prefHeight="680.0" prefWidth="1140.0">
                      <children>
-                        <TableView fx:id="tvAto" layoutX="114.0" layoutY="397.0" prefHeight="113.0" prefWidth="890.0">
+                        <TableView fx:id="tvAto" layoutX="114.0" layoutY="397.0" prefHeight="113.0" prefWidth="889.0">
                            <columns>
-                              <TableColumn fx:id="tcTipo" prefWidth="363.0" text="Tipo" />
-                              <TableColumn fx:id="tcNumero" minWidth="0.0" prefWidth="250.0" text="Número" />
-                              <TableColumn fx:id="tcSEI" prefWidth="276.0" text="SEI" />
+                              <TableColumn fx:id="tcTipo" prefWidth="409.0" text="Tipo" />
+                              <TableColumn fx:id="tcNumero" minWidth="0.0" prefWidth="232.0" text="Número" />
+                              <TableColumn fx:id="tcSEI" prefWidth="232.0" text="SEI" />
                            </columns>
                         </TableView>
                         <Pane layoutX="127.0" layoutY="350.0" prefHeight="47.0" prefWidth="839.0">

@@ -418,6 +418,7 @@ public class TabAtoController implements Initializable{
 			        event.consume();
 			    }
 			});
+		htmlCaracterizar.setHtmlText("<p><font face='Times New Roman'> </font></p>");
 			
 			StackPane rootCaracterizacao = new StackPane();
 			rootCaracterizacao.getChildren().add(htmlCaracterizar);
@@ -493,13 +494,7 @@ public class TabAtoController implements Initializable{
 			
 			File file = null;
 			
-			try {
-				file = new File (TabAtoController.class.getResource("/html/termonotificacao.html").toURI());
-				
-			} catch (URISyntaxException e) {
-				System.out.println("erro na leitura do relatório.html" );
-				e.printStackTrace();
-			}
+			file = new File (TabAtoController.class.getResource("/html/termoNotificacao.html").getFile());
 			
 			Document docHtml = null;
 			
@@ -620,7 +615,7 @@ public class TabAtoController implements Initializable{
 			
 		}
 	      
-		if (cbAtoTipo.getValue().equals("Auto de Infração")) {
+		if (cbAtoTipo.getValue().equals("Auto de Infração") || cbAtoTipo.getValue().equals("Auto de Infração de Multa") ) {
 			
 			File file = null;
 			
@@ -643,6 +638,7 @@ public class TabAtoController implements Initializable{
 			}
 			
 			
+			
 			docHtml.select("autoNum").prepend(atoGeral.getAtoIdentificacao());
 			docHtml.select("autoSEI").prepend(atoGeral.getAtoSEI());
 			
@@ -656,6 +652,8 @@ public class TabAtoController implements Initializable{
 			docHtml.select("autoUsTel").prepend(endereco.getListUsuarios().get(0).getUsTelefone());
 			docHtml.select("autoUsCel").prepend(endereco.getListUsuarios().get(0).getUsCelular());
 			docHtml.select("autoUsEmail").prepend(endereco.getListUsuarios().get(0).getUsEmail());
+			
+			//dataFis termoNot 
 			
 			docHtml.select("EndEmpDes").prepend(endereco.getDesc_Endereco());
 			docHtml.select("EndEmpRA").prepend(endereco.getRA_Endereco());

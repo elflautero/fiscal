@@ -39,6 +39,8 @@ import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.AnchorPane;
@@ -81,9 +83,7 @@ public class TabEnderecoController implements Initializable {
 	@FXML Button btnEndPesq = new Button();
 	
 	@FXML Button btnEndMaps = new Button ();
-	Button btnCoord = new Button();
 	
-
 	@FXML Button btnDenAtualizar = new Button();
 	@FXML TextField tfEndPesq = new TextField();
 	
@@ -103,14 +103,32 @@ public class TabEnderecoController implements Initializable {
 	private static Endereco eGeral;
 	
 	//-- botao para chamar o mapa javascript --//
-	//@FXML Image imgGetCoord = new Image(getClass().getResourceAsStream("../images/getCoord.png")); erro: input stream must be not null
+	@FXML Image imgGetCoord = new Image(TabEnderecoController.class.getResourceAsStream("/images/getCoord.png")); 
+	@FXML Button btnCoord = new Button ();
+	/*
+	 Image imgSub = new Image(TabSubterraneaController.class.getResourceAsStream("/images/subterranea.png"));
+	
+	@FXML ImageView	iVewSubt = new ImageView();
+	 */
+	
+	
+	@FXML Button btnMap;
+	GoogleMap google;
+	
+	public void btnMapHab () {
+		
+		google.setMarkerPosition(-15.775073004902042, -47.940351677729836);
+		//google.setMapCenter(-15.775073004902042, -47.940351677729836);
+		google.switchTerrain();
+		//google.setDarkMarkerIcon();
+	}
 	
 	
 	
 	//-- coordenadas do mapa javascript --//
-	public static String latDec;
-	public static String lngDec;
-	public static String endMap;
+	public static String latDec = "-15";
+	public static String lngDec = "-47";
+	public static String endMap = "";
 	
 	
 	//-- combobox -Regiao Administrativa --//	
@@ -155,7 +173,7 @@ public class TabEnderecoController implements Initializable {
 			@FXML
 			ChoiceBox<String> cbEndUF = new ChoiceBox<String>();
 				ObservableList<String> olEndUF = FXCollections
-					.observableArrayList("DF" , "GO", "Outro"); // box - seleÃ§Ã£o pessoa fÃ­scia ou jurÃ­dica
+					.observableArrayList("DF" , "GO", "Outro");
 
 	
 	@FXML Label lblEndereco = new Label();
@@ -534,31 +552,6 @@ public class TabEnderecoController implements Initializable {
 	//-- Botao atualizar mapa de acordo com as coordenadas --//
 	public void btnEndAtualizarHab (ActionEvent event) throws IOException, ScriptException {
 		
-		/*
-		//-- jsoup e html maps --//
-		String latMap = tfEndLat.getText();
-		String lonMap = tfEndLon.getText();
-		
-		
-		File file = null;
-		//Image imgSuper = new Image(TabSuperficialController.class.getResourceAsStream("/images/superficial.png"));
-		try {
-			file = new File (TabEnderecoController.class.getResource("/html/enderecoMap.html").toURI());
-			//file = new File (TabEnderecoController.class.getResourceAsStream("/html/enderecoMap.html"))
-			Document docHtmlTest = Jsoup.parse(file, "UTF-8").clone();
-			System.out.println(docHtmlTest);
-			
-			System.out.println(file);
-		} catch (URISyntaxException e) {
-			System.out.println("erro na leitura do mapa endereçoMap.html" );
-			e.printStackTrace();
-			
-		}
-		*/
-		
-		//-- jsoup e html maps --//
-		
-		
 		String latMap = tfEndLat.getText();
 		String lonMap = tfEndLon.getText();
 		
@@ -587,40 +580,6 @@ public class TabEnderecoController implements Initializable {
 		
 		getWvEndMap ();
 		
-		
-		/*
-		//trabalhar com o jSoup sem necessitar do File, pois gera erro na compilacao do .jar //
-		
-		WebView webView = new WebView();
-       
-		WebEngine eng = webView.getEngine();
-		
-		eng.load(getClass().getResource("/html/enderecoMap.html").toExternalForm());
-        
-		eng.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>()
-		
-	        {
-	            public void changed(final ObservableValue<? extends Worker.State> observableValue,
-	                                final Worker.State oldState,
-	                                final Worker.State newState)
-	            {
-	            	
-	                if (newState == Worker.State.SUCCEEDED)
-	                {
-	                	htmlEndereco = (String) eng.executeScript("document.documentElement.outerHTML");  
-	                }
-	                
-	            }
-	        });
-		
-		//Document docHtml = Jsoup.parse(html, "UTF-8");  // retirei o  .clone()
-        
-		//File file = new File("../fiscalizacao/src/main/resources/html/enderecoMap.html");
-		
-		Document docHtml = Jsoup.parse(htmlEndereco, "UTF-8"); 
-		*/
-		
-		
 		linkEndMap = docHtml.toString();
 		
 		getWvEndMap ();
@@ -635,17 +594,18 @@ public class TabEnderecoController implements Initializable {
 	//-- buscador de enderecos e coordenadas --//
 		public void btnEndMapsHab (ActionEvent event) throws IOException {
 			
-			GoogleMap google = new GoogleMap();
+			google = new GoogleMap();
 			
 			Group group = new Group();
 			group.getChildren().addAll(google, btnCoord);
 			
 			Scene scene = new Scene(group);
 			
+			
+			
 			btnCoord.setLayoutY(8);
 			btnCoord.setLayoutX(502);
-			btnCoord.setText("Coord");
-			//btnCoord.setGraphic(new ImageView(imgGetCoord));
+			btnCoord.setGraphic(new ImageView(imgGetCoord));
 			
 			btnCoord.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override public void handle(ActionEvent e) {
@@ -708,31 +668,16 @@ public class TabEnderecoController implements Initializable {
 	        
 		}
 		
-	
+		
 	//-- INITIALIZE --//
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		
 		//-- Modular a forma de abrir dos botÃµes --//
 		modularBotoesInicial ();
-		//-- Selecionar endereÃ§o --//
+		//-- Selecionar endereco --//
 		selecionarEndereco ();
 		
-		/*
-		//-- Chamar o Google Maps da TabEndereco --//
-		Platform.runLater(() ->{
-			getWvEndMap ();
-			});
-		*/
-		
-		/* text field com ouvinte para captar modificaÃ§Ãµes na strin latDec
-		tfEndLat.textProperty().addListener((observable, oldValue, newValue) -> {
-		    tfEndLat.setText(latDec);
-		});
-		*/
-		
-		
-		//cbEndRA.setValue("BrasÃ­lia");
 		cbEndRA.setItems(olEndRA);
 		
 		cbEndUF.setValue("DF");
@@ -802,9 +747,7 @@ public class TabEnderecoController implements Initializable {
 			 e.printStackTrace();
 		 }
 			
-			
 	}
-	
 	
 	//-- Main Controller --//
 	public void init(MainController mainController) {
@@ -813,212 +756,4 @@ public class TabEnderecoController implements Initializable {
 
 	
 }
-
-/*
- WebView wv1 = new WebView();
-		wv1.setPrefSize(700,500);
-		wv1.getEngine().loadContent(linkEndMap);
-	
-		BorderPane root = new BorderPane();
-		root.setCenter(wv1);
-		root.setPrefSize(700, 420);
-		root.setLayoutY(349);
-		root.setLayoutX(122);
-		
-		aPaneEnd.getChildren().add(root);
-	*/
-
-
-/*
- //-- Buscador de endereÃ§os e coordenadas --//
-	public void btnEndMapsHab (ActionEvent event) throws IOException {
-		
-		File file = new File("../FiscalizacaoSRH/src/main/resources/html/mapSearch.html");
-		
-		Document docHtml = Jsoup.parse(file, "UTF-8").clone();
-	
-		linkEndMap = docHtml.toString();
-		
-		WebView wvEndMapsView = new WebView();
-		WebEngine weEndMapsView = wvEndMapsView.getEngine();
-		weEndMapsView.loadContent(linkEndMap);
-		wvEndMapsView.setMaxSize(500, 300);
-		
-		
-		
-		Stage stage = new Stage(StageStyle.UTILITY);
-        stage.setScene(new Scene(wvEndMapsView, 911, 600));
-        stage.show();
-	}
-	*/
-
-
-/*
- 
- File file = new File("../FiscalizacaoSRH/src/main/resources/html/mapSearch.html");
-		
-		Document docHtml = Jsoup.parse(file, "UTF-8").clone();
-	
-		linkEndMap = docHtml.toString();
-		
-		WebView wvEndMapsView = new WebView();
-		WebEngine weEndMapsView = wvEndMapsView.getEngine();
-		
-		
-		//weEndMapsView.loadContent("../FiscalizacaoSRH/src/main/resources/html/mapSearch.html");
-		weEndMapsView.loadContent(linkEndMap);
-		wvEndMapsView.setMaxSize(500, 300);
-		
-		JSObject window = (JSObject) weEndMapsView.executeScript("window");
-		window.setMember("app", new TabEnderecoController());
-  */
-
-
-/*
- 
- 
- //-- Buscador de endereÃ§os e coordenadas --//
-	public void btnEndMapsHab (ActionEvent event) throws IOException {
-		
-		//File file = new File("../FiscalizacaoSRH/src/main/resources/html/mapSearch.html");
-		
-		//Document docHtml = Jsoup.parse(file, "UTF-8").clone();
-	
-		//linkEndMap = docHtml.toString();
-		
-		WebView wvEndMapsView = new WebView();
-		WebEngine weEndMapsView = wvEndMapsView.getEngine();
-		
-		
-		weEndMapsView.getLoadWorker().stateProperty().addListener(
-				
-				new ChangeListener<Worker.State>() {
-					@Override
-					public void changed (ObservableValue<? extends Worker.State> observable, Worker.State
-							oldValue, Worker.State newValue) {
-						if (newValue == Worker.State.SUCCEEDED) {
-							System.out.println("succeded");
-							JSObject windowObject = (JSObject) weEndMapsView.executeScript("window");
-							windowObject.setMember("app", new TabEnderecoController());
-							windowObject.call("ready");
-							
-						}
-					}
-				}
-			);
-				
-		URL url = getClass().getResource("/html/mapSearch.html");	
-		weEndMapsView.load(url.toString());
-		
-  */
-
-
-/*
- 
- public static class MeuMapa () {
-		
-		//-- obter as coordenadas do javascript --//
-		public void getEndCoord (String lat, String lon) {
-			
-			try {
-				//tfLatMap.setText(lat):
-				tfEndLat.setText(lat);
-				tfEndLon.setText(lon);
-			
-				System.out.println("primeiro mÃ©todo: " + lat + " e " + lon);
-				
-				getEndCoordJavaFX (lat, lon);
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		
-	}
- 
- */
-
-
-//File file = new File("../FiscalizacaoSRH/src/main/resources/html/mapSearch.html");
-
-//Document docHtml = Jsoup.parse(file, "UTF-8").clone();
-
-//linkEndMap = docHtml.toString();
-
-
-//weEndMapsView.loadContent(linkEndMap);
-/*
-weEndMapsView.loadContent("../FiscalizacaoSRH/src/main/resources/html/mapSearch.html");
-weEndMapsView.loadContent(linkEndMap);
-wvEndMapsView.setMaxSize(500, 300);
-
-JSObject window = (JSObject) weEndMapsView.executeScript("window");
-window.setMember("app", new TabEnderecoController());
-
-
-engine.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
-    if (Worker.State.SUCCEEDED.equals(newValue)) {
-    	
-    }
-});
-
-*/
-
-
-//TENTANDO INCLUIR O WEBVIEW UM TEXTFIELD JAVAFX E PREENCHER COM AS COORDENADAS
-
-//TextField tfLatMap = new TextField();
-//tfLatMap.setText("TextField");
-//tfLatMap.setLayoutY(10);
-
-/*
-	DOIS WEBVIEW PARA DIVIDIR A PARTE DO JSOBJECT DO TEXTFIELD QUE RECEBE AS COORDENADAS
-	
-	NÃƒO DEU CERTO, TERMINA QUE O JSOBJECT PERDE A REFERÃŠNCIA
-	
-	
-public void btnEndMapsHab (ActionEvent event) throws IOException {
-	
-	WebView wvEndMapsView = new WebView();
-	WebView wvEndBuscador = new WebView();
-	
-	WebEngine weEndMapsView = wvEndMapsView.getEngine();
-	WebEngine weEngineEndBuscador = wvEndBuscador.getEngine();
-	
-	URL url = getClass().getResource("/html/mapSearch.html");	
-	weEndMapsView.load(url.toString());
-	
-	weEngineEndBuscador.getLoadWorker().stateProperty().addListener(
-			
-			new ChangeListener<Worker.State>() {
-				@Override
-				public void changed (ObservableValue<? extends Worker.State> observable, Worker.State
-						oldValue, Worker.State newValue) {
-					if (newValue == Worker.State.SUCCEEDED) {
-						System.out.println("succeded");
-						JSObject windowObject = (JSObject) weEngineEndBuscador.executeScript("window");
-						windowObject.setMember("app", new MyMapSearch());
-						
-					} 
-				}
-			}
-		);
-			
-	URL urlEndBuscador = getClass().getResource("/html/endBuscador.html");	
-	
-	weEngineEndBuscador.load(urlEndBuscador.toString());
-	
-	wvEndMapsView.setLayoutY(50);
-	wvEndBuscador.setLayoutY(5);
-	
-	Pane paneMap = new Pane();
-	paneMap.getChildren().setAll(wvEndBuscador, wvEndMapsView);
-	
-	Stage stage = new Stage(StageStyle.UTILITY);
-    stage.setScene(new Scene(paneMap));  //911600   
-    //stage.setScene(new Scene(wvEndMapsView, 911, 600));
-    stage.show();
-}
-
-*/
 
