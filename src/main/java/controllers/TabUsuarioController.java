@@ -14,7 +14,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -27,7 +29,7 @@ import tabela.UsuarioTabela;
 public class TabUsuarioController implements Initializable {
 	
 	//-- Strings --//
-	String strPesquisaUsuario = "";
+	String strPesquisa = "";
 	
 	@FXML Pane tabUsuario = new Pane();
 	
@@ -52,6 +54,8 @@ public class TabUsuarioController implements Initializable {
 	@FXML Button btnUsPesq;
 	@FXML Button btnBucarEnd;
 	
+	@FXML CheckBox cbEndEmp;
+	
 	// --- objeto para passar os valor pelo MainControoler para outro controller --- //
 	public Endereco eGeralUs;
 	
@@ -63,13 +67,28 @@ public class TabUsuarioController implements Initializable {
 			@FXML TableColumn<InterferenciaTabela, String> tcUsCPFCNPJ;
 			@FXML TableColumn<InterferenciaTabela, String> tcUsEndereco;
 	
-	
+	public void cbEndEmpHab (ActionEvent event) {
+		
+		int count = 0;
+		
+		if (cbEndEmp.isSelected()) {
+			count ++;
+			try{tfUsEnd.setText(eGeralUs.getDesc_Endereco());}catch (Exception e) {tfUsEnd.setText("");};
+			try{cbUsRA.setValue(eGeralUs.getRA_Endereco());}catch (Exception e) {cbUsRA.setValue("");};
+			try{tfUsCEP.setText(eGeralUs.getCEP_Endereco());}catch (Exception e) {tfUsCEP.setText("");};
+			try{tfUsCidade.setText(eGeralUs.getCid_Endereco());}catch (Exception e) {tfUsCidade.setText("");};
+			try{cbUsUF.setValue(eGeralUs.getUF_Endereco());}catch (Exception e) {cbUsUF.setValue("");};
+			
+		}
+		System.out.println("check box usuario - endereço: " + count);
+	}
 	public void btnUsNovoHab (ActionEvent event) {
 		
 		cbTipoPessoa.setValue(null);
 		
 		tfUsNome.setText("");
 		tfUsCPFCNPJ.setText("");
+		
 		tfUsEnd.setText("");
 		
 		cbUsRA.setValue(null);
@@ -86,6 +105,9 @@ public class TabUsuarioController implements Initializable {
 		cbTipoPessoa.setDisable(false);
 		tfUsNome.setDisable(false);
 		tfUsCPFCNPJ.setDisable(false);  //tfEndUF.setDisable(false);
+		
+		cbEndEmp.setDisable(false);
+		
 		tfUsEnd.setDisable(false);
 		cbUsRA.setDisable(false);
 		tfUsCEP.setDisable(false);
@@ -105,40 +127,72 @@ public class TabUsuarioController implements Initializable {
 	
 	public void btnUsSalvarHab (ActionEvent event) {
 		
-		Usuario usuario = new  Usuario ();
-		
-			usuario.setUsTipo(cbTipoPessoa.getValue());
-			usuario.setUsNome(tfUsNome.getText());
-			usuario.setUsCPFCNPJ(tfUsCPFCNPJ.getText()); 
-			usuario.setUsDescricaoEnd(tfUsEnd.getText());
-			usuario.setUsRA(cbUsRA.getValue());
-			usuario.setUsCidade(tfUsCidade.getText());
-			usuario.setUsEstado(cbUsUF.getValue());
-			usuario.setUsCEP(tfUsCEP.getText());
-			usuario.setUsTelefone(tfUsTel.getText());
-			usuario.setUsCelular(tfUsCel.getText());
-			usuario.setUsEmail(tfUsEmail.getText());
+		if (eGeralUs == null) {
 			
-		
-		Endereco endereco = new Endereco();
-		
-			endereco = eGeralUs;
+			Alert aLat = new Alert (Alert.AlertType.ERROR);
+			aLat.setTitle("Alerta!!!");
+			aLat.setContentText("Endereço relacionado ao usuário não selecionado!!!");
+			aLat.setHeaderText(null);
+			aLat.show();
 			
-			endereco.getListUsuarios().add(usuario);
+		} else {
 			
-			usuario.setUsEndCodigoFK(endereco);
-			
-		UsuarioDao  usDao = new UsuarioDao();
+				if (cbTipoPessoa.getValue() == null  ||
+						tfUsNome.getText().isEmpty()
+						
+						) {
+					
+					Alert a = new Alert (Alert.AlertType.ERROR);
+					a.setTitle("Alerta!!!");
+					a.setContentText("Informe: Tipo e Nome do Usuário!!!");
+					a.setHeaderText(null);
+					a.show();
+					
+				} else {
 		
-			usDao.salvaUsuario(usuario);
-			usDao.mergeUsuario(usuario);
-		
-		//-- listar --//
-		listarUsuarios(strPesquisaUsuario);
-		//-- selecionar --//
-		selecionarUsuario();
-		
-		modularBotoesInicial();
+						Usuario usuario = new  Usuario ();
+						
+							usuario.setUsTipo(cbTipoPessoa.getValue());
+							usuario.setUsNome(tfUsNome.getText());
+							usuario.setUsCPFCNPJ(tfUsCPFCNPJ.getText()); 
+							usuario.setUsDescricaoEnd(tfUsEnd.getText());
+							usuario.setUsRA(cbUsRA.getValue());
+							usuario.setUsCidade(tfUsCidade.getText());
+							usuario.setUsEstado(cbUsUF.getValue());
+							usuario.setUsCEP(tfUsCEP.getText());
+							usuario.setUsTelefone(tfUsTel.getText());
+							usuario.setUsCelular(tfUsCel.getText());
+							usuario.setUsEmail(tfUsEmail.getText());
+							
+						
+						Endereco endereco = new Endereco();
+						
+							endereco = eGeralUs;
+							
+							endereco.getListUsuarios().add(usuario);
+							
+							usuario.setUsEndCodigoFK(endereco);
+							
+						UsuarioDao  usDao = new UsuarioDao();
+						
+							usDao.salvaUsuario(usuario);
+							usDao.mergeUsuario(usuario);
+						
+						//-- listar --//
+						listarUsuarios(strPesquisa);
+						//-- selecionar --//
+						selecionarUsuario();
+						
+						modularBotoesInicial();
+						
+						Alert a = new Alert (Alert.AlertType.INFORMATION);
+						a.setTitle("Parabéns!!!");
+						a.setContentText("Informe: Cadastro salvo com sucesso!!!");
+						a.setHeaderText(null);
+						a.show();
+						
+				}
+		}
 			
 	}
 	
@@ -148,6 +202,9 @@ public class TabUsuarioController implements Initializable {
 			
 			cbTipoPessoa.setDisable(false);
 			tfUsNome.setDisable(false);
+			
+			cbEndEmp.setDisable(false);
+			
 			tfUsCPFCNPJ.setDisable(false);
 			tfUsEnd.setDisable(false);
 			cbUsRA.setDisable(false);
@@ -166,6 +223,20 @@ public class TabUsuarioController implements Initializable {
 		}
 		
 		else {
+			
+			if (cbTipoPessoa.getValue() == null  ||
+					tfUsNome.getText().isEmpty()
+					
+					) {
+				
+				Alert a = new Alert (Alert.AlertType.ERROR);
+				a.setTitle("Alerta!!!");
+				a.setContentText("Informe: Tipo e Nome do Usuário!!!");
+				a.setHeaderText(null);
+				a.show();
+				
+			} else {
+	
 			//*  //eGeralUs
 			UsuarioTabela usTabEditar = tvListaUs.getSelectionModel().getSelectedItem(); 
 			
@@ -195,12 +266,20 @@ public class TabUsuarioController implements Initializable {
 			usDao.mergeUsuario(us);
 			
 			//-- listar --//
-			listarUsuarios(strPesquisaUsuario);
+			listarUsuarios(strPesquisa);
 			//-- selecionar --//
 			selecionarUsuario();
 			
 			modularBotoesInicial();
 			
+			Alert a = new Alert (Alert.AlertType.INFORMATION);
+			a.setTitle("Parabéns!!!");
+			a.setContentText("Informe: Cadastro editado com sucesso!!!");
+			a.setHeaderText(null);
+			a.show();
+			
+			
+			}
 			
 		}
 		
@@ -218,7 +297,7 @@ public class TabUsuarioController implements Initializable {
 		usExDao.removeUsuario(usEx.getUsCodigo());
 		
 		//-- listar --//
-		listarUsuarios(strPesquisaUsuario);
+		listarUsuarios(strPesquisa);
 		//-- selecionar --//
 		selecionarUsuario();
 		
@@ -250,9 +329,9 @@ public class TabUsuarioController implements Initializable {
 	//-- botão pesquisar usuário --//
 	public void btnUsPesqHab (ActionEvent event) {
 		
-		strPesquisaUsuario = tfUsPesquisar.getText();
+		strPesquisa = tfUsPesquisar.getText();
 		
-		listarUsuarios (strPesquisaUsuario);
+		listarUsuarios (strPesquisa);
 		
 		selecionarUsuario ();
 		
@@ -273,37 +352,40 @@ public class TabUsuarioController implements Initializable {
 		ObservableList<String> olUsRA = FXCollections
 			.observableArrayList(
 					
+
+					"Águas Claras",
 					"Brasília",
-					"Gama",
-					"Taguatinga",
 					"Brazlândia",
-					"Sobradinho",
-					"Planaltina",
-					"Paranoá",
-					"Núcleo Bandeirante",
+					"Candangolândia",
 					"Ceilândia",
-					"Guará",
 					"Cruzeiro",
+					"Fercal",
+					"Gama",
+					"Guará",
+					"Itapoã",
+					"Jardim Botânico",
+					"Lago Norte",
+					"Lago Sul",
+					"Núcleo Bandeirante",
+					"Paranoá",
+					"Park Way",
+					"Planaltina",
+					"Recanto das Emas",
+					"Riacho Fundo II",
+					"Riacho Fundo",
 					"Samambaia",
 					"Santa Maria",
 					"São Sebastião",
-					"Recanto das Emas",
-					"Lago Sul",
-					"Riacho Fundo",
-					"Lago Norte",
-					"Candangolândia",
-					"Águas Claras",
-					"Riacho Fundo II",
-					"Sudoeste/Octogonal",
-					"Varjão",
-					"Park Way",
 					"SCIA",
-					"Sobradinho II",
-					"Jardim Botânico",
-					"Itapoã",
 					"SIA",
-					"Vicente Pires",
-					"Fercal"); 	
+					"Sobradinho II",
+					"Sobradinho	",
+					"Sudoeste/Octogonal",
+					"Taguatinga	",
+					"Varjão	",
+					"Vicente Pires"
+					
+					); 	
 		
 		//-- combobox - unidade federal --//
 		@FXML
@@ -319,7 +401,7 @@ public class TabUsuarioController implements Initializable {
 	public void listarUsuarios (String strPesquisa) {
 		
 		UsuarioDao usDao = new UsuarioDao();
-		List<Usuario> usuarioList = usDao.listUsuario(strPesquisaUsuario);
+		List<Usuario> usuarioList = usDao.listUsuario(strPesquisa);
 		ObservableList<UsuarioTabela> olUsuarioTabela = FXCollections.observableArrayList();
 		
 		
@@ -453,6 +535,9 @@ public class TabUsuarioController implements Initializable {
 		cbTipoPessoa.setDisable(true);
 		tfUsNome.setDisable(true); 
 		tfUsCPFCNPJ.setDisable(true);
+		
+		cbEndEmp.setDisable(true);
+		
 		tfUsEnd.setDisable(true);
 		
 		cbUsRA.setDisable(true); 

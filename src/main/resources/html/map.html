@@ -185,7 +185,11 @@ select {
 
 <script charset="UTF-8">
 
+	var map;
+	var marker;
+
 	function get_click_position(event){
+		
         	var location = event.latLng;
         	var lat = location.lat();
         	var lng = location.lng();
@@ -223,7 +227,7 @@ select {
                 mapTypeId: google.maps.MapTypeId.SATELLITE
             };
             map.setOptions(mapOptions);
-            setLightMarkerIcon();
+            //setLightMarkerIcon();
         }
 
         function switchRoadmap() {
@@ -231,7 +235,7 @@ select {
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             };
             map.setOptions(mapOptions);
-            setDarkMarkerIcon();
+            //setDarkMarkerIcon();
         }
 
         function switchHybrid() {
@@ -239,7 +243,7 @@ select {
                 mapTypeId: google.maps.MapTypeId.HYBRID
             };
             map.setOptions(mapOptions);
-            setLightMarkerIcon();
+            //setLightMarkerIcon();
         }
 
         function switchTerrain() {
@@ -247,7 +251,7 @@ select {
                 mapTypeId: google.maps.MapTypeId.TERRAIN
             };
             map.setOptions(mapOptions);
-            setDarkMarkerIcon();
+            //setDarkMarkerIcon();
         }
 
         function setDarkMarkerIcon() {
@@ -259,11 +263,11 @@ select {
         }
 
 
-//-- array de shapes --//
-var layers = [];
-
-//-- funcao para as shapes --//
-function toggleLayers(i) {
+		//-- array de shapes --//
+		var layers = [];
+		
+		//-- funcao para as shapes --//
+		function toggleLayers(i) {
 
       		if(layers[i].getMap()==null) {
          		layers[i].setMap(map);
@@ -294,11 +298,12 @@ function initAutocomplete() {
 
 	layers[6] = new google.maps.KmlLayer('https://sites.google.com/site/shapeskmlkmz/baciasHidrograficas.kmz',{ preserveViewport: true });
 	 
-	 layers[7] = new google.maps.TrafficLayer();
+	layers[7] = new google.maps.TrafficLayer();
 	 
 	//-- ADASA -15.775073004902042, -47.940351677729836    --//
 	 var defLatLng = new google.maps.LatLng(-15.790631073109617, -47.74939032660592); // coordenada para centralizar o mapa do df no google maps
-
+	 var adasa = new google.maps.LatLng(-15.775073004902042, -47.940351677729836); // coordenada adasa
+		
 	//-- opcoes do mapa --//
 	 var mapOptions = {
 	        center: defLatLng,
@@ -312,9 +317,9 @@ function initAutocomplete() {
 	 		google.maps.event.addListener(map, 'click', get_click_position);
 
 	    marker = new google.maps.Marker({
-	        position: defLatLng,
+	        position: adasa,
 	        map: map,
-	        icon: "img/Pin.png"
+	        //icon: "img/Pin.png"
 	    }
       
       );
@@ -344,6 +349,9 @@ function initAutocomplete() {
 	        //-- variável de endereço --//
 	        
 	        var endMap = results[1].formatted_address;
+	        //-- passar para os inputs lat e lng
+	        document.getElementById('lat').value = latlng.lat;  // não vai usar mais
+ 	    	document.getElementById('lng').value = latlng.lng;  // não  vai usar mais
 	        //-- passar as coordenadas com a variável de endereço --//
 	        app.handle(latlng.lat, latlng.lng, endMap);
 	        
@@ -391,7 +399,7 @@ function initAutocomplete() {
         return;
       }
       var icon = {
-        //url: place.icon,
+        url: place.icon,
         size: new google.maps.Size(71, 71),
         origin: new google.maps.Point(0, 0),
         anchor: new google.maps.Point(17, 34),
@@ -401,7 +409,7 @@ function initAutocomplete() {
       // Create a marker for each place.
       markers.push(new google.maps.Marker({
         map: map,
-        icon: icon,
+        //icon: icon,
         title: place.name,
         position: place.geometry.location
       }));
@@ -449,10 +457,10 @@ function initAutocomplete() {
 	<input type="checkbox" id="layer_03" onclick="toggleLayers(5)">UTM
 	<input type="checkbox" id="layer_03" onclick="toggleLayers(7)">Tráfego
 	
-	&nbsp &nbsp &nbsp   
+	&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
 	 
 	<!-- conversor de coordenadas - input -->
-	Conversor DMS para DD:
+	Conversor:
 	<input type="number" id="grauLat" class="InputConvLatLng"  placeholder="15" size="3" maxlength="3"/>
 	<input type="number" id="minLat" class="InputConvLatLng"  placeholder="46" size="3" maxlength="3"/>
 	<input type="number" id="segLat" class="InputConvLatLng"  placeholder="30" size="3" maxlength="3"/>

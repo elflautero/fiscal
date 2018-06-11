@@ -11,7 +11,7 @@ public class Main extends Application {
 	public Parent rootNode;
 
 	public static void main(final String[] args) {
-		System.out.println("Olá Mundo!!!");
+		
         Application.launch(args);
         
     }

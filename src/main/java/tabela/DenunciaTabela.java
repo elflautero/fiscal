@@ -8,60 +8,69 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class DenunciaTabela {
 	
-	private final SimpleIntegerProperty Cod_Denuncia;
-	private final SimpleStringProperty Doc_Denuncia;
-	private final SimpleStringProperty Doc_SEI_Denuncia;
-	private final SimpleStringProperty Proc_SEI_Denuncia;
-	private final SimpleStringProperty Desc_Denuncia;
+	private final SimpleIntegerProperty denunciaID;
+	private final SimpleStringProperty denDocumento;
+	private final SimpleStringProperty denDocumentoSEI;
+	private final SimpleStringProperty denProcesso;
+	private final SimpleStringProperty denDescricao;
+	private final SimpleStringProperty denDataDistribuicao;
+	private final SimpleStringProperty denDataRecebimento;
 	
-	private SimpleObjectProperty<Endereco> enderecoObjetoFK;
+	private SimpleObjectProperty<Endereco> denEnderecoFK;
 	
 	//-- CONSTRUTOR --// 
 	
 	public DenunciaTabela (
 			
-			int Cod_Denuncia, 
+			int denunciaID, 
 			
-			String Doc_Denuncia, 
-			String Doc_SEI_Denuncia, 
-			String Proc_SEI_Denuncia, 
-			String Desc_Denuncia, 
+			String denDocumento, 
+			String denDocumentoSEI, 
+			String denProcesso, 
+			String denDescricao, 
+			String denDataDistribuicao, 
+			String denDataRecebimento, 
 			
-			Endereco enderecoObjetoFK) {
+			Endereco denEnderecoFK) {
 		
 		super();
 		
-		this.Cod_Denuncia = new SimpleIntegerProperty(Cod_Denuncia);
-		this.Doc_Denuncia = new SimpleStringProperty(Doc_Denuncia);
-		this.Doc_SEI_Denuncia = new SimpleStringProperty(Doc_SEI_Denuncia);
-		this.Proc_SEI_Denuncia = new SimpleStringProperty(Proc_SEI_Denuncia);
-		this.Desc_Denuncia = new SimpleStringProperty(Desc_Denuncia);
+		this.denunciaID = new SimpleIntegerProperty(denunciaID);
+		this.denDocumento = new SimpleStringProperty(denDocumento);
+		this.denDocumentoSEI = new SimpleStringProperty(denDocumentoSEI);
+		this.denProcesso = new SimpleStringProperty(denProcesso);
+		this.denDescricao = new SimpleStringProperty(denDescricao);
+		this.denDataDistribuicao = new SimpleStringProperty(denDataDistribuicao);
+		this.denDataRecebimento = new SimpleStringProperty(denDataRecebimento);
 		
-		this.enderecoObjetoFK = new SimpleObjectProperty<>(enderecoObjetoFK);
+		this.denEnderecoFK = new SimpleObjectProperty<>(denEnderecoFK);
 		
 	}
 	
-	public int getCod_Denuncia () {
-		return Cod_Denuncia.get();  // esse get é para pegar apenas o que queremos do dado, senão ele retornaria uma string longa... 
+	public int getDenDenunciaID () {
+		return denunciaID.get();  // esse get é para pegar apenas o que queremos do dado, senão ele retornaria uma string longa... 
 	}
-	public String getDoc_Denuncia () {
-		return Doc_Denuncia.get();
+	public String getDenDocumento () {
+		return denDocumento.get();
 	}
-	public String getDoc_SEI_Denuncia () {
-		return Doc_SEI_Denuncia.get();
+	public String getDenDecumentoSEI () {
+		return denDocumentoSEI.get();
 	}
-	public String getProc_SEI_Denuncia () {
-		return Proc_SEI_Denuncia.get();
+	public String getDenProcessoSEI () {
+		return denProcesso.get();
 	}
-	public String getDesc_Denuncia () {
-		return Desc_Denuncia.get();
+	public String getDenDescricao () {
+		return denDescricao.get();
 	}
-	// precisei mudar o get para tipo objeto Endereco, ao incluir  no construtor da denúncia  o
-	
-			//this.enderecoObjetoFK = denunciaTabela.getenderecoTabelaFK();
-	
-	public Endereco getenderecoObjetoTabelaFK () {
-		return enderecoObjetoFK.get();
+	public String getDenDataDistribuicao () {
+		return denDataDistribuicao.get();
+	}
+	public String getDenDataRecebimento () {
+		return denDataRecebimento.get();
+	}
+	// objeto - FK //
+	public Endereco getDenEnderecoFK () {
+		return denEnderecoFK.get();
 	}
 	
 }

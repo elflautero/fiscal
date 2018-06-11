@@ -17,7 +17,6 @@ import dao.EnderecoDao;
 import entity.Denuncia;
 import entity.Endereco;
 import fiscalizacao.GoogleMap;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -35,7 +34,6 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -49,7 +47,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import tabela.EnderecoTabela;
 
 public class TabEnderecoController implements Initializable {
@@ -84,6 +81,7 @@ public class TabEnderecoController implements Initializable {
 	
 	@FXML Button btnEndMaps = new Button ();
 	
+	
 	@FXML Button btnDenAtualizar = new Button();
 	@FXML TextField tfEndPesq = new TextField();
 	
@@ -99,31 +97,15 @@ public class TabEnderecoController implements Initializable {
 	@FXML TableColumn<EnderecoTabela, String> tcEndRA;
 	@FXML TableColumn<EnderecoTabela, String> tcEndCid;
 	
+	
+	
 	// capturar enderereco para a TabInterfController
 	private static Endereco eGeral;
 	
 	//-- botao para chamar o mapa javascript --//
 	@FXML Image imgGetCoord = new Image(TabEnderecoController.class.getResourceAsStream("/images/getCoord.png")); 
 	@FXML Button btnCoord = new Button ();
-	/*
-	 Image imgSub = new Image(TabSubterraneaController.class.getResourceAsStream("/images/subterranea.png"));
-	
-	@FXML ImageView	iVewSubt = new ImageView();
-	 */
-	
-	
-	@FXML Button btnMap;
-	GoogleMap google;
-	
-	public void btnMapHab () {
-		
-		google.setMarkerPosition(-15.775073004902042, -47.940351677729836);
-		//google.setMapCenter(-15.775073004902042, -47.940351677729836);
-		google.switchTerrain();
-		//google.setDarkMarkerIcon();
-	}
-	
-	
+	@FXML Image imgMap = new Image(TabEnderecoController.class.getResourceAsStream("/images/map.png"));
 	
 	//-- coordenadas do mapa javascript --//
 	public static String latDec = "-15";
@@ -137,37 +119,39 @@ public class TabEnderecoController implements Initializable {
 			ObservableList<String> olEndRA = FXCollections
 				.observableArrayList(
 						
+						"Águas Claras",
 						"Brasília",
-						"Gama",
-						"Taguatinga",
 						"Brazlândia",
-						"Sobradinho",
-						"Planaltina",
-						"Paranoá",
-						"Núcleo Bandeirante",
+						"Candangolândia",
 						"Ceilândia",
-						"Guará",
 						"Cruzeiro",
+						"Fercal",
+						"Gama",
+						"Guará",
+						"Itapoã",
+						"Jardim Botânico",
+						"Lago Norte",
+						"Lago Sul",
+						"Núcleo Bandeirante",
+						"Paranoá",
+						"Park Way",
+						"Planaltina",
+						"Recanto das Emas",
+						"Riacho Fundo II",
+						"Riacho Fundo",
 						"Samambaia",
 						"Santa Maria",
 						"São Sebastião",
-						"Recanto das Emas",
-						"Lago Sul",
-						"Riacho Fundo",
-						"Lago Norte",
-						"Candangolândia",
-						"Águas Claras",
-						"Riacho Fundo II",
-						"Sudoeste/Octogonal",
-						"Varjão",
-						"Park Way",
 						"SCIA",
-						"Sobradinho II",
-						"Jardim Botânico",
-						"Itapoã",
 						"SIA",
-						"Vicente Pires",
-						"Fercal"); 	
+						"Sobradinho II",
+						"Sobradinho	",
+						"Sudoeste/Octogonal",
+						"Taguatinga	",
+						"Varjão	",
+						"Vicente Pires"
+						
+						); 	
 	
 			//-- combobox - unidade federal --//
 			@FXML
@@ -229,7 +213,7 @@ public class TabEnderecoController implements Initializable {
 	
  	}
  	
- 	// mÃ©todo selecionar endereÃ§o -- //
+ 	// método selecionar endereço -- //
  	public void selecionarEndereco () {
 	
 		tvListaEnd.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
@@ -319,64 +303,88 @@ public class TabEnderecoController implements Initializable {
 	// --  botao salvar -- //
 	public void btnEndSalvarHab (ActionEvent event) {
 			
-		if (tfEndLat.getText().isEmpty() || tfEndLon.getText().isEmpty()) {
+		if (tfEndLat.getText().isEmpty() || 
+				tfEndLon.getText().isEmpty()) {
+			
+			Alert a = new Alert (Alert.AlertType.ERROR);
+			a.setTitle("Alerta!!!");
+			a.setContentText("Coordenadas inválidas!!!");
+			a.setHeaderText(null);
+			a.show();
+			
+		} 
+		
+		else if (dGeralEnd == null) {
 			
 			Alert aLat = new Alert (Alert.AlertType.ERROR);
 			aLat.setTitle("Alerta!!!");
-			aLat.setContentText("Coordenadas inválidas!!!");
+			aLat.setContentText("Documento relacionado não selecionado!!!");
 			aLat.setHeaderText(null);
 			aLat.show();
-			
-		} else {
-			
-		Endereco endereco = new Endereco();
-			
-			endereco.setDesc_Endereco(tfEnd.getText());
-			endereco.setRA_Endereco(cbEndRA.getValue());    //endereco.setRA_Endereco(tfEndRA.getText());
-			endereco.setCEP_Endereco(tfEndCep.getText());
-			endereco.setCid_Endereco(tfEndCid.getText());
-			endereco.setUF_Endereco(cbEndUF.getValue());  //endereco.setUF_Endereco(tfEndUF.getText());
-			endereco.setLat_Endereco(Double.parseDouble(tfEndLat.getText()));
-			endereco.setLon_Endereco(Double.parseDouble(tfEndLon.getText()));
+		}
 		
-	
-		Denuncia denuncia = new Denuncia();
+			else {
 			
-			denuncia.setCod_Denuncia(dGeralEnd.getCod_Denuncia());
-			denuncia.setDoc_Denuncia(dGeralEnd.getDoc_Denuncia());
-			denuncia.setDoc_SEI_Denuncia(dGeralEnd.getDoc_SEI_Denuncia());
-			denuncia.setProc_SEI_Denuncia(dGeralEnd.getProc_SEI_Denuncia());
-			denuncia.setDesc_Denuncia(dGeralEnd.getDesc_Denuncia());
-			
-			denuncia.setEnderecoFK(endereco);
-			
-			
-		
-			endereco.getListDenuncias().add(denuncia);
-		
-		EnderecoDao enderecoDao = new EnderecoDao();
-		
-			enderecoDao.salvaEndereco(endereco);
-			enderecoDao.mergeEnd(endereco);
-			
-			//-- Alerta de endereco salvo --//
-			Alert aSalvo = new Alert (Alert.AlertType.CONFIRMATION);
-			aSalvo.setTitle("Parabéns!");
-			aSalvo.setContentText("O endereço salvo com sucesso!");
-			aSalvo.setHeaderText(null);
-			aSalvo.show();
-			
-			// pegar o valor, levar para o MainController  e depois para o label lblEnd no InterfController
-			eGeral = endereco;
-			main.pegarEnd(eGeral);
-			
-			
-			//-- modular botoes--//
-			modularBotoesInicial ();
-			
-			// listar enderecos --//
-			listarEnderecos (strPesquisaEnd);
-			selecionarEndereco();
+				if (tfEnd.getText().isEmpty()) {
+					
+					Alert a = new Alert (Alert.AlertType.ERROR);
+					a.setTitle("Alerta!!!");
+					a.setContentText("Informe: Endereço do Empreendimento!!!");
+					a.setHeaderText(null);
+					a.show();
+					
+				} else {
+					
+						Endereco endereco = new Endereco();
+							
+							endereco.setDesc_Endereco(tfEnd.getText());
+							endereco.setRA_Endereco(cbEndRA.getValue());    //endereco.setRA_Endereco(tfEndRA.getText());
+							endereco.setCEP_Endereco(tfEndCep.getText());
+							endereco.setCid_Endereco(tfEndCid.getText());
+							endereco.setUF_Endereco(cbEndUF.getValue());  //endereco.setUF_Endereco(tfEndUF.getText());
+							endereco.setLat_Endereco(Double.parseDouble(tfEndLat.getText()));
+							endereco.setLon_Endereco(Double.parseDouble(tfEndLon.getText()));
+						
+					
+							/*
+						Denuncia denuncia = new Denuncia();
+							
+							denuncia.setDenunciaID(denunciaID);(dGeralEnd.getDenunciaID());
+							denuncia.setDenDocumento(denDocumento);(dGeralEnd.getDenDocumento());
+							denuncia.setDenProcessoSEI(denProcessoSEI);(dGeralEnd.getDenProcessoSEI());
+							denuncia.s(dGeralEnd.getProc_SEI_Denuncia());
+							denuncia.setDesc_Denuncia(dGeralEnd.getDesc_Denuncia());
+							
+							
+							*/
+						Denuncia denuncia = new Denuncia();
+						
+							denuncia = dGeralEnd;
+							denuncia.setDenEnderecoFK(endereco);
+							endereco.getListDenuncias().add(dGeralEnd);
+						
+						EnderecoDao enderecoDao = new EnderecoDao();
+						
+							enderecoDao.salvaEndereco(endereco);
+							enderecoDao.mergeEnd(endereco);
+							
+							// pegar o valor, levar para o MainController  e depois para o label lblEnd no InterfController
+							eGeral = endereco;
+							main.pegarEnd(eGeral);
+							
+							//-- modular botoes--//
+							modularBotoesInicial ();
+							
+							// listar enderecos --//
+							listarEnderecos (strPesquisaEnd);
+							selecionarEndereco();
+							
+							Alert a = new Alert (Alert.AlertType.INFORMATION);
+							a.setTitle("Parabéns!!!");
+							a.setContentText("Cadastro salvo com sucesso!!!");
+							a.setHeaderText(null);
+							a.show();
+				}
 			
 		}
 			
@@ -384,13 +392,6 @@ public class TabEnderecoController implements Initializable {
 	
 	// -- botao editar -- //
 	public void btnEndEditarHab (ActionEvent event) {
-		
-		
-		// nÃ£o deixar editar sem um  documento cadastrado... colocar... primeiro puxar um documento
-		
-		// ou pedir para confirmar o documento relacionado  ao endereÃ§o
-		
-		// exigir denuncia -  Ã© preciso escolher uma denuncia antes de editar um endereÃ§o
 		
 		
 		if (tfEnd.isDisable()) {
@@ -405,41 +406,77 @@ public class TabEnderecoController implements Initializable {
 			tfLinkEnd.setDisable(false);
 				
 		} else {
+			
+			if (tfEndLat.getText().isEmpty()|| tfEndLon.getText().isEmpty() ) {
+				
+				Alert a = new Alert (Alert.AlertType.ERROR);
+				a.setTitle("Alerta!!!");
+				a.setContentText("Coordenadas inválidas!!!");
+				a.setHeaderText(null);
+				a.show();
+				
+			} 
+			
+			else if (dGeralEnd == null) {
+				
+				Alert aLat = new Alert (Alert.AlertType.ERROR);
+				aLat.setTitle("Alerta!!!");
+				aLat.setContentText("Documento relacionado não selecionado!!!");
+				aLat.setHeaderText(null);
+				aLat.show();
+			}
+			
+			else {
 		
-		EnderecoTabela enderecoTabelaEditar = tvListaEnd.getSelectionModel().getSelectedItem();
-		Endereco endereco = new Endereco(enderecoTabelaEditar);
-		
-		endereco.setDesc_Endereco(tfEnd.getText());
-		endereco.setRA_Endereco(cbEndRA.getValue());   //endereco.setRA_Endereco(tfEndRA.getText());
-		endereco.setCEP_Endereco(tfEndCep.getText());
-		endereco.setCid_Endereco(tfEndCid.getText());
-		endereco.setUF_Endereco(cbEndUF.getValue());  //endereco.setUF_Endereco(tfEndUF.getText());
-		endereco.setLat_Endereco(Double.parseDouble(tfEndLat.getText()));
-		endereco.setLon_Endereco(Double.parseDouble(tfEndLon.getText()));
-	
-		Denuncia denuncia = new Denuncia();
-		
-		denuncia.setCod_Denuncia(dGeralEnd.getCod_Denuncia());
-		denuncia.setDoc_Denuncia(dGeralEnd.getDoc_Denuncia());
-		denuncia.setDoc_SEI_Denuncia(dGeralEnd.getDoc_SEI_Denuncia());
-		denuncia.setProc_SEI_Denuncia(dGeralEnd.getProc_SEI_Denuncia());
-		denuncia.setDesc_Denuncia(dGeralEnd.getDesc_Denuncia());
-		denuncia.setEnderecoFK(endereco);
-		
-		endereco.getListDenuncias().add(denuncia);
-		
-		EnderecoDao enderecoDao = new EnderecoDao();
-	
-		enderecoDao.mergeEnd(endereco);
-		
-		
-		// pegar o valor, levar para o MainController  e depois para o label lblEnd no InterfController
-		eGeral = endereco;
-		main.pegarEnd(eGeral);
+					EnderecoTabela enderecoTabelaEditar = tvListaEnd.getSelectionModel().getSelectedItem();
+					Endereco endereco = new Endereco(enderecoTabelaEditar);
 					
-		listarEnderecos(strPesquisaEnd);
-		
-		modularBotoesInicial (); 
+					endereco.setDesc_Endereco(tfEnd.getText());
+					endereco.setRA_Endereco(cbEndRA.getValue());   //endereco.setRA_Endereco(tfEndRA.getText());
+					endereco.setCEP_Endereco(tfEndCep.getText());
+					endereco.setCid_Endereco(tfEndCid.getText());
+					endereco.setUF_Endereco(cbEndUF.getValue());  //endereco.setUF_Endereco(tfEndUF.getText());
+					endereco.setLat_Endereco(Double.parseDouble(tfEndLat.getText()));
+					endereco.setLon_Endereco(Double.parseDouble(tfEndLon.getText()));
+				
+					/*
+					Denuncia denuncia = new Denuncia();
+					
+					denuncia.setCod_Denuncia(dGeralEnd.getCod_Denuncia());
+					denuncia.setDoc_Denuncia(dGeralEnd.getDoc_Denuncia());
+					denuncia.setDoc_SEI_Denuncia(dGeralEnd.getDoc_SEI_Denuncia());
+					denuncia.setProc_SEI_Denuncia(dGeralEnd.getProc_SEI_Denuncia());
+					denuncia.setDesc_Denuncia(dGeralEnd.getDesc_Denuncia());
+					denuncia.setEnderecoFK(endereco);
+					*/
+					
+					Denuncia denuncia = new Denuncia();
+					
+					denuncia = dGeralEnd;
+					denuncia.setDenEnderecoFK(endereco);
+					
+					endereco.getListDenuncias().add(dGeralEnd);
+					
+					EnderecoDao enderecoDao = new EnderecoDao();
+				
+					enderecoDao.mergeEnd(endereco);
+					
+					
+					// pegar o valor, levar para o MainController  e depois para o label lblEnd no InterfController
+					eGeral = endereco;
+					main.pegarEnd(eGeral);
+								
+					listarEnderecos(strPesquisaEnd);
+					
+					modularBotoesInicial (); 
+					
+					Alert a = new Alert (Alert.AlertType.INFORMATION);
+					a.setTitle("Parabéns!!!");
+					a.setContentText("Cadastro editado com sucesso!!!");
+					a.setHeaderText(null);
+					a.show();
+					
+			}
 		
 		}	
 	}
@@ -450,10 +487,6 @@ public class TabEnderecoController implements Initializable {
 		EnderecoTabela endereco = tvListaEnd.getSelectionModel().getSelectedItem();
 		
 		int id = endereco.getCod_Endereco();
-		
-		//enderecoList = enderecoDao.listEndereco();
-		
-		// obsList.
 		
 		EnderecoDao enderecoDao = new EnderecoDao();
 		
@@ -473,6 +506,12 @@ public class TabEnderecoController implements Initializable {
 			listarEnderecos(strPesquisaEnd);
 			
 			modularBotoesInicial();
+			
+			Alert a = new Alert (Alert.AlertType.INFORMATION);
+			a.setTitle("Parabéns!!!");
+			a.setContentText("Cadastro deletado com sucesso!!!");
+			a.setHeaderText(null);
+			a.show();
 		}
 		
 	}
@@ -487,7 +526,6 @@ public class TabEnderecoController implements Initializable {
 		cbEndRA.setValue(null);
 		
 		tfEndCep.setText("");
-		tfEndCid.setText("BrasÃ­lia");
 		
 		cbEndUF.setValue(null);
 		
@@ -591,6 +629,8 @@ public class TabEnderecoController implements Initializable {
 		
 	}
 	
+	GoogleMap google;
+	
 	//-- buscador de enderecos e coordenadas --//
 		public void btnEndMapsHab (ActionEvent event) throws IOException {
 			
@@ -618,16 +658,7 @@ public class TabEnderecoController implements Initializable {
 	        		
 	        		ObservableList<String> documentos = FXCollections.observableArrayList(end);
 	    			ListView<String> listView = new ListView<String>(documentos);
-	    			TableColumn<List, String> tc = new TableColumn<List, String> ("Documentos");
 	    			
-	    			tc.setCellValueFactory(new Callback<CellDataFeatures<List, String>, ObservableValue<String>>() {
-	    				
-	    			     public ObservableValue<String> call(CellDataFeatures<List, String> p) {
-	    			 
-	    			         return new SimpleStringProperty(p.getValue().toString());
-	    			     }
-	    			 });
-
 	    				Scene scene = new Scene(listView);
 	    				Stage stage = new Stage(); // StageStyle.UTILITY - tirei para ver como fica, se aparece o minimizar
 	    				stage.setWidth(400);
@@ -683,6 +714,8 @@ public class TabEnderecoController implements Initializable {
 		cbEndUF.setValue("DF");
 		cbEndUF.setItems(olEndUF);
 		
+		btnEndMaps.setGraphic(new ImageView(imgMap));
+		//btnMapCoord.setGraphic(new ImageView(imgMapCoord));
 	}
 
 	//-- Modular os botoes na inicializacao do programa --//

@@ -1,6 +1,5 @@
 package controllers;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -21,13 +20,13 @@ import entity.Endereco;
 import entity.HibernateUtil;
 import entity.Vistoria;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -37,11 +36,12 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
@@ -52,13 +52,13 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.util.Callback;
 import javafx.util.StringConverter;
 import tabela.VistoriaTabela;
 
 public class TabVistoriaController implements Initializable{
 	
 	@FXML Pane tabVistoria = new Pane();
+	RelatosController relCon;
 	
 	String infraIncisos [];
 	String atenIncisos [];
@@ -89,6 +89,9 @@ public class TabVistoriaController implements Initializable{
 	@FXML Button btnRecomendacoes;
 	
 	
+	
+	@FXML Image imgRelatorio = new Image(TabVistoriaController.class.getResourceAsStream("/images/report32.png"));
+		
 	DateTimeFormatter formatter = new DateTimeFormatterBuilder()
 			.parseCaseInsensitive()
 			.append(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
@@ -171,8 +174,6 @@ public class TabVistoriaController implements Initializable{
 	@FXML Pane paneApresentacao; // = new Pane();
 	@FXML Pane paneRelato; // = new Pane();
 	@FXML Pane paneRecomendacao; // = new Pane();
-	
-	
 	
 	//-- passar vistoria para o maincontroller --//
 	public Vistoria visGeral;
@@ -388,20 +389,15 @@ public class TabVistoriaController implements Initializable{
 		dpDataFiscalizacao.getEditor().clear(); // limpar datepicker
 		dpDataCriacaoAto.getEditor().clear();
 		
-		htmlObjeto.setHtmlText("");
-		htmlApresentacao.setHtmlText("");
-		htmlRelato.setHtmlText("");
-		htmlRecomendacao.setHtmlText("");
+		htmlObjeto.setHtmlText("<p><font face='Times New Roman'> </font></p>");
+		htmlApresentacao.setHtmlText("<p><font face='Times New Roman'> </font></p>");
+		htmlRelato.setHtmlText("<p><font face='Times New Roman'> </font></p>");
+		htmlRecomendacao.setHtmlText("<p><font face='Times New Roman'> </font></p>");
 		
 		tfAto.setDisable(false);
 		tfAtoSEI.setDisable(false);
 		dpDataFiscalizacao.setDisable(false);
 		dpDataCriacaoAto.setDisable(false);
-		
-		htmlObjeto.setDisable(false);
-		htmlApresentacao.setDisable(false);
-		htmlRelato.setDisable(false);
-		htmlRecomendacao.setDisable(false);
 		
 		btnNovo.setDisable(true);
 		btnSalvar.setDisable(false);
@@ -409,52 +405,93 @@ public class TabVistoriaController implements Initializable{
 		btnEditar.setDisable(true);
 		btnExcluir.setDisable(true);
 		
+		abrirEditorHTML();
+		abrirCheckBox();
+		LimparCheckBox();
+		
 	}
 	
 	public void btnSalvarHab (ActionEvent event) {
 		
-		Vistoria vis = new Vistoria();
+		if (eGeralVis == null) {
+			
+			Alert aLat = new Alert (Alert.AlertType.ERROR);
+			aLat.setTitle("Alerta!!!");
+			aLat.setContentText("Endereço NÃO selecionado!!!");
+			aLat.setHeaderText(null);
+			aLat.show();
+			
+		} else {
+			
+			if (dpDataFiscalizacao.getValue() == null  ||
+					dpDataCriacaoAto.getValue() == null  ||
+						tfAto.getText().isEmpty()
+					
+					) {
+				
+				Alert aLat = new Alert (Alert.AlertType.ERROR);
+				aLat.setTitle("Alerta!!!");
+				aLat.setContentText("Informe: Número do Ato, Data da fiscalização e Data de Criação!!!");
+				aLat.setHeaderText(null);
+				aLat.show();
+				
+			} else {
 		
-			vis.setVisIdentificacao(tfAto.getText());
-			vis.setVisSEI(tfAtoSEI.getText());
-			
-			vis.setVisDataFiscalizacao(formatter.format(dpDataFiscalizacao.getValue()));
-			vis.setVisDataCriacao(formatter.format(dpDataCriacaoAto.getValue()));
-			
-			vis.setVisInfracoes(strInfracoes);
-			vis.setVisPenalidades(strPenalidades);
-			vis.setVisAgravantes(strAgravantes);
-			vis.setVisAtenuantes(strAtenuantes);
-			
-			vis.setVisObjeto(htmlObjeto.getHtmlText());
-			vis.setVisApresentacao(htmlApresentacao.getHtmlText());
-			vis.setVisRelato(htmlRelato.getHtmlText());
-			vis.setVisRecomendacoes(htmlRecomendacao.getHtmlText());
-			
-			
-			vis.setVisEndCodigoFK(eGeralVis);
-			
-			VistoriaDao visDao = new VistoriaDao();
-			
-			visDao.salvarVistoria(vis);
-			visDao.mergeVistoria(vis);
-			
-			listarVistorias(strPesquisa);
-			selecionarVistoria();
-			
-			//-- Alerta de interferência editada --//
-			Alert vSalva = new Alert (Alert.AlertType.CONFIRMATION);
-			vSalva.setTitle("Parabéns!");
-			vSalva.setContentText("vistoria salva com sucesso!");
-			vSalva.setHeaderText(null);
-			vSalva.show();
-			
-			
-			//-- número da vistoria para a tabela atos --//
-			
-			visGeral = vis;
-			main.pegarVistoria(vis);
-			
+					Vistoria vis = new Vistoria();
+					
+						vis.setVisIdentificacao(tfAto.getText());
+						vis.setVisSEI(tfAtoSEI.getText());
+						
+						if (dpDataFiscalizacao.getValue() == null) {
+							vis.setVisDataFiscalizacao(null);}
+						else {
+							vis.setVisDataFiscalizacao(formatter.format(dpDataFiscalizacao.getValue()));
+						}
+						
+						if (dpDataCriacaoAto.getValue() == null) {
+							vis.setVisDataCriacao(null);}
+						else {
+							vis.setVisDataCriacao(formatter.format(dpDataCriacaoAto.getValue()));
+						}
+						
+						vis.setVisInfracoes(strInfracoes);
+						vis.setVisPenalidades(strPenalidades);
+						vis.setVisAgravantes(strAgravantes);
+						vis.setVisAtenuantes(strAtenuantes);
+						
+						vis.setVisObjeto(htmlObjeto.getHtmlText());
+						vis.setVisApresentacao(htmlApresentacao.getHtmlText());
+						vis.setVisRelato(htmlRelato.getHtmlText());
+						vis.setVisRecomendacoes(htmlRecomendacao.getHtmlText());
+						
+						
+						vis.setVisEndCodigoFK(eGeralVis);
+						
+						VistoriaDao visDao = new VistoriaDao();
+						
+						visDao.salvarVistoria(vis);
+						visDao.mergeVistoria(vis);
+						
+						listarVistorias(strPesquisa);
+						selecionarVistoria();
+						modularBotoes();
+						fecharEditorHTML();
+						
+						
+						//-- Alerta de interferência editada --//
+						Alert a = new Alert (Alert.AlertType.INFORMATION);
+						a.setTitle("Parabéns!");
+						a.setContentText("Cadastro salvo!");
+						a.setHeaderText(null);
+						a.show();
+						
+						
+						//-- número da vistoria para a tabela atos --//
+						
+						visGeral = vis;
+						main.pegarVistoria(vis);
+		}
+		}
 		
 	}
 	
@@ -472,68 +509,95 @@ public class TabVistoriaController implements Initializable{
 			htmlRelato.setDisable(false);
 			htmlRecomendacao.setDisable(false);
 			
+			abrirEditorHTML();
+			abrirCheckBox();
+			
 		} else {
+			
+			if (dpDataFiscalizacao == null  ||
+					dpDataCriacaoAto == null
+					
+					) {
+				
+				Alert aLat = new Alert (Alert.AlertType.ERROR);
+				aLat.setTitle("Alerta!!!");
+				aLat.setContentText("Informe: Data da Fiscalização e Data de Criação do Ato!!!");
+				aLat.setHeaderText(null);
+				aLat.show();
+				
+			} else {
 		
-			try {
-			
-			VistoriaTabela visTab = tvVistoria.getSelectionModel().getSelectedItem();
-			
-			Vistoria vis = new Vistoria(visTab);
-			
-				//-- capturar endereço relacionado --//
-				vis.setVisEndCodigoFK(eGeralVis);
-			
-				//-- capturar tela --//
-				vis.setVisIdentificacao(tfAto.getText());
-				vis.setVisSEI(tfAtoSEI.getText());
+				try {
 				
-				vis.setVisDataFiscalizacao(formatter.format(dpDataFiscalizacao.getValue()));  // está dando erro temporal nullpoint
-				vis.setVisDataCriacao(formatter.format(dpDataCriacaoAto.getValue()));
+				VistoriaTabela visTab = tvVistoria.getSelectionModel().getSelectedItem();
 				
-				vis.setVisInfracoes(strInfracoes);
-				vis.setVisPenalidades(strPenalidades);
-				vis.setVisAgravantes(strAgravantes);
-				vis.setVisAtenuantes(strAtenuantes);
+				Vistoria vis = new Vistoria(visTab);
 				
-				vis.setVisObjeto(htmlObjeto.getHtmlText());
-				vis.setVisApresentacao(htmlApresentacao.getHtmlText());
-				vis.setVisRelato(htmlRelato.getHtmlText());
-				vis.setVisRecomendacoes(htmlRecomendacao.getHtmlText());
+					//-- capturar endereço relacionado --//
+					vis.setVisEndCodigoFK(eGeralVis);
 				
-						VistoriaDao visDao = new VistoriaDao();
+					//-- capturar tela --//
+					vis.setVisIdentificacao(tfAto.getText());
+					vis.setVisSEI(tfAtoSEI.getText());
 						
-						visDao.mergeVistoria(vis);
-						
-
-						listarVistorias(strPesquisa);
-						selecionarVistoria();
-						modularBotoes();
-						
-						//-- Alerta de interferência editada --//
-						Alert vMerge = new Alert (Alert.AlertType.CONFIRMATION);
-						vMerge.setTitle("Parabéns!");
-						vMerge.setContentText("vistoria editada!");
-						vMerge.setHeaderText(null);
-						vMerge.show();
-						
-						visGeral = vis;
-						main.pegarVistoria(vis);
-			
-			
-					} catch (Exception e) {
-						
-						System.out.println("Erro ao editar: " + e);
-						
-						//-- Alerta de interferência editada --//
-						Alert vMerge = new Alert (Alert.AlertType.ERROR);
-						vMerge.setTitle("Atenção!");
-						vMerge.setContentText("erro ao editar vistoria!");
-						vMerge.setHeaderText(null);
-						vMerge.show();
-						
+					if (dpDataFiscalizacao.getValue() == null) {
+						vis.setVisDataFiscalizacao(null);}
+					else {
+						vis.setVisDataFiscalizacao(formatter.format(dpDataFiscalizacao.getValue()));
 					}
+					
+					if (dpDataCriacaoAto.getValue() == null) {
+						vis.setVisDataCriacao(null);}
+					else {
+						vis.setVisDataCriacao(formatter.format(dpDataCriacaoAto.getValue()));
+					}
+					
+					vis.setVisInfracoes(strInfracoes);
+					vis.setVisPenalidades(strPenalidades);
+					vis.setVisAgravantes(strAgravantes);
+					vis.setVisAtenuantes(strAtenuantes);
+					
+					vis.setVisObjeto(htmlObjeto.getHtmlText());
+					vis.setVisApresentacao(htmlApresentacao.getHtmlText());
+					vis.setVisRelato(htmlRelato.getHtmlText());
+					vis.setVisRecomendacoes(htmlRecomendacao.getHtmlText());
+					
+							VistoriaDao visDao = new VistoriaDao();
+							
+							visDao.mergeVistoria(vis);
+							
+	
+							listarVistorias(strPesquisa);
+							selecionarVistoria();
+							
+							modularBotoes();
+							fecharEditorHTML();
+							
+							//-- Alerta de interferência editada --//
+							Alert a = new Alert (Alert.AlertType.INFORMATION);
+							a.setTitle("Parabéns!");
+							a.setContentText("Vistoria editada!");
+							a.setHeaderText(null);
+							a.show();
+							
+							visGeral = vis;
+							main.pegarVistoria(vis);
+				
+				
+						} catch (Exception e) {
+							
+							System.out.println("Erro ao editar: " + e);
+							
+							//-- Alerta de interferência editada --//
+							Alert a = new Alert (Alert.AlertType.ERROR);
+							a.setTitle("Atenção!"); 
+							a.setContentText("Erro ao editar vistoria!" + "[ " + e + " ]");
+							a.setHeaderText(null);
+							a.show();
+							
+						}
 			
-			
+			}
 			
 		}
 		
@@ -551,14 +615,17 @@ public class TabVistoriaController implements Initializable{
 			
 			listarVistorias(strPesquisa);
 			selecionarVistoria();
+			
 			modularBotoes();
+			fecharEditorHTML();
+			
 			
 			//-- Alerta de interferência editada --//
-			Alert vRemover = new Alert (Alert.AlertType.CONFIRMATION);
-			vRemover.setTitle("Parabéns!");
-			vRemover.setContentText("vistoria excluída!");
-			vRemover.setHeaderText(null);
-			vRemover.show();
+			Alert a = new Alert (Alert.AlertType.INFORMATION);
+			a.setTitle("Parabéns!");
+			a.setContentText("Vistoria excluída!");
+			a.setHeaderText(null);
+			a.show();
 		
 				} catch (Exception e) {
 					
@@ -567,7 +634,7 @@ public class TabVistoriaController implements Initializable{
 					//-- Alerta de interferência editada --//
 					Alert vRemover = new Alert (Alert.AlertType.ERROR);
 					vRemover.setTitle("Atenção!");
-					vRemover.setContentText("erro ao excluir vistoria!");
+					vRemover.setContentText("erro ao excluir vistoria!"  + "[ " + e + " ]");
 					vRemover.setHeaderText(null);
 					vRemover.show();
 				}
@@ -579,25 +646,55 @@ public class TabVistoriaController implements Initializable{
 	public void btnCancelarHab (ActionEvent event) {
 		
 		modularBotoes();
+		fecharEditorHTML();
+		
 	}
 	
 	public void btnPesquisarHab (ActionEvent event) {
-		
+		try {
 		strPesquisa = tfPesquisar.getText();
 		listarVistorias(strPesquisa);
 		selecionarVistoria();
+		fecharEditorHTML();
+		modularBotoes();
+		
+		
+		}
+		
+			catch (Exception e) {
+				Alert aLat = new Alert (Alert.AlertType.ERROR);
+				aLat.setTitle("Alerta!!!");
+				aLat.setContentText("Erro de conexão!!!" + "[ " + e + " ]");
+				aLat.setHeaderText(null);
+				aLat.show();
+			}
 		
 	}
 	
+	String strData;
+	String strEndereco;
 	
 	public void btnPesqObjHab (ActionEvent event) {
 		
+		try {
+			strData = formatter.format(dpDataFiscalizacao.getValue());
+		} catch (Exception e) {
+			strData = "DATA";
+		}
+		
+		
+		try {
+			strEndereco = eGeralVis.getDesc_Endereco();
+		} catch (Exception e) {
+			strEndereco = "ENDEREÇO";
+		}
+		
 		//e se a vistoria for salva pela primeira vez? Ainda  não há as informaçoes visGeral
 				
-		String objeto = "<p>Em atendimento ao " + visGeral.getVisEndCodigoFK().getListDenuncias().get(0).getDoc_Denuncia() + 
-				", foi realizada vistoria no dia " + visGeral.getVisDataFiscalizacao() + ", para verifica&ccedil;&atilde;o de " +
-				visGeral.getVisEndCodigoFK().getListDenuncias().get(0).getDesc_Denuncia() + ", no endereço: " + 
-				visGeral.getVisEndCodigoFK().getDesc_Endereco() + ".</p>";
+		String objeto = "<p>Em atendimento ao MEMORANDO... foi realizada vistoria no dia "
+				+ strData 
+				+ ", para verifica&ccedil;&atilde;o de DESCRIÇÃO DENÚNCIA, no endereço: " + strEndereco + ".";
+				;
 		
 		htmlObjeto.setHtmlText(objeto);
 		
@@ -605,9 +702,9 @@ public class TabVistoriaController implements Initializable{
 	
 	public void btnPesApHab (ActionEvent event) {
 		
-		String apresentacao = "A vistoria ocorreu em " + visGeral.getVisDataFiscalizacao() + ", por volta das HORA, "
+		String apresentacao = "A vistoria ocorreu em " + strData + ", por volta das HORAS, "
 				+ "e contou com a presen&ccedil;a do(s) t&eacute;cnico(s) "
-				+ "TECNICO e do respons&aacute;vel pela propriedade " + eGeralVis.getListUsuarios().get(0).getUsNome() + ".";
+				+ "TECNICO e do respons&aacute;vel pela propriedade USUÁRIO.";
 		
 		htmlApresentacao.setHtmlText(apresentacao);
 		
@@ -615,35 +712,76 @@ public class TabVistoriaController implements Initializable{
 
 	public void btnAjudaRelatorioHab (ActionEvent event) {
 	
+		Pane legPane = new Pane();
+    	relCon = new RelatosController();
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TabRelatos.fxml"));
+		loader.setRoot(legPane);
+		loader.setController(relCon);
+		
+		try {
+			loader.load();
+		} catch (IOException e) {
+			System.out.println("erro leitura do pane - chamada legislação");
+			e.printStackTrace();
+		}
+		
+		Scene scene = new Scene(legPane);
+		Stage stage = new Stage(); // StageStyle.UTILITY - tirei para ver como fica, se aparece o minimizar
+		stage.setWidth(960);
+		stage.setHeight(600);
+        stage.setScene(scene);
+        stage.setMaximized(false);
+        stage.setResizable(false);
+        stage.setAlwaysOnTop(true); 
+        stage.show();
 	}
 	
 	
 	String htmlVistoria = "";
+	String htmlRel = "";
 	
 	public void btnRelatorioHab (ActionEvent event) {
 		
-		File file = null;
+		//File file = null;
+		//file = new File (TabVistoriaController.class.getResource("/html/relatorioVistoria.html").getFile());
 		
-		file = new File (TabVistoriaController.class.getResource("/html/relatorioVistoria.html").getFile());
+		/*
+		WebView webView = new WebView(); 
+		WebEngine eng = webView.getEngine(); 
+		eng.load(getClass().getResource("/html/relatorioVistoria.html").toExternalForm()); 
+		*/
+		
+		/*
+        eng.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>(){ 
+
+                public void changed(final ObservableValue<? extends Worker.State> observableValue, 
+
+                                    final Worker.State oldState, 
+                                    final Worker.State newState) 
+
+                { 
+                	if (newState == Worker.State.SUCCEEDED){  
+                		htmlRel = (String) eng.executeScript("document.documentElement.outerHTML"); 
+                		
+                	} 
+                	
+               } 
+        }); 
+        */
+		
+		htmlRel = (String) engVistoria.executeScript("document.documentElement.outerHTML");
 		
 		Document docHtml = null;
 		
-		try {
-			docHtml = Jsoup.parse(file, "UTF-8");  // retirei o  .clone()
-			
-			// file:\C:\Users\fabricio\eclipse-workspace\fiscalizacao\target\classes\html\relatorioVistoria.html 
-			// (A sintaxe do nome do arquivo, do nome do diretório ou do rótulo do volume está incorreta)
-			
-		} catch (IOException e1) {
-			System.out.println("Erro na leitura no parse Jsoup!!!");
-			e1.printStackTrace();
-		}
-		  
-	      
+		docHtml = Jsoup.parse(htmlRel, "UTF-8").clone();
+		
 		// inicializar o usuario //
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction tx = session.beginTransaction();
 		Endereco endereco = (Endereco) session.get(Endereco.class, eGeralVis.getCod_Endereco());
+		
+		System.out.println("código do endereço: " + eGeralVis.getCod_Endereco());
+		
 		
 		// inicializar as listas //
 		Hibernate.initialize(endereco.getListUsuarios());
@@ -653,64 +791,104 @@ public class TabVistoriaController implements Initializable{
 		    tx.commit();
 		}
 		
-		System.out.println("usuario para imprimir relatorio " + endereco.getListUsuarios().get(0).getUsNome());
+		System.out.println("usuario para imprimir relatorio abaixo: ");
+		System.out.println(endereco.getListUsuarios().get(0).getUsNome());
 		
 		session.close();
 		
 		//-- preencher a vistoria --//
-		docHtml.select("nRela").prepend(visGeral.getVisIdentificacao());
-		docHtml.select("nRelSEI").prepend(visGeral.getVisSEI());
-		
+		try {docHtml.select("nRela").prepend(visGeral.getVisIdentificacao());} catch (Exception e){docHtml.select("nRela").prepend("");};
+		try {docHtml.select("nRelSEI").prepend(visGeral.getVisSEI());} catch (Exception e){docHtml.select("nRelSEI").prepend("");};
+	
 		if (endereco.getListUsuarios() != null) { // não está funcionando... melhorar
 			
 			//-- usuario atraves do endereco --//
-			docHtml.select("nomeUs").prepend(endereco.getListUsuarios().get(0).getUsNome());
-			docHtml.select("cpfUs").prepend(endereco.getListUsuarios().get(0).getUsCPFCNPJ());
-			docHtml.select("endUs").prepend(endereco.getListUsuarios().get(0).getUsDescricaoEnd()); 
+			try {docHtml.select("nomeUs").prepend(endereco.getListUsuarios().get(0).getUsNome());} catch (Exception e) {docHtml.select("nomeUs").prepend("");};
+			try {docHtml.select("cpfUs").prepend(endereco.getListUsuarios().get(0).getUsCPFCNPJ());} catch (Exception e) {docHtml.select("cpfUs").prepend("");};
+			try {docHtml.select("endUs").prepend(endereco.getListUsuarios().get(0).getUsDescricaoEnd());} catch (Exception e) {docHtml.select("endUs").prepend("");};
 			
 			if (endereco.getListUsuarios().get(0).getUsRA() != null) { //se o combox diferente de null, não acontece o mesmo no textfield
 				docHtml.select("raUs").prepend(endereco.getListUsuarios().get(0).getUsRA());
 			}
 			
 			// endereco do usuario atraves do endereco //
-			docHtml.select("cepUs").prepend(endereco.getListUsuarios().get(0).getUsCEP());
-			docHtml.select("cidUs").prepend(endereco.getListUsuarios().get(0).getUsCidade());
-			docHtml.select("ufUs").prepend(endereco.getListUsuarios().get(0).getUsEstado());
-			docHtml.select("telUs").prepend(endereco.getListUsuarios().get(0).getUsTelefone());
-			docHtml.select("celUs").prepend(endereco.getListUsuarios().get(0).getUsCelular());
-			docHtml.select("emailUs").prepend(endereco.getListUsuarios().get(0).getUsEmail());
+			try {docHtml.select("cepUs").prepend(endereco.getListUsuarios().get(0).getUsCEP());}catch (Exception e){docHtml.select("cepUs").prepend("");};
+			try {docHtml.select("cidUs").prepend(endereco.getListUsuarios().get(0).getUsCidade());}catch (Exception e){docHtml.select("cidUs").prepend("");};
+			try {docHtml.select("ufUs").prepend(endereco.getListUsuarios().get(0).getUsEstado());}catch (Exception e){docHtml.select("ufUs").prepend("");};
+			try {docHtml.select("telUs").prepend(endereco.getListUsuarios().get(0).getUsTelefone());}catch (Exception e){docHtml.select("telUs").prepend("");};
+			try {docHtml.select("celUs").prepend(endereco.getListUsuarios().get(0).getUsCelular());}catch (Exception e){docHtml.select("celUs").prepend("");};
+			try {docHtml.select("emailUs").prepend(endereco.getListUsuarios().get(0).getUsEmail());}catch (Exception e){docHtml.select("emailUs").prepend("");};
 			
-			    
+			// catch (Exception e){};
 			// endereco do empreedimento //  
 			 
-			docHtml.select("EndEmpDes").prepend(endereco.getDesc_Endereco());
-			docHtml.select("EndEmpRA").prepend(endereco.getRA_Endereco());
-			docHtml.select("EndEmpCep").prepend(endereco.getCEP_Endereco());
-			docHtml.select("EndEmpCid").prepend(endereco.getCid_Endereco());
-			docHtml.select("EndEmpUF").prepend(endereco.getUF_Endereco());
+			try { docHtml.select("EndEmpDes").prepend(endereco.getDesc_Endereco());} catch (Exception e){docHtml.select("EndEmpDes").prepend("");};
+			try { docHtml.select("EndEmpRA").prepend(endereco.getRA_Endereco());} catch (Exception e){docHtml.select("EndEmpRA").prepend("");};
+			try { docHtml.select("EndEmpCep").prepend(endereco.getCEP_Endereco());} catch (Exception e){docHtml.select("EndEmpCep").prepend("");};
+			try { docHtml.select("EndEmpCid").prepend(endereco.getCid_Endereco());} catch (Exception e){docHtml.select("EndEmpCid").prepend("");};
+			try { docHtml.select("EndEmpUF").prepend(endereco.getUF_Endereco());} catch (Exception e){docHtml.select("EndEmpUF").prepend("");};
 			
 		}
 		
 		//-- latitude e longitude do endereço --//
-		docHtml.select("latEnd").prepend(endereco.getLat_Endereco().toString());
-		docHtml.select("lngEnd").prepend(endereco.getLon_Endereco().toString());
+		try {docHtml.select("latEnd").prepend(endereco.getLat_Endereco().toString());} catch (Exception e){docHtml.select("latEnd").prepend("");};
+		try {docHtml.select("lngEnd").prepend(endereco.getLon_Endereco().toString());} catch (Exception e){docHtml.select("lngEnd").prepend("");};
 		 
 		//-- objecto, apresentação, relato e recomendações --//
-		docHtml.select("objVis").prepend(visGeral.getVisObjeto());
-		docHtml.select("apreVis").prepend(visGeral.getVisApresentacao());
-		docHtml.select("relVis").prepend(visGeral.getVisRelato());
-		docHtml.select("recVis").prepend(visGeral.getVisRecomendacoes());
+		try {docHtml.select("objVis").prepend(visGeral.getVisObjeto());} catch (Exception e){docHtml.select("objVis").prepend("");};
+		try {docHtml.select("apreVis").prepend(visGeral.getVisApresentacao());} catch (Exception e){docHtml.select("apreVis").prepend("");};
+		try {docHtml.select("relVis").prepend(visGeral.getVisRelato());} catch (Exception e){docHtml.select("relVis").prepend("");};
+		try {docHtml.select("recVis").prepend(visGeral.getVisRecomendacoes());} catch (Exception e){docHtml.select("recVis").prepend("");};
 		
 		// <br><p>Tipo: Superficial, Bacia: Paranoá, UH: 23, Corpo Hídrico: rio das pedras, Coordenadas: -15, -48</p><br>
 		//interEnd
 		
 		if (endereco.getListInterferencias() != null) {
 			
-			docHtml.select("interEnd").prepend(
-					"<p>Tipo: " + endereco.getListInterferencias().get(0).getInter_Tipo()
-				+ 	", Bacia: " + endereco.getListInterferencias().get(0).getInter_Bacia()
-				+ 	"</p>"
-				);
+			System.out.println("quantidade de interferencias " + endereco.getListInterferencias().size());
+			
+			for (int i  = 0; i< endereco.getListInterferencias().size(); i++) {
+				
+				String strTipo, strBacia, strUH,strCorpo, strLat, strLng;
+				
+				try{strTipo = endereco.getListInterferencias().get(i).getInter_Tipo();
+					}catch(Exception e) {strTipo = "";};
+					
+						if (endereco.getListInterferencias().get(i).getInter_Bacia() != null) {
+							strBacia = endereco.getListInterferencias().get(i).getInter_Bacia();
+							} else {
+							strBacia = "";	
+							};
+						
+							try{strUH = endereco.getListInterferencias().get(i).getInter_UH();
+								}catch(Exception e) {strUH = "";};
+								
+									try{strCorpo = endereco.getListInterferencias().get(i).getInter_Corpo_Hidrico();
+										}catch(Exception e) {strCorpo = "";};
+										
+											try{strLat = endereco.getListInterferencias().get(i).getInter_Lat().toString();
+												}catch(Exception e) {strLat = "";};
+												try{strLng = endereco.getListInterferencias().get(i).getInter_Lng().toString();
+													}catch(Exception e) {strLng = "";};
+					
+				
+			
+				docHtml.select("interEnd").prepend(
+							"<ul>"
+						+	"<li>Tipo: " + strTipo
+						+ 	", Bacia: " + strBacia
+						+ 	", UH: " + strUH
+						+ 	", Corpo Hídrico: " + strCorpo
+						+	"<ul>"
+						+	"<li>Coordenadas: " + strLat + "," + strLng + "</li>"
+						+	"</ul>"
+						+		"</li>"
+						+			"</ul>"
+					);
+					
+			}
+			
+			
 		}
 	
 		
@@ -718,25 +896,25 @@ public class TabVistoriaController implements Initializable{
 		for (int i = 0; i<infrArray.length; i++) {
 			
 			if (infrArray[i].equals("1") ) {
-				docHtml.select("infrRel").append(infraIncisos[0]);
+				docHtml.select("infrRel").append("<p>" + infraIncisos[0]);
 			}
 			if (infrArray[i].equals("2") ) {
-				docHtml.select("infrRel").append(infraIncisos[1]);
+				docHtml.select("infrRel").append("<p>" + infraIncisos[1]);
 			}
 			if (infrArray[i].equals("3")  ) {
-				docHtml.select("infrRel").append(infraIncisos[2]);
+				docHtml.select("infrRel").append("<p>" + infraIncisos[2]);
 			}
 			if (infrArray[i].equals("4") ) {
-				docHtml.select("infrRel").append(infraIncisos[3]);
+				docHtml.select("infrRel").append("<p>" + infraIncisos[3]);
 			}
 			if (infrArray[i].equals("5")  ) {
-				docHtml.select("infrRel").append(infraIncisos[4]);
+				docHtml.select("infrRel").append("<p>" + infraIncisos[4]);
 			}
 			if (infrArray[i].equals("6") ) {
-				docHtml.select("infrRel").append(infraIncisos[5]);
+				docHtml.select("infrRel").append("<p>" + infraIncisos[5]);
 			}
 			if (infrArray[i].equals("7")  ) {
-				docHtml.select("infrRel").append(infraIncisos[6]);
+				docHtml.select("infrRel").append("<p>" + infraIncisos[6]);
 			}
 			
 		}
@@ -745,31 +923,31 @@ public class TabVistoriaController implements Initializable{
 		for (int i = 0; i<atenArray.length; i++) {
 			
 			if (atenArray[i].equals("1") ) {
-				docHtml.select("atenRel").append(atenIncisos[0]);
+				docHtml.select("atenRel").append("<p>" + atenIncisos[0]);
 			}
 			if (atenArray[i].equals("2") ) {
-				docHtml.select("atenRel").append(atenIncisos[1]);
+				docHtml.select("atenRel").append("<p>" + atenIncisos[1]);
 			}
 			if (atenArray[i].equals("3")  ) {
-				docHtml.select("atenRel").append(atenIncisos[2]);
+				docHtml.select("atenRel").append("<p>" + atenIncisos[2]);
 			}
 			if (atenArray[i].equals("4") ) {
-				docHtml.select("atenRel").append(atenIncisos[3]);
+				docHtml.select("atenRel").append("<p>" + atenIncisos[3]);
 			}
 			if (atenArray[i].equals("5")  ) {
-				docHtml.select("atenRel").append(atenIncisos[4]);
+				docHtml.select("atenRel").append("<p>" + atenIncisos[4]);
 			}
 			if (atenArray[i].equals("6") ) {
-				docHtml.select("atenRel").append(atenIncisos[5]);
+				docHtml.select("atenRel").append("<p>" + atenIncisos[5]);
 			}
 			if (atenArray[i].equals("7")  ) {
-				docHtml.select("atenRel").append(atenIncisos[6]);
+				docHtml.select("atenRel").append("<p>" + atenIncisos[6]);
 			}
 			if (atenArray[i].equals("8")  ) {
-				docHtml.select("atenRel").append(atenIncisos[7]);
+				docHtml.select("atenRel").append("<p>" + atenIncisos[7]);
 			}
 			if (atenArray[i].equals("9")  ) {
-				docHtml.select("atenRel").append(atenIncisos[8]);
+				docHtml.select("atenRel").append("<p>" + atenIncisos[8]);
 			}
 			
 		}
@@ -777,40 +955,40 @@ public class TabVistoriaController implements Initializable{
 		//tem que colocar um  if
 		for (int i = 0; i<agraArray.length; i++) {
 			if (agraArray[i].equals("a") ) {
-				docHtml.select("agraRel").append(agraIncisos[0]);
+				docHtml.select("agraRel").append("<p>" + agraIncisos[0]);
 			}
 			if (agraArray[i].equals("b") ) {
-				docHtml.select("agraRel").append(agraIncisos[1]);
+				docHtml.select("agraRel").append("<p>" + agraIncisos[1]);
 			}
 			if (agraArray[i].equals("c")  ) {
-				docHtml.select("agraRel").append(agraIncisos[2]);
+				docHtml.select("agraRel").append("<p>" + agraIncisos[2]);
 			}
 			if (agraArray[i].equals("d") ) {
-				docHtml.select("agraRel").append(agraIncisos[3]);
+				docHtml.select("agraRel").append("<p>" + agraIncisos[3]);
 			}
 			if (agraArray[i].equals("e")  ) {
-				docHtml.select("agraRel").append(agraIncisos[4]);
+				docHtml.select("agraRel").append("<p>" + agraIncisos[4]);
 			}
 			if (agraArray[i].equals("f") ) {
-				docHtml.select("agraRel").append(agraIncisos[5]);
+				docHtml.select("agraRel").append("<p>" + agraIncisos[5]);
 			}
 			if (agraArray[i].equals("g")  ) {
-				docHtml.select("agraRel").append(agraIncisos[6]);
+				docHtml.select("agraRel").append("<p>" + agraIncisos[6]);
 			}
 			if (agraArray[i].equals("h")  ) {
-				docHtml.select("agraRel").append(agraIncisos[7]);
+				docHtml.select("agraRel").append("<p>" + agraIncisos[7]);
 			}
 			if (agraArray[i].equals("i")  ) {
-				docHtml.select("agraRel").append(agraIncisos[8]);
+				docHtml.select("agraRel").append("<p>" + agraIncisos[8]);
 			}
 			if (agraArray[i].equals("j")  ) {
-				docHtml.select("agraRel").append(agraIncisos[9]);
+				docHtml.select("agraRel").append("<p>" + agraIncisos[9]);
 			}
 			if (agraArray[i].equals("k")  ) {
-				docHtml.select("agraRel").append(agraIncisos[10]);
+				docHtml.select("agraRel").append("<p>" + agraIncisos[10]);
 			}
 			if (agraArray[i].equals("l")  ) {
-				docHtml.select("agraRel").append(agraIncisos[11]);
+				docHtml.select("agraRel").append("<p>" + agraIncisos[11]);
 			}
 					
 		}	// com if, mais um }
@@ -834,7 +1012,7 @@ public class TabVistoriaController implements Initializable{
 		Scene scene = new Scene(browser);
 		
 		Stage stage = new Stage(StageStyle.UTILITY);
-		stage.setWidth(1250);
+		stage.setWidth(1150);
 		stage.setHeight(750);
         stage.setScene(scene);
         stage.setMaximized(false);
@@ -855,6 +1033,9 @@ public class TabVistoriaController implements Initializable{
 
 	}
 	
+	WebView webVistoria;
+	WebEngine engVistoria;
+		
 	//-- INITIALIZE --//
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -912,9 +1093,20 @@ public class TabVistoriaController implements Initializable{
 		
 		// -- inicitalizar o mapa -- //
 				Platform.runLater(() ->{
-				relatarHTML();  
+				relatarHTML();
+				fecharEditorHTML();
 				
 				});
+				
+		btnRelatorio.setGraphic(new ImageView(imgRelatorio));
+		
+		// -- inicitalizar o mapa -- //
+		Platform.runLater(() ->{
+			webVistoria = new WebView();
+			engVistoria = webVistoria.getEngine();
+			engVistoria.load(getClass().getResource("/html/relatorioVistoria.html").toExternalForm()); 
+		 
+		});
 		
 	}
 	
@@ -958,7 +1150,7 @@ public class TabVistoriaController implements Initializable{
 	    
 		htmlRelato  = new HTMLEditor();
 		
-			htmlRelato.setPrefSize(800, 773);
+			htmlRelato.setPrefSize(800, 673);
 			
 			htmlRelato.setOnKeyPressed(event -> {
 			    if (event.getCode() == KeyCode.SPACE  
@@ -1082,15 +1274,26 @@ public class TabVistoriaController implements Initializable{
 					tfAto.setText(visTab.getVisIdentificacao());
 					tfAtoSEI.setText(visTab.getVisSei());
 					
-					dpDataFiscalizacao.setValue(LocalDate.parse(visTab.getVisDataFiscalizacao(), formatter));
-					dpDataCriacaoAto.setValue(LocalDate.parse(visTab.getVisDataCriacao(), formatter));
+					if (visTab.getVisDataFiscalizacao() == null) {
+						dpDataFiscalizacao.getEditor().clear();
+	 				} else {
+	 					dpDataFiscalizacao.setValue(LocalDate.parse(visTab.getVisDataFiscalizacao(), formatter));
+	 				}
+	 				
+	 				if (visTab.getVisDataCriacao() == null) {
+	 					dpDataCriacaoAto.getEditor().clear();
+	 				} else {
+	 					dpDataCriacaoAto.setValue(LocalDate.parse(visTab.getVisDataCriacao(), formatter));
+	 				}
 						
-					modularCheckBox ();
+					
 					
 					String infr =  visTab.getVisInfracoes();
 					String pena = visTab.getVisPenalidades();
 					String agra = visTab.getVisAgravantes();
 					String aten = visTab.getVisAtenuantes();
+					
+					LimparCheckBox();
 					
 					System.out.println(htmlObjeto.getHtmlText());
 					
@@ -1329,6 +1532,21 @@ public class TabVistoriaController implements Initializable{
 			});
 		}
 	 	
+	 	
+	 public void fecharEditorHTML () {
+		 htmlObjeto.setDisable(true);
+		 htmlApresentacao.setDisable(true);
+		 htmlRelato.setDisable(true);
+		 htmlRecomendacao.setDisable(true);
+	 }
+	 
+	 public void abrirEditorHTML () {
+		 htmlObjeto.setDisable(false);
+		 htmlApresentacao.setDisable(false);
+		 htmlRelato.setDisable(false);
+		 htmlRecomendacao.setDisable(false);
+	 }
+	 	
 	 public void modularBotoes () {
 		 
 		 tfAto.setDisable(true);
@@ -1341,9 +1559,97 @@ public class TabVistoriaController implements Initializable{
 		 btnExcluir.setDisable(true);
 		 
 		 btnNovo.setDisable(false);
+		 
+		 fecharCheckBox ();
 	 }
 	 
-	 public void modularCheckBox () {
+	 public void fecharCheckBox () {
+		 
+		 checkInfra1.setDisable(true);
+		 checkInfra2.setDisable(true);
+		 checkInfra3.setDisable(true);
+		 checkInfra4.setDisable(true);
+		 checkInfra5.setDisable(true);
+		 checkInfra6.setDisable(true);
+		 checkInfra7.setDisable(true);
+		 
+		 checkPena1.setDisable(true);
+		 checkPena2.setDisable(true);
+		 checkPena3.setDisable(true);
+		 checkPena4.setDisable(true);
+		 checkPena5.setDisable(true);
+		 checkPena6.setDisable(true);
+		 checkPena7.setDisable(true);
+		 
+		 checkAten1.setDisable(true);
+		 checkAten2.setDisable(true);
+		 checkAten3.setDisable(true);
+		 checkAten4.setDisable(true);
+		 checkAten5.setDisable(true);
+		 checkAten6.setDisable(true);
+		 checkAten7.setDisable(true);
+		 checkAten8.setDisable(true);
+		 checkAten9.setDisable(true);
+		 
+		 checkAgra1.setDisable(true);
+		 checkAgra2.setDisable(true);
+		 checkAgra3.setDisable(true);
+		 checkAgra4.setDisable(true);
+		 checkAgra5.setDisable(true);
+		 checkAgra6.setDisable(true);
+		 checkAgra7.setDisable(true);
+		 checkAgra8.setDisable(true);
+		 checkAgra9.setDisable(true);
+		 checkAgra10.setDisable(true);
+		 checkAgra11.setDisable(true);
+		 checkAgra12.setDisable(true);
+		 
+	 }
+	 
+	 public void abrirCheckBox () {
+		 
+		 checkInfra1.setDisable(false);
+		 checkInfra2.setDisable(false);
+		 checkInfra3.setDisable(false);
+		 checkInfra4.setDisable(false);
+		 checkInfra5.setDisable(false);
+		 checkInfra6.setDisable(false);
+		 checkInfra7.setDisable(false);
+		 
+		 checkPena1.setDisable(false);
+		 checkPena2.setDisable(false);
+		 checkPena3.setDisable(false);
+		 checkPena4.setDisable(false);
+		 checkPena5.setDisable(false);
+		 checkPena6.setDisable(false);
+		 checkPena7.setDisable(false);
+		 
+		 checkAten1.setDisable(false);
+		 checkAten2.setDisable(false);
+		 checkAten3.setDisable(false);
+		 checkAten4.setDisable(false);
+		 checkAten5.setDisable(false);
+		 checkAten6.setDisable(false);
+		 checkAten7.setDisable(false);
+		 checkAten8.setDisable(false);
+		 checkAten9.setDisable(false);
+		 
+		 checkAgra1.setDisable(false);
+		 checkAgra2.setDisable(false);
+		 checkAgra3.setDisable(false);
+		 checkAgra4.setDisable(false);
+		 checkAgra5.setDisable(false);
+		 checkAgra6.setDisable(false);
+		 checkAgra7.setDisable(false);
+		 checkAgra8.setDisable(false);
+		 checkAgra9.setDisable(false);
+		 checkAgra10.setDisable(false);
+		 checkAgra11.setDisable(false);
+		 checkAgra12.setDisable(false);
+		 
+	 }
+
+	 public void LimparCheckBox () {
 		 
 		 checkInfra1.setSelected(false);
 		 checkInfra2.setSelected(false);
@@ -1389,23 +1695,11 @@ public class TabVistoriaController implements Initializable{
 		 
 		 ObservableList<String> documentos = FXCollections.observableArrayList(infraIncisos);
 			ListView<String> listView = new ListView<String>(documentos);
-			TableColumn<List, String> tc = new TableColumn<List, String> ("Documentos");
 			
-			tc.setCellValueFactory(new Callback<CellDataFeatures<List, String>, ObservableValue<String>>() {
-				
-			     public ObservableValue<String> call(CellDataFeatures<List, String> p) {
-			 
-			         return new SimpleStringProperty(p.getValue().toString());
-			     }
-			 });
-			 
-
-				//TableView tv = new TableView(listView);
-				
 				Scene scene = new Scene(listView);
 				Stage stage = new Stage(); // StageStyle.UTILITY - tirei para ver como fica, se aparece o minimizar
 				stage.setWidth(964);
-				stage.setHeight(185);
+				stage.setHeight(210);
 			    stage.setScene(scene);
 			    stage.setMaximized(false);
 			    stage.setResizable(false);
@@ -1415,92 +1709,33 @@ public class TabVistoriaController implements Initializable{
 			    stage.setAlwaysOnTop(true); 
 			    stage.show();
 			
-			    //--  https://docs.oracle.com/javafx/2/ui_controls/ListViewSample.java.html  --// 
-			    listView.getSelectionModel().selectedItemProperty().addListener(
-             new ChangeListener<String>() {
-                 public void changed(ObservableValue<? extends String> 
-                 ov, String old_val, String new_val) {
-               
-                      Clipboard clip = Clipboard.getSystemClipboard();
-                      ClipboardContent conteudo = new ClipboardContent();
-                      conteudo.putString(new_val);
-                      clip.setContent(conteudo);
-                 }
+			  //--  https://docs.oracle.com/javafx/2/ui_controls/ListViewSample.java.html  --// 
+			 listView.getSelectionModel().selectedItemProperty().addListener(
+	             new ChangeListener<String>() {
+	                 public void changed(ObservableValue<? extends String> 
+	                 ov, String old_val, String new_val) {
+	               
+	                      Clipboard clip = Clipboard.getSystemClipboard();
+	                      ClipboardContent conteudo = new ClipboardContent();
+	                      conteudo.putHtml(new_val);
+	                      String artigo = (String) conteudo.getString();
+	                      conteudo.putString(artigo);
+	                      clip.setContent(conteudo);
+	                      
+	                 }
              });
              
 		 
 	 }
 	 public void btnPenalidadesHab (ActionEvent event) {
 		 
-		 
-	 }
-	 public void btnAtenuantesHab (ActionEvent event) {
-		 
-		 ObservableList<String> documentos = FXCollections.observableArrayList(atenIncisos);
+		 ObservableList<String> documentos = FXCollections.observableArrayList(penaIncisos);
 			ListView<String> listView = new ListView<String>(documentos);
-			TableColumn<List, String> tc = new TableColumn<List, String> ("Documentos");
 			
-			tc.setCellValueFactory(new Callback<CellDataFeatures<List, String>, ObservableValue<String>>() {
-				
-			     public ObservableValue<String> call(CellDataFeatures<List, String> p) {
-			 
-			         return new SimpleStringProperty(p.getValue().toString());
-			     }
-			 });
-
-				//TableView tv = new TableView(listView);
-				
 				Scene scene = new Scene(listView);
 				Stage stage = new Stage(); // StageStyle.UTILITY - tirei para ver como fica, se aparece o minimizar
 				stage.setWidth(964);
-				stage.setHeight(185);
-			    stage.setScene(scene);
-			    stage.setMaximized(false);
-			    stage.setResizable(false);
-			    stage.setX(425.0);
-			    stage.setY(410.0);
-			   
-			    stage.setAlwaysOnTop(true); 
-			    stage.show();
-			
-			    //--  https://docs.oracle.com/javafx/2/ui_controls/ListViewSample.java.html  --// 
-			    listView.getSelectionModel().selectedItemProperty().addListener(
-          new ChangeListener<String>() {
-              public void changed(ObservableValue<? extends String> 
-              ov, String old_val, String new_val) {
-            
-                   Clipboard clip = Clipboard.getSystemClipboard();
-                   ClipboardContent conteudo = new ClipboardContent();
-                   conteudo.putString(new_val);
-                   clip.setContent(conteudo);
-              }
-          });
-          
-         
-	 
-	 
-	 }
-	 public void btnAgravantesHab (ActionEvent event) {
-		
-		 
-		 ObservableList<String> documentos = FXCollections.observableArrayList(agraIncisos);
-			ListView<String> listView = new ListView<String>(documentos);
-			TableColumn<List, String> tc = new TableColumn<List, String> ("Documentos");
-			
-			tc.setCellValueFactory(new Callback<CellDataFeatures<List, String>, ObservableValue<String>>() {
-				
-			     public ObservableValue<String> call(CellDataFeatures<List, String> p) {
-			 
-			         return new SimpleStringProperty(p.getValue().toString());
-			     }
-			 });
-
-				//TableView tv = new TableView(listView);
-				
-				Scene scene = new Scene(listView);
-				Stage stage = new Stage(); // StageStyle.UTILITY - tirei para ver como fica, se aparece o minimizar
-				stage.setWidth(964);
-				stage.setHeight(185);
+				stage.setHeight(210);
 			    stage.setScene(scene);
 			    stage.setMaximized(false);
 			    stage.setResizable(false);
@@ -1513,13 +1748,91 @@ public class TabVistoriaController implements Initializable{
 			    //--  https://docs.oracle.com/javafx/2/ui_controls/ListViewSample.java.html  --// 
 			    listView.getSelectionModel().selectedItemProperty().addListener(
 			    		new ChangeListener<String>() {
-              public void changed(ObservableValue<? extends String> 
-              ov, String old_val, String new_val) {
+			    			public void changed(ObservableValue<? extends String> 
+			    				ov, String old_val, String new_val) {
             
                    Clipboard clip = Clipboard.getSystemClipboard();
                    ClipboardContent conteudo = new ClipboardContent();
-                   conteudo.putString(new_val);
+                   conteudo.putHtml(new_val);
+                   String artigo = (String) conteudo.getString();
+                   conteudo.putString(artigo);
                    clip.setContent(conteudo);
+                   
+              }
+          });
+	 }
+	 
+	 public void btnAtenuantesHab (ActionEvent event) {
+		 
+		 ObservableList<String> documentos = FXCollections.observableArrayList(atenIncisos);
+			ListView<String> listView = new ListView<String>(documentos);
+			
+				Scene scene = new Scene(listView);
+				Stage stage = new Stage(); // StageStyle.UTILITY - tirei para ver como fica, se aparece o minimizar
+				stage.setWidth(964);
+				stage.setHeight(250);
+			    stage.setScene(scene);
+			    stage.setMaximized(false);
+			    stage.setResizable(false);
+			    stage.setX(425.0);
+			    stage.setY(410.0);
+			   
+			    stage.setAlwaysOnTop(true); 
+			    stage.show();
+			
+			    //--  https://docs.oracle.com/javafx/2/ui_controls/ListViewSample.java.html  --// 
+			    listView.getSelectionModel().selectedItemProperty().addListener(
+			    		new ChangeListener<String>() {
+			    			public void changed(ObservableValue<? extends String> 
+			    				ov, String old_val, String new_val) {
+            
+            	  Clipboard clip = Clipboard.getSystemClipboard();
+                  ClipboardContent conteudo = new ClipboardContent();
+                  conteudo.putHtml(new_val);
+                  String artigo = (String) conteudo.getString();
+                  conteudo.putString(artigo);
+                  clip.setContent(conteudo);
+              }
+          });
+          
+         
+	 
+	 
+	 }
+	 public void btnAgravantesHab (ActionEvent event) {
+		
+		 
+		 ObservableList<String> documentos = FXCollections.observableArrayList(agraIncisos);
+			ListView<String> listView = new ListView<String>(documentos);
+			
+				
+				Scene scene = new Scene(listView);
+				Stage stage = new Stage(); // StageStyle.UTILITY - tirei para ver como fica, se aparece o minimizar
+				stage.setWidth(964);
+				stage.setHeight(310);
+			    stage.setScene(scene);
+			    stage.setMaximized(false);
+			    stage.setResizable(false);
+			    stage.setX(425.0);
+			    stage.setY(410.0);
+			   
+			    stage.setAlwaysOnTop(true); 
+			    stage.show();
+			
+			    //--  https://docs.oracle.com/javafx/2/ui_controls/ListViewSample.java.html  --// 
+			    listView.getSelectionModel().selectedItemProperty().addListener(
+			    		new ChangeListener<String>() {
+			    			public void changed(ObservableValue<? extends String> 
+			    				ov, String old_val, String new_val) {
+            
+            	  
+            	  Clipboard clip = Clipboard.getSystemClipboard();
+                  ClipboardContent conteudo = new ClipboardContent();
+                  conteudo.putHtml(new_val);
+                  String artigo = (String) conteudo.getString();
+                  conteudo.putString(artigo);
+                  clip.setContent(conteudo);
+            	  
               }
           });
          
@@ -1527,122 +1840,111 @@ public class TabVistoriaController implements Initializable{
 	 
 	 public void ObterArtigos () {
 		 
-		 	//--  --//
-			infraIncisos = new String [8];
+		 	//-- infrações  --//
+			infraIncisos = new String [7];
 			
 		
-			infraIncisos [0] = "<p>I - derivar ou utilizar recursos hídricos para qualquer finalidade, sem a respectiva " + 
-					"outorga de direito de uso;</p>";
+			infraIncisos [0] = "I - derivar ou utilizar recursos hídricos para qualquer finalidade, sem a respectiva " + 
+					"outorga de direito de uso;";
 			
 			
-			infraIncisos [1] = "<p>II - implantar ou iniciar a implantação de empreendimento que exija derivação ou " + 
+			infraIncisos [1] = "II - implantar ou iniciar a implantação de empreendimento que exija derivação ou " + 
 					"utilização de recursos hídricos, superficiais ou subterrâneos que implique alterações no regime," + 
-					"quantidade ou qualidade dos mesmos, sem a autorização dos órgãos ou entidades competentes;</p>";
+					"quantidade ou qualidade dos mesmos, sem a autorização dos órgãos ou entidades competentes;";
 			
-			infraIncisos [2] = "<p>III - utilizar-se de recursos hídricos ou executar obras ou serviços relacionados com os " + 
-					"mesmos em desacordo com as condições estabelecidas na outorga;</p>";
+			infraIncisos [2] = "III - utilizar-se de recursos hídricos ou executar obras ou serviços relacionados com os " + 
+					"mesmos em desacordo com as condições estabelecidas na outorga;";
 			
-			infraIncisos [3] = "<p>IV - perfurar poços para extração de água subterrânea ou operá-los sem a devida " + 
-					"autorização; </p>";
+			infraIncisos [3] = "IV - perfurar poços para extração de água subterrânea ou operá-los sem a devida " + 
+					"autorização;";
 			
-			infraIncisos [4] = "<p>V - fraudar as medições dos volumes d’água utilizados ou declarar valores diferentes " + 
-					"dos medidos; </p>";
+			infraIncisos [4] = "V - fraudar as medições dos volumes d’água utilizados ou declarar valores diferentes " + 
+					"dos medidos;";
 			
-			infraIncisos [5] = "<p>VI - infringir normas estabelecidas nos regulamentos da legislação vigente e " + 
+			infraIncisos [5] = "VI - infringir normas estabelecidas nos regulamentos da legislação vigente e " + 
 					"superveniente e nos regulamentos administrativos, inclusive em resoluções, instruções e procedimentos " + 
-					"fixados pelos órgãos ou entidades competentes; </p>";
+					"fixados pelos órgãos ou entidades competentes;";
 			
-			infraIncisos [6] = "<p>VII - obstar ou dificultar a ação fiscalizadora das autoridades competentes, no exercício " + 
-					"de suas funções;</p>";
+			infraIncisos [6] = "VII - obstar ou dificultar a ação fiscalizadora das autoridades competentes, no exercício " + 
+					"de suas funções;";
+			
+			penaIncisos = new String [7];
+			
+			penaIncisos [0] = "Infração LEVE: Multa no valor base de R$ 400,00 (quatrocentos reais)";
+					
+			penaIncisos [1] = "Infração LEVE: Multa no valor base de R$ 1.000,00 (um mil reais)";
+			
+			penaIncisos [2] = "Infração GRAVE: Multa no valor base de R$ 10.001 (dez mil e um reais)";
+			
+			penaIncisos [3] = "Infração LEVE: Multa no valor base de R$ 1.000,00 (um mil reais)";
+			
+			penaIncisos [4] = "Infração GRAVE: Multa no valor base de R$ 10.001 (dez mil e um reais)";
+											
+			penaIncisos [5] = "Infração GRAVE: Multa no valor base de R$ 10.001 (dez mil e um reais)";
+													
+			penaIncisos [6] = "Infração LEVE: Multa no valor base de R$ 600,00 (seiscentos reais)";
 			
 			//-- atenuantes --//
 			atenIncisos = new String [9];
 			
 			
-			atenIncisos [0] = "<p>I - baixo grau de instrução ou escolaridade do usuário dos recursos hídricos;</p>";
+			atenIncisos [0] = "I - baixo grau de instrução ou escolaridade do usuário dos recursos hídricos;";
 			
-			atenIncisos [1] = "<p>II - arrependimento do usuário, manifestado pela espontânea reparação do dano ou pela " + 
-					"mitigação significativa da degradação causada aos recursos hídricos;</p>";
+			atenIncisos [1] = "II - arrependimento do usuário, manifestado pela espontânea reparação do dano ou pela " + 
+					"mitigação significativa da degradação causada aos recursos hídricos;";
 			
-			atenIncisos [2] = "<p>III - comunicação prévia, pelo usuário, de perigo iminente de degradação dos recursos " + 
-					"hídricos; </p>";
+			atenIncisos [2] = "III - comunicação prévia, pelo usuário, de perigo iminente de degradação dos recursos " + 
+					"hídricos;";
 			
-			atenIncisos [3] = "<p>IV - oficialização do comprometimento do usuário em sanar as irregularidades e reparar " + 
-					"os danos delas decorrentes;</p>";
+			atenIncisos [3] = "IV - oficialização do comprometimento do usuário em sanar as irregularidades e reparar " + 
+					"os danos delas decorrentes;";
 			
-			atenIncisos [4] = "<p>V - colaboração explícita com a fiscalização;</p>";
+			atenIncisos [4] = "V - colaboração explícita com a fiscalização;";
 			
-			atenIncisos [5] = "<p>VI - tratando-se de usuário não outorgado, haver espontaneamente procurado a Agência " + 
-					"para regularização do uso dos recursos hídricos; </p>";
+			atenIncisos [5] = "VI - tratando-se de usuário não outorgado, haver espontaneamente procurado a Agência " + 
+					"para regularização do uso dos recursos hídricos;";
 			
-			atenIncisos [6] = "<p>VII - atendimento a todas as recomendações e exigências, nos prazos fixados pela " + 
-					"Agência; </p>";
+			atenIncisos [6] = "VII - atendimento a todas as recomendações e exigências, nos prazos fixados pela " + 
+					"Agência;";
 			
-			atenIncisos [7] = "<p>VIII - reconstituição dos recursos hídricos degradados ou sua recomposição na forma " + 
-					"exigida; </p>";
+			atenIncisos [7] = "VIII - reconstituição dos recursos hídricos degradados ou sua recomposição na forma " + 
+					"exigida;";
 			
-			atenIncisos [8] = "<p>IX - não ter sido autuado por infração nos últimos 5 (cinco) anos anteriores ao fato.</p>";
+			atenIncisos [8] = "IX - não ter sido autuado por infração nos últimos 5 (cinco) anos anteriores ao fato.";
 			
 			
 			//-- agravantes --//
 			agraIncisos = new String [12];
 			
-			agraIncisos [0] = "<p>a) para obter vantagem pecuniária;</p>";
+			agraIncisos [0] = "a) para obter vantagem pecuniária;";
 			
-			agraIncisos [1] = "<p>b) mediante coação de outrem para a sua execução material;</p>";
+			agraIncisos [1] = "b) mediante coação de outrem para a sua execução material;";
 			
-			agraIncisos [2] = "<p>c) com implicações graves à saúde pública ou ao meio ambiente, em especial aos " + 
-					"recursos hídricos;</p>";
+			agraIncisos [2] = "c) com implicações graves à saúde pública ou ao meio ambiente, em especial aos " + 
+					"recursos hídricos;";
 			
-			agraIncisos [3] = "<p>d) que atinja áreas de unidades de conservação ou áreas sujeitas, por ato do Poder " + 
-					"Público, a regime especial de uso;</p>";
+			agraIncisos [3] = "d) que atinja áreas de unidades de conservação ou áreas sujeitas, por ato do Poder " + 
+					"Público, a regime especial de uso;";
 			
-			agraIncisos [4] = "<p>e) que atinja áreas urbanas ou quaisquer assentamentos humanos;</p>";
+			agraIncisos [4] = "e) que atinja áreas urbanas ou quaisquer assentamentos humanos;";
 			
-			agraIncisos [5] = "<p>f) em época de racionamento do uso de água ou em condições sazonais adversas ao seu " + 
-					"uso;</p>";
+			agraIncisos [5] = "f) em época de racionamento do uso de água ou em condições sazonais adversas ao seu " + 
+					"uso;";
 			
-			agraIncisos [6] = "<p>g) mediante fraude ou abuso de confiança;</p>";
+			agraIncisos [6] = "g) mediante fraude ou abuso de confiança;";
 			
-			agraIncisos [7] = "<p>h) mediante abuso do direito de uso do recurso hídrico;</p>";
+			agraIncisos [7] = "h) mediante abuso do direito de uso do recurso hídrico;";
 			
-			agraIncisos [8] = "<p>i) em favor do interesse de pessoa jurídica mantida total ou parcialmente por recursos " + 
-					"públicos ou beneficiada por incentivos fiscais;</p>";
+			agraIncisos [8] = "i) em favor do interesse de pessoa jurídica mantida total ou parcialmente por recursos " + 
+					"públicos ou beneficiada por incentivos fiscais;";
 			
-			agraIncisos [9] = "<p>j) sem proceder à reparação integral dos danos causados;</p>";
+			agraIncisos [9] = "j) sem proceder à reparação integral dos danos causados;";
 			
-			agraIncisos [10] = "<p>k) que tenha sido facilitada por funcionário público no exercício de suas funções;</p>";
+			agraIncisos [10] = "k) que tenha sido facilitada por funcionário público no exercício de suas funções;";
 			
-			agraIncisos [11] = "<p>l) mediante fraude documental;</p>";
+			agraIncisos [11] = "l) mediante fraude documental;";
 		 
 		 
 	 }
 	
 }
-
-
-/* para ler o html, mas não precisa mais...
-WebView webView = new WebView();
-   
-WebEngine eng = webView.getEngine();
-
-eng.load(getClass().getResource("/html/relatoriovistoria.html").toExternalForm());
-
-eng.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>()
-
-    {
-        public void changed(final ObservableValue<? extends Worker.State> observableValue,
-                            final Worker.State oldState,
-                            final Worker.State newState)
-        {
-        	
-            if (newState == Worker.State.SUCCEEDED)
-            {
-            	htmlVistoria = (String) eng.executeScript("document.documentElement.outerHTML");  
-            }
-            
-        }
-    });
-
-*/
-

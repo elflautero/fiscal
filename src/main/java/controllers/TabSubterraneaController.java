@@ -1,6 +1,9 @@
 package controllers;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.ResourceBundle;
 
 import entity.Subterranea;
@@ -14,10 +17,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.util.StringConverter;
 
 public class TabSubterraneaController implements Initializable {
 	
-	Subterranea sGeral = new Subterranea();
+	public Subterranea sGeral = new Subterranea();
 	
 	public Subterranea obterSubterranea () {
 		
@@ -28,6 +32,12 @@ public class TabSubterraneaController implements Initializable {
 		sGeral.setSub_Dinamico(tfDinamico.getText());
 		sGeral.setSub_Profundidade(tfProfundidade.getText());
 		sGeral.setSub_Caesb(cbSubCaesb.getValue());
+		
+		if (dpDataSubterranea.getValue() == null) {
+			sGeral.setSub_Data(null);}
+		else {
+		sGeral.setSub_Data(formatter.format(dpDataSubterranea.getValue()));
+		}
 		
 		return sGeral;
 	
@@ -44,10 +54,18 @@ public class TabSubterraneaController implements Initializable {
 		tfProfundidade.setText(sub.getSub_Profundidade());
 		
 		cbSubCaesb.setValue(sub.getSub_Caesb());
-		
-		// falta a data
+		if (sub.getSub_Data() == null) {
+			dpDataSubterranea.getEditor().clear();
+		} else {
+		dpDataSubterranea.setValue((LocalDate.parse(sub.getSub_Data(), formatter)));
+		}
 		
 	}
+	
+	DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+			.parseCaseInsensitive()
+			.append(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+			.toFormatter();
 	
 	@FXML private MainController main;
 	
@@ -106,7 +124,7 @@ public class TabSubterraneaController implements Initializable {
 	TextField tfProfundidade = new TextField();
 	
 	
-	@FXML DatePicker dpDataSubterranea = new DatePicker();
+	@FXML public DatePicker dpDataSubterranea = new DatePicker();
 	
 	
 	//-- Main Controller --//
@@ -127,6 +145,26 @@ public class TabSubterraneaController implements Initializable {
 		
 		
 		iVewSubt.setImage(imgSub);
+		
+		dpDataSubterranea.setConverter(new StringConverter<LocalDate>() {
+			
+			@Override
+			public String toString(LocalDate t) {
+				if (t != null) {
+					return formatter.format(t);
+				}
+				return null;
+			}
+			
+			@Override
+			public LocalDate fromString(String string) {
+				if (string != null && !string.trim().isEmpty()) {
+					return LocalDate.parse(string, formatter);
+				}
+				return null;
+			}
+
+		});
 		
 		System.out.println("TabSubterranea inicializada!");
 		

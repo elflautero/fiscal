@@ -10,7 +10,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Tab;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -88,7 +87,7 @@ public class MainController {
 		public void pegarDoc(Denuncia dGeral) {
 			
 			//-- para a tab endereço --//
-			tabEnderecoController.lblDoc.setText(dGeral.getDoc_Denuncia() + "  |  SEI nº: " + dGeral.getDoc_SEI_Denuncia());
+			tabEnderecoController.lblDoc.setText(dGeral.getDenDocumento() + "  |  SEI nº: " + dGeral.getDenDocumentoSEI());
 			tabEnderecoController.dGeralEnd = dGeral;
 		}
 		

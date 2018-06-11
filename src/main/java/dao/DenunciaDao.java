@@ -32,7 +32,7 @@ public void salvaDenuncia (Denuncia denuncia) {
 		s.beginTransaction();
 		
 		Criteria crit = s.createCriteria(Denuncia.class);
-		crit.add(Restrictions.like("Doc_Denuncia", '%' + strPesquisa + '%'));
+		crit.add(Restrictions.like("denDocumento", '%' + strPesquisa + '%'));
 		list = crit.list();
 		// SQL list = s.createSQLQuery("SELECT * FROM Denuncia WHERE Documento_Denuncia LIKE '%strPesquisa%'").list();
 		//list = s.createQuery("from Denuncia d where d.Documento_Denuncia= : strPesquisa").setString("strPesquisa",strPesquisa).list();

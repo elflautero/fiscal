@@ -1,8 +1,5 @@
 package controllers;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -31,6 +28,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
@@ -39,6 +37,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -74,14 +74,17 @@ public class TabAtoController implements Initializable{
 	@FXML Button bntCaracterizacao;
 	@FXML Button btnGerarAto;
 	
+	@FXML Image imgAto = new Image(TabAtoController.class.getResourceAsStream("/images/ato32.png"));
+	
+	
 	Ato atoGeral;
 	
-			// TableView Endereço //
-			@FXML private TableView <AtoTabela> tvAto;
-			
-			@FXML TableColumn<AtoTabela, String> tcTipo;
-			@FXML TableColumn<AtoTabela, String> tcNumero;
-			@FXML TableColumn<AtoTabela, String> tcSEI;
+	// TableView Endereço //
+	@FXML private TableView <AtoTabela> tvAto;
+	
+	@FXML TableColumn<AtoTabela, String> tcTipo;
+	@FXML TableColumn<AtoTabela, String> tcNumero;
+	@FXML TableColumn<AtoTabela, String> tcSEI;
 		
 		
 	@FXML TextField tfPesquisar;
@@ -101,15 +104,22 @@ public class TabAtoController implements Initializable{
 	
 	HTMLEditor htmlCaracterizar;
   	@FXML Pane paneCaracterizar;
+  	
+  	int u = 0;
+  	@FXML
+	ChoiceBox<String> cbUsuario = new ChoiceBox<String>();
+		ObservableList<String> olUsuario = FXCollections
+			.observableArrayList("0" , "1", "2", "3", "4");
+		
 	
 	//Locale.setDefault(new Locale("pt", "BR"));
 	
-		//private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	//private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		
-		DateTimeFormatter formatter = new DateTimeFormatterBuilder()
-				.parseCaseInsensitive()
-				.append(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-				.toFormatter();
+	DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+			.parseCaseInsensitive()
+			.append(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+			.toFormatter();
 	
 	//  Controller Principal - MainController  //
 	@FXML private MainController main;
@@ -148,7 +158,8 @@ public class TabAtoController implements Initializable{
 		dpDataFiscalizacao.setValue(null);
 		dpDataCriacaoAto.setValue(null);
 		
-		htmlCaracterizar.setHtmlText("");
+		htmlCaracterizar.setHtmlText("<p><font face='Times New Roman'> </font></p>");
+		abrirEditorHTML();
 		
 		btnNovo.setDisable(true);
 		btnSalvar.setDisable(false);
@@ -160,33 +171,71 @@ public class TabAtoController implements Initializable{
 
 	public void btnSalvarHab (ActionEvent event) {
 		
-		
-			Ato ato = new Ato();
+		if (visGeral == null) {
 			
-			ato.setAtoTipo(cbAtoTipo.getValue());
-			ato.setAtoIdentificacao(tfAto.getText());
-			ato.setAtoSEI(tfAtoSEI.getText());
+			Alert a = new Alert (Alert.AlertType.ERROR);
+			a.setTitle("Alerta!!!");
+			a.setContentText("Vistoria não selecionada!!!");
+			a.setHeaderText(null);
+			a.show();
 			
-			ato.setAtoDataFiscalizacao(formatter.format(dpDataFiscalizacao.getValue())); // DATA						
-			ato.setAtoDataCriacao(formatter.format(dpDataCriacaoAto.getValue())); // DATA
+		} else {
 			
-			ato.setAtoCaracterizacao(htmlCaracterizar.getHtmlText());
-			
-			ato.setAtoVisCodigoFK(visGeral);
-			
-			AtoDao atoDao = new  AtoDao();
-			
-			atoDao.mergeAto(ato);
-			
-			listarAtos (strPesquisa);
-			selecionarAto();
-			
-			atoGeral = ato;
-			
-			modularBotoes();
+				if (cbAtoTipo.getValue() == null  ||
+						tfAto.getText().isEmpty() ) 
+				{
+					
+					Alert a = new Alert (Alert.AlertType.ERROR);
+					a.setTitle("Alerta!!!");
+					a.setContentText("Informe: Tipo de Ato, Número do Ato!!!");
+					a.setHeaderText(null);
+					a.show();
+					
+				} else {
+				
+				Ato ato = new Ato();
+				
+				ato.setAtoTipo(cbAtoTipo.getValue());
+				ato.setAtoIdentificacao(tfAto.getText());
+				ato.setAtoSEI(tfAtoSEI.getText());
+				
+				if (dpDataFiscalizacao.getValue() == null) {
+					ato.setAtoDataFiscalizacao(null);}
+				else {
+					ato.setAtoDataFiscalizacao(formatter.format(dpDataFiscalizacao.getValue())); // DATA
+				}
+				
+				if (dpDataCriacaoAto.getValue() == null) {
+					ato.setAtoDataCriacao(null);}
+				else {
+					ato.setAtoDataCriacao(formatter.format(dpDataCriacaoAto.getValue())); // DATA
+				}
+				
+				ato.setAtoCaracterizacao(htmlCaracterizar.getHtmlText());
+				
+				ato.setAtoVisCodigoFK(visGeral);
+				
+				AtoDao atoDao = new  AtoDao();
+				
+				atoDao.mergeAto(ato);
+				
+				listarAtos (strPesquisa);
+				selecionarAto();
+				
+				atoGeral = ato;
+				
+				modularBotoes();
+				fecharEditorHTML();
+				
+				Alert a = new Alert (Alert.AlertType.INFORMATION);
+				a.setTitle("Parabéns!!!");
+				a.setContentText("Cadastro salvo com sucesso!!!");
+				a.setHeaderText(null);
+				a.show();
 		}
+		}
+	}
 	
-
 	public void btnEditarHab (ActionEvent event) {
 		
 		if (cbAtoTipo.isDisable()) {
@@ -198,10 +247,22 @@ public class TabAtoController implements Initializable{
 			dpDataFiscalizacao.setDisable(false);
 			dpDataCriacaoAto.setDisable(false);
 			
-			htmlCaracterizar.setDisable(false);
+			abrirEditorHTML();
 			
 			
 		} else {
+			
+			if (cbAtoTipo.getValue() == null  ||
+					tfAto.getText().isEmpty() ) 
+			{
+				
+				Alert a = new Alert (Alert.AlertType.ERROR);
+				a.setTitle("Alerta!!!");
+				a.setContentText("Informe: Tipo de Ato, Número do Ato!!!");
+				a.setHeaderText(null);
+				a.show();
+				
+			} else {
 			
 			AtoTabela atoTab = tvAto.getSelectionModel().getSelectedItem();
 			
@@ -211,8 +272,17 @@ public class TabAtoController implements Initializable{
 			ato.setAtoIdentificacao(tfAto.getText());
 			ato.setAtoSEI(tfAtoSEI.getText());
 			
-			ato.setAtoDataFiscalizacao(formatter.format(dpDataFiscalizacao.getValue()));
-			ato.setAtoDataCriacao(formatter.format(dpDataCriacaoAto.getValue()));
+			if (dpDataFiscalizacao.getValue() == null) {
+				ato.setAtoDataFiscalizacao(null);}
+			else {
+				ato.setAtoDataFiscalizacao(formatter.format(dpDataFiscalizacao.getValue())); // DATA
+			}
+			
+			if (dpDataCriacaoAto.getValue() == null) {
+				ato.setAtoDataCriacao(null);}
+			else {
+				ato.setAtoDataCriacao(formatter.format(dpDataCriacaoAto.getValue())); // DATA
+			}
 
 			ato.setAtoCaracterizacao(htmlCaracterizar.getHtmlText());
 			
@@ -222,9 +292,19 @@ public class TabAtoController implements Initializable{
 			
 			listarAtos(strPesquisa);
 			selecionarAto();
+			
 			modularBotoes();
+			fecharEditorHTML();
 			
 			atoGeral = ato;
+			
+			Alert a = new Alert (Alert.AlertType.INFORMATION);
+			a.setTitle("Parabéns!!!");
+			a.setContentText("Cadastro editado com sucesso!!!");
+			a.setHeaderText(null);
+			a.show();
+			
+			}
 			
 		}
 		
@@ -242,13 +322,16 @@ public class TabAtoController implements Initializable{
 		
 		listarAtos(strPesquisa);
 		selecionarAto();
+		
 		modularBotoes();
+		fecharEditorHTML();
 		
 	}
 	
 	public void btnCancelarHab (ActionEvent event) {
 		
 		modularBotoes();
+		fecharEditorHTML();
 	}
 
 	public void btnPesquisarHab (ActionEvent event) {
@@ -257,6 +340,9 @@ public class TabAtoController implements Initializable{
 		
 		listarAtos(strPesquisa);
 		selecionarAto ();
+		
+		modularBotoes();
+		fecharEditorHTML();
 	
 	}
 	
@@ -269,8 +355,6 @@ public class TabAtoController implements Initializable{
 		dpDataFiscalizacao.setDisable(true);
 		dpDataCriacaoAto.setDisable(true);
 		
-		//htmlCaracterizar.setDisable(true);
-		
 		btnSalvar.setDisable(true);
 		btnEditar.setDisable(true);
 		btnExcluir.setDisable(true);
@@ -278,8 +362,15 @@ public class TabAtoController implements Initializable{
 		btnNovo.setDisable(false);
 	}
 	
+	WebView webTermo;
+	WebEngine engTermo;
+	
+	WebView webAuto;
+	WebEngine engAuto;
+	
 	// INITIALIZE //
 	public void initialize(URL url, ResourceBundle rb) {
+		
 		cbAtoTipo.setItems(olAtoTipo);
 		
 		dpDataFiscalizacao.setConverter(new StringConverter<LocalDate>() {
@@ -302,19 +393,41 @@ public class TabAtoController implements Initializable{
 
 		});
 		
+		
+		
+		
+		// -- inicitalizar o mapa -- //
+				Platform.runLater(() ->{
+					
+				webTermo = new WebView();
+				engTermo = webTermo.getEngine();
+				engTermo.load(getClass().getResource("/html/termoNotificacao.html").toExternalForm()); 
+				
+
+				webAuto = new WebView();
+				engAuto = webAuto.getEngine();
+				engAuto.load(getClass().getResource("/html/autoInfracao.html").toExternalForm()); 
+				
+				});
+				
+				
+		
 		modularBotoes();
 		
 		// -- inicitalizar a caracterizacao -- //
 		Platform.runLater(() ->{
-		caracterizarHTML();  
+		
+			caracterizarHTML();
+			fecharEditorHTML();
 		
 		});
 		
+		btnGerarAto.setGraphic(new ImageView(imgAto));
+		
+		cbUsuario.setValue("0");
+		cbUsuario.setItems(olUsuario);
 		
 	}
-	
-	//TabVistoriaController tabVis;
-	//@FXML Pane paneTipoAto;
 	
 	//  metodo para listar interferencias  //
  	public void listarAtos (String strPesquisaAto) {
@@ -380,8 +493,19 @@ public class TabAtoController implements Initializable{
  				tfAto.setText(atoTab.getAtoIdentificacao());
  				tfAtoSEI.setText(atoTab.getAtoSEI());
  				
- 				dpDataFiscalizacao.setValue(LocalDate.parse(atoTab.getAtoDataFiscalizacao(), formatter));
- 				dpDataCriacaoAto.setValue(LocalDate.parse(atoTab.getAtoDataCriacao(), formatter));
+ 				
+ 				if (atoTab.getAtoDataFiscalizacao() == null) {
+ 					dpDataFiscalizacao.getEditor().clear();
+ 				} else {
+ 					dpDataFiscalizacao.setValue(LocalDate.parse(atoTab.getAtoDataFiscalizacao(), formatter));
+ 				}
+ 				
+ 				if (atoTab.getAtoDataCriacao() == null) {
+ 					dpDataCriacaoAto.getEditor().clear();
+ 				} else {
+ 					dpDataCriacaoAto.setValue(LocalDate.parse(atoTab.getAtoDataCriacao(), formatter));
+ 				}
+ 				
  				
  				htmlCaracterizar.setHtmlText(atoTab.getAtoCaracterizacao());
  					
@@ -426,8 +550,6 @@ public class TabAtoController implements Initializable{
 	    
   	}
   	
-  	
-	
   	String infraIncisos [];
 	String atenIncisos [];
 	String agraIncisos [];
@@ -436,7 +558,14 @@ public class TabAtoController implements Initializable{
 	String agraArray [];
 	String atenArray[];
 	
+	String htmlTermo = "";
+	String htmlAuto = "";
+	
 	public void btnGerarAtoHab (ActionEvent event) {
+		
+		u = Integer.parseInt(cbUsuario.getValue());
+		
+		System.out.println("número do  usuario " + u);
 		
 		String ifracoes = visGeral.getVisInfracoes();
 		
@@ -468,58 +597,71 @@ public class TabAtoController implements Initializable{
 		
 		infraIncisos [6] = "<p>VII - obstar ou dificultar a ação fiscalizadora das autoridades competentes, no exercício " + 
 				"de suas funções;</p>";
-		
-		
-		
+	
 		
 		// inicializar o usuario //
-				Session session = HibernateUtil.getSessionFactory().openSession();
-				Transaction tx = session.beginTransaction();
-				Endereco endereco = (Endereco) session.get(Endereco.class, visGeral.getVisEndCodigoFK().getCod_Endereco());
-				
-				// inicializar as listas //
-				Hibernate.initialize(endereco.getListUsuarios());
-				//Hibernate.initialize(endereco.getListInterferencias());
-				
-				if (tx.getStatus().equals(TransactionStatus.ACTIVE)) { 
-				    tx.commit();
-				}
-				
-				System.out.println("usuario para imprimir relatorio " + endereco.getListUsuarios().get(0).getUsNome());
-				
-				session.close();
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction tx = session.beginTransaction();
+		Endereco endereco = (Endereco) session.get(Endereco.class, visGeral.getVisEndCodigoFK().getCod_Endereco());
+		
+		// inicializar as listas //
+		Hibernate.initialize(endereco.getListUsuarios());
+		//Hibernate.initialize(endereco.getListInterferencias());
+		
+		System.out.println("Usuario u : " + endereco.getListUsuarios().get(u).getUsNome());
+		
+		if (tx.getStatus().equals(TransactionStatus.ACTIVE)) { 
+		    tx.commit();
+		}
+		
+		session.close();
 		
 		
 		if (cbAtoTipo.getValue().equals("Termo de Notificação")) {
 			
-			File file = null;
+			//File file = null;
+			//file = new File (TabAtoController.class.getResource("/html/termoNotificacao.html").toExternalForm());
 			
-			file = new File (TabAtoController.class.getResource("/html/termoNotificacao.html").getFile());
+			/*
+			engTermo.load(getClass().getResource("/html/termoNotificacao.html").toExternalForm()); 
 			
+	        engTermo.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>(){ 
+
+	                public void changed(final ObservableValue<? extends Worker.State> observableValue, 
+
+	                                    final Worker.State oldState, 
+	                                    final Worker.State newState) 
+
+	                { 
+	                	if (newState == Worker.State.SUCCEEDED){  
+	                		
+	                		htmlTermo = (String) engTermo.executeScript("document.documentElement.outerHTML"); 
+	                		
+	                	} 
+	                	
+	               } 
+	        }); 
+	        */
+			
+			htmlTermo = (String) engTermo.executeScript("document.documentElement.outerHTML"); 
+	      
 			Document docHtml = null;
 			
-			try {
-				docHtml = Jsoup.parse(file, "UTF-8");  // retirei o  .clone()
-				
-			} catch (IOException e1) {
-				System.out.println("Erro na leitura no parse Jsoup!!!");
-				e1.printStackTrace();
-			}
+			docHtml = Jsoup.parse(htmlTermo, "UTF-8");  // retirei o  .clone()
 			
-			
-			// ato //
+			// termo de notificação //
 			docHtml.select("terNum").prepend(atoGeral.getAtoIdentificacao());
 			docHtml.select("terSei").prepend(atoGeral.getAtoSEI());
 			
-			docHtml.select("terUsNome").prepend(endereco.getListUsuarios().get(0).getUsNome());
-			docHtml.select("terUsCPF").prepend(endereco.getListUsuarios().get(0).getUsCPFCNPJ());
-			docHtml.select("terUsEnd").prepend(endereco.getListUsuarios().get(0).getUsDescricaoEnd());
-			docHtml.select("terUsCep").prepend(endereco.getListUsuarios().get(0).getUsCEP());
-			docHtml.select("terUsCid").prepend(endereco.getListUsuarios().get(0).getUsCidade());
-			docHtml.select("terUsUF").prepend(endereco.getListUsuarios().get(0).getUsEstado());
-			docHtml.select("terUsTel").prepend(endereco.getListUsuarios().get(0).getUsTelefone());
-			docHtml.select("terUsCel").prepend(endereco.getListUsuarios().get(0).getUsCelular());
-			docHtml.select("terUsEmail").prepend(endereco.getListUsuarios().get(0).getUsEmail());
+			docHtml.select("terUsNome").prepend(endereco.getListUsuarios().get(u).getUsNome());
+			docHtml.select("terUsCPF").prepend(endereco.getListUsuarios().get(u).getUsCPFCNPJ());
+			docHtml.select("terUsEnd").prepend(endereco.getListUsuarios().get(u).getUsDescricaoEnd());
+			docHtml.select("terUsCep").prepend(endereco.getListUsuarios().get(u).getUsCEP());
+			docHtml.select("terUsCid").prepend(endereco.getListUsuarios().get(u).getUsCidade());
+			docHtml.select("terUsUF").prepend(endereco.getListUsuarios().get(u).getUsEstado());
+			docHtml.select("terUsTel").prepend(endereco.getListUsuarios().get(u).getUsTelefone());
+			docHtml.select("terUsCel").prepend(endereco.getListUsuarios().get(u).getUsCelular());
+			docHtml.select("terUsEmail").prepend(endereco.getListUsuarios().get(u).getUsEmail());
 			
 			
 			// endereco do empreedimento //      
@@ -603,7 +745,7 @@ public class TabAtoController implements Initializable{
 			Scene scene = new Scene(browser);
 			
 			Stage stage = new Stage(StageStyle.UTILITY);
-			stage.setWidth(1250);
+			stage.setWidth(1150);
 			stage.setHeight(750);
 	        stage.setScene(scene);
 	        stage.setMaximized(false);
@@ -617,6 +759,8 @@ public class TabAtoController implements Initializable{
 	      
 		if (cbAtoTipo.getValue().equals("Auto de Infração") || cbAtoTipo.getValue().equals("Auto de Infração de Multa") ) {
 			
+			
+			/*
 			File file = null;
 			
 			try {
@@ -626,32 +770,33 @@ public class TabAtoController implements Initializable{
 				System.out.println("erro na leitura do relatório.html" );
 				e.printStackTrace();
 			}
+			*/
+			
+			//engAuto.load(getClass().getResource("/html/autoInfracao.html").toExternalForm()); 
+			
+			// capturar o html //
+			
+			htmlAuto = (String) engAuto.executeScript("document.documentElement.outerHTML"); 
 			
 			Document docHtml = null;
 			
-			try {
-				docHtml = Jsoup.parse(file, "UTF-8");  // retirei o  .clone()
+			docHtml = Jsoup.parse(htmlAuto, "UTF-8");  // retirei o  .clone()
 				
-			} catch (IOException e1) {
-				System.out.println("Erro na leitura no parse Jsoup!!!");
-				e1.printStackTrace();
-			}
-			
-			
-			
+			// auto de infração //
 			docHtml.select("autoNum").prepend(atoGeral.getAtoIdentificacao());
 			docHtml.select("autoSEI").prepend(atoGeral.getAtoSEI());
 			
-			docHtml.select("autoUs").prepend(endereco.getListUsuarios().get(0).getUsNome());
-			docHtml.select("autoUsCPF").prepend(endereco.getListUsuarios().get(0).getUsCPFCNPJ());
-			docHtml.select("autoUsEnd").prepend(endereco.getListUsuarios().get(0).getUsDescricaoEnd());
-			docHtml.select("autoUsRA").prepend(endereco.getListUsuarios().get(0).getUsRA());
-			docHtml.select("autoUsCEP").prepend(endereco.getListUsuarios().get(0).getUsCEP());
-			docHtml.select("autoUsCid").prepend(endereco.getListUsuarios().get(0).getUsCidade());
-			docHtml.select("autoUsUF").prepend(endereco.getListUsuarios().get(0).getUsEstado());
-			docHtml.select("autoUsTel").prepend(endereco.getListUsuarios().get(0).getUsTelefone());
-			docHtml.select("autoUsCel").prepend(endereco.getListUsuarios().get(0).getUsCelular());
-			docHtml.select("autoUsEmail").prepend(endereco.getListUsuarios().get(0).getUsEmail());
+			docHtml.select("autoUs").prepend(endereco.getListUsuarios().get(u).getUsNome());
+			docHtml.select("autoUsCPF").prepend(endereco.getListUsuarios().get(u).getUsCPFCNPJ());
+			docHtml.select("autoUsEnd").prepend(endereco.getListUsuarios().get(u).getUsDescricaoEnd());
+			                             
+			docHtml.select("autoUsRA").prepend(endereco.getListUsuarios().get(u).getUsRA());
+			docHtml.select("autoUsCEP").prepend(endereco.getListUsuarios().get(u).getUsCEP());
+			docHtml.select("autoUsCid").prepend(endereco.getListUsuarios().get(u).getUsCidade());
+			docHtml.select("autoUsUF").prepend(endereco.getListUsuarios().get(u).getUsEstado());
+			docHtml.select("autoUsTel").prepend(endereco.getListUsuarios().get(u).getUsTelefone());
+			docHtml.select("autoUsCel").prepend(endereco.getListUsuarios().get(u).getUsCelular());
+			docHtml.select("autoUsEmail").prepend(endereco.getListUsuarios().get(u).getUsEmail());
 			
 			//dataFis termoNot 
 			
@@ -733,9 +878,6 @@ public class TabAtoController implements Initializable{
 			
 			atenIncisos [8] = "<p>IX - não ter sido autuado por infração nos últimos 5 (cinco) anos anteriores ao fato.</p>";
 			
-			
-			
-			//;<aten></p> agra
 			
 			//-- atenuantes --//
 			for (int i = 0; i<atenArray.length; i++) {
@@ -848,7 +990,6 @@ public class TabAtoController implements Initializable{
 				}
 			}
 			
-			
 			String html = new String ();
 			
 			html = docHtml.toString();
@@ -867,7 +1008,7 @@ public class TabAtoController implements Initializable{
 			Scene scene = new Scene(browser);
 			
 			Stage stage = new Stage(StageStyle.UTILITY);
-			stage.setWidth(1250);
+			stage.setWidth(1150);
 			stage.setHeight(750);
 	        stage.setScene(scene);
 	        stage.setMaximized(false);
@@ -876,70 +1017,37 @@ public class TabAtoController implements Initializable{
 	        stage.show();
 	        
 	        TabNavegadorController.html = html;
-			
-			
-			
+				
 		}
 		
+	}
+	
+	public void fecharEditorHTML (){
+		htmlCaracterizar.setDisable(true);
+	}
+	public void abrirEditorHTML (){
+		htmlCaracterizar.setDisable(false);
 	}
 }
 
 
 /*
- 
- 
- //-- Selecionar a tabela de acordo com o tipo de captação --//
-		cbAtoTipo.getSelectionModel().selectedItemProperty().addListener( 
-						(ObservableValue<? extends String> observable, String oldString, String newString) -> 
-						
-						{
-							try {
-								abrirTabs(newString);
-							} catch (IOException e) {
-								System.out.println("erro na chamada do método abrir tab: " + e);
-								e.printStackTrace();
-							}
-						} 
-						
-						);
-						
- */
+//-- se não ler, tenta por aqui --//
+eng.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>(){ 
 
-/*
- 
- // método abrir tab Vistoria, Termo etc //
-	public void abrirTabs (String newString) throws IOException {
-		
-		if (newString.equals("Termo de Notificação")) {
-			
-			paneTipoAto.getChildren().clear();
-			
-			Pane paneVistoria = new Pane();
-			
-			tabVis = new TabVistoriaController();
-			
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TabVistoria.fxml"));
-			loader.setRoot(paneTipoAto);
-			loader.setController(tabVis);
-			loader.load();
-			
-			paneTipoAto.getChildren().add(paneVistoria);
-			//tipoAto = 1;
-			
-		}
-		
-		if (newString.equals( "Termo de Notificação") 					|| 
-				newString.equals("Auto de Infração de Advertência")	|| 
-					newString.equals("Auto de Infração de Multa")	
-						)	
-		{
-			paneTipoAto.getChildren().clear();
-		}
-		
-		if (newString.equals(null)) {
-			paneTipoAto.getChildren().clear();
-		}
-		
-	}
-	
-	*/
+        public void changed(final ObservableValue<? extends Worker.State> observableValue, 
+
+                            final Worker.State oldState, 
+                            final Worker.State newState) 
+        
+        { 
+        	if (newState == Worker.State.SUCCEEDED){  
+        		htmlAuto = (String) eng.executeScript("document.documentElement.outerHTML"); 
+        		
+        	} 
+        	
+       } 
+}); 
+*/
+
+

@@ -2,6 +2,9 @@ package controllers;
 
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -16,6 +19,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -50,6 +54,9 @@ public class TabDenunciaController implements Initializable {
 	@FXML Button btnPesquisar = new Button();
 	@FXML Button btnSair = new Button();
 	
+	@FXML DatePicker dpDataDistribuicao = new DatePicker();
+	@FXML DatePicker dpDataRecebimento = new DatePicker();
+	
 	// -- Tabela --  //
 	@FXML private TableView <DenunciaTabela> tvLista;
 	
@@ -58,12 +65,20 @@ public class TabDenunciaController implements Initializable {
 	@FXML private TableColumn<DenunciaTabela, String> tcDocSEI;
 	@FXML private TableColumn<DenunciaTabela, String> tcProcSEI;
 	
+	@FXML DatePicker dpDoc;
+	
 	// capturar denuncia para a TabEnderecoController
 	private static Denuncia dGeral;
 	
 	// --- String para primeira pesquisa --- //
 	String strPesquisa = "";
 	
+
+	// formatação de datas //
+	DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+			.parseCaseInsensitive()
+			.append(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+			.toFormatter();
 		
 	// --- m�todo listarDenuncias --- //
 	public void listarDenuncias (String strPesquisa) {
@@ -80,24 +95,27 @@ public class TabDenunciaController implements Initializable {
 		for (Denuncia denuncia : denunciaList) {
 			
 			DenunciaTabela denTab = new DenunciaTabela(
-					denuncia.getCod_Denuncia(), 
-					denuncia.getDoc_Denuncia(),
-					denuncia.getDoc_SEI_Denuncia(), 
-					denuncia.getProc_SEI_Denuncia(),
-					denuncia.getDesc_Denuncia(),
-					// adiciona o objeto enderecoFK na DenunciaTabela
-					denuncia.getEnderecoFK()
+					denuncia.getDenunciaID(), 
+					denuncia.getDenDocumento(),
+					denuncia.getDenDocumentoSEI(), 
+					denuncia.getDenProcessoSEI(),
+					denuncia.getDenDescricao(),
+					denuncia.getDenDataDistribuicao(),
+					denuncia.getDenDataRecebimento(),
+					
+					denuncia.getDenEnderecoFK()
 					);
 			
 				obsListDenunciaTabela.add(denTab);
 		}
 		
-		tcDocumento.setCellValueFactory(new PropertyValueFactory<DenunciaTabela, String>("Doc_Denuncia")); 
-        tcDocSEI.setCellValueFactory(new PropertyValueFactory<DenunciaTabela, String>("Doc_SEI_Denuncia")); 
-        tcProcSEI.setCellValueFactory(new PropertyValueFactory<DenunciaTabela, String>("Proc_SEI_Denuncia")); 
+		tcDocumento.setCellValueFactory(new PropertyValueFactory<DenunciaTabela, String>("denDocumento")); 
+        tcDocSEI.setCellValueFactory(new PropertyValueFactory<DenunciaTabela, String>("denDocumentoSEI")); 
+        tcProcSEI.setCellValueFactory(new PropertyValueFactory<DenunciaTabela, String>("denProcessoSEI")); 
         
         tvLista.setItems(obsListDenunciaTabela); 
 	}
+	
 	
 	// -- selecionar denúncia -- //
 	public void selecionarDenuncia () {
@@ -113,6 +131,10 @@ public class TabDenunciaController implements Initializable {
 				tfDocumento.setText("");
 				tfDocSei.setText("");
 				tfProcSei.setText("");
+				
+				dpDataRecebimento.getEditor().clear();
+				dpDataDistribuicao.getEditor().clear();
+				
 				tfResDen.setText("");
 				
 				btnNovo.setDisable(true);
@@ -121,18 +143,38 @@ public class TabDenunciaController implements Initializable {
 				btnExcluir.setDisable(false);
 				btnCancelar.setDisable(false);
 				
+				
 			} else {
 
 				// preencher os campos
-				tfDocumento.setText(denTab.getDoc_Denuncia());
-				tfDocSei.setText(denTab.getDoc_SEI_Denuncia());
-				tfProcSei.setText(denTab.getProc_SEI_Denuncia());
-				tfResDen.setText(denTab.getDesc_Denuncia());
+				tfDocumento.setText(denTab.getDenDocumento());
+				tfDocSei.setText(denTab.getDenDecumentoSEI());
+				tfProcSei.setText(denTab.getDenProcessoSEI());
+				
+				if (denTab.getDenDataDistribuicao() == null) {
+					dpDataDistribuicao.getEditor().clear();
+ 				} else {
+ 					dpDataDistribuicao.setValue(LocalDate.parse(denTab.getDenDataDistribuicao(), formatter));
+ 				}
+ 				
+ 				if (denTab.getDenDataRecebimento() == null) {
+ 					dpDataRecebimento.getEditor().clear();
+ 				} else {
+ 					dpDataRecebimento.setValue((LocalDate.parse(denTab.getDenDataRecebimento(), formatter)));
+ 				}
+ 				
+ 				System.out.println("selecionando denuncias, datas: ");
+ 				System.out.println(denTab.getDenDataDistribuicao());
+ 				System.out.println(denTab.getDenDataRecebimento());
+ 				
+ 				
+ 				
+				tfResDen.setText(denTab.getDenDescricao());
 				
 				
-				if (denTab.getenderecoObjetoTabelaFK() != null) {
+				if (denTab.getDenEnderecoFK() != null) {
 					
-					lblDenEnd.setText(denTab.getenderecoObjetoTabelaFK().getDesc_Endereco() + ", " + denTab.getenderecoObjetoTabelaFK().getRA_Endereco());
+					lblDenEnd.setText(denTab.getDenEnderecoFK().getDesc_Endereco() + ", " + denTab.getDenEnderecoFK().getRA_Endereco());
 					lblDenEnd.setTextFill(Color.BLACK);
 				} else {
 					lblDenEnd.setText("Sem endereço cadastrado!");
@@ -150,6 +192,7 @@ public class TabDenunciaController implements Initializable {
 				btnEditar.setDisable(false);
 				btnExcluir.setDisable(false);
 				btnCancelar.setDisable(false);
+				
 			}
 			}
 		});
@@ -161,7 +204,14 @@ public class TabDenunciaController implements Initializable {
 		tfDocumento.setText("");
 		tfDocSei.setText("");
 		tfProcSei.setText("");
+		
+		dpDataDistribuicao.getEditor().clear();
+		dpDataRecebimento.getEditor().clear();
+		
 		tfResDen.setText("");
+		
+		dpDataDistribuicao.setDisable(false);
+		dpDataRecebimento.setDisable(false);
 		
 		tfDocumento.setDisable(false);
 		tfDocSei.setDisable(false);
@@ -179,33 +229,60 @@ public class TabDenunciaController implements Initializable {
 		
 		try {
 			
-			Denuncia denuncia = new Denuncia();
-			
-			denuncia.setDoc_Denuncia(tfDocumento.getText()); 
-			denuncia.setProc_SEI_Denuncia(tfProcSei.getText());
-			denuncia.setDoc_SEI_Denuncia(tfDocSei.getText()); 
-			denuncia.setDesc_Denuncia(tfResDen.getText());
-			
-			DenunciaDao dao = new DenunciaDao();
-			
-			dao.salvaDenuncia(denuncia);
-			
-			// pegar o valor, levar para o MainController  e depois para o label lblDoc no EnderecoController
-			dGeral = denuncia;
-			main.pegarDoc(dGeral);
-			
-			listarDenuncias(strPesquisa);
-			selecionarDenuncia();
-		
-			modularBotoesInicial ();
-			
-			//-- Alerta de denúncia salva --//
-			Alert aSalvo = new Alert (Alert.AlertType.CONFIRMATION);
-			aSalvo.setTitle("Parabéns!");
-			aSalvo.setContentText("A denúncia salva com sucesso!");
-			aSalvo.setHeaderText(null);
-			aSalvo.show();
+			if (tfDocSei.getText().isEmpty()  ||
+				tfProcSei.getText().isEmpty()	) 
+			{
 				
+				Alert a = new Alert (Alert.AlertType.ERROR);
+				a.setTitle("Alerta!!!");
+				a.setContentText("Informe: Documento, Processo SEI!!!");
+				a.setHeaderText(null);
+				a.show();
+				
+			} else {
+			
+					Denuncia denuncia = new Denuncia();
+					
+					denuncia.setDenDocumento(tfDocumento.getText()); 
+					
+					denuncia.setDenDocumentoSEI(tfDocSei.getText()); 
+					denuncia.setDenProcessoSEI(tfProcSei.getText());
+					
+					if (dpDataDistribuicao.getValue() == null) {
+						denuncia.setDenDataDistribuicao(null);}
+					else {
+						denuncia.setDenDataDistribuicao(formatter.format(dpDataDistribuicao.getValue()));
+						}
+											
+						if (dpDataRecebimento.getValue() == null) {
+						denuncia.setDenDataRecebimento(null);}
+					else {
+						denuncia.setDenDataRecebimento(formatter.format(dpDataRecebimento.getValue()));
+						}
+
+					denuncia.setDenDescricao(tfResDen.getText());
+					
+					DenunciaDao dao = new DenunciaDao();
+					
+					dao.salvaDenuncia(denuncia);
+					
+					// pegar o valor, levar para o MainController  e depois para o label lblDoc no EnderecoController
+					dGeral = denuncia;
+					main.pegarDoc(dGeral);
+					
+					listarDenuncias(strPesquisa);
+					selecionarDenuncia();
+				
+					modularBotoesInicial ();
+					
+					//-- Alerta de denúncia salva --//
+					Alert a = new Alert (Alert.AlertType.INFORMATION);
+					a.setTitle("Parabéns!!!");
+					a.setContentText("Cadastro salvo com sucesso!!!");
+					a.setHeaderText(null);
+					a.show();
+					
+					}
 			
 		} catch (Exception ex) {
 			
@@ -213,11 +290,11 @@ public class TabDenunciaController implements Initializable {
 			ex.printStackTrace();
 			
 			//-- Alerta de denúncia salva --//
-			Alert aMy = new Alert (Alert.AlertType.ERROR);
-			aMy.setTitle("Alerta!!!");
-			aMy.setContentText("erro na conexão, tente novamente!");
-			aMy.setHeaderText(null);
-			aMy.show();
+			Alert a = new Alert (Alert.AlertType.ERROR);
+			a.setTitle("Alerta!!!");
+			a.setContentText("erro na conexão, tente novamente!");
+			a.setHeaderText(null);
+			a.show();
 		}
 		
 	}
@@ -231,31 +308,68 @@ public class TabDenunciaController implements Initializable {
 			tfDocumento.setDisable(false);
 			tfDocSei.setDisable(false);
 			tfProcSei.setDisable(false);
+			
+			dpDataDistribuicao.setDisable(false);
+			dpDataRecebimento.setDisable(false);
+			
 			tfResDen.setDisable(false);
 			
 		} else {
 			
-			DenunciaTabela denunciaTabelaEditar = tvLista.getSelectionModel().getSelectedItem();
+			if (tfDocSei.getText().isEmpty() ||
+					tfProcSei.getText().isEmpty()) 
+				{
+					
+					Alert a = new Alert (Alert.AlertType.ERROR);
+					a.setTitle("Alerta!!!");
+					a.setContentText("Informe: Documento, Processo SEI!!!");
+					a.setHeaderText(null);
+					a.show();
+					
+				} else {
 			
-			Denuncia denunciaEditar = new Denuncia(denunciaTabelaEditar);
-			
-			denunciaEditar.setDoc_Denuncia(tfDocumento.getText());
-			denunciaEditar.setDoc_SEI_Denuncia(tfDocSei.getText());
-			denunciaEditar.setProc_SEI_Denuncia(tfProcSei.getText());
-			denunciaEditar.setDesc_Denuncia(tfResDen.getText());
-			
-			DenunciaDao dDao = new DenunciaDao();
-			
-			dDao.mergeDenuncia(denunciaEditar);
-			
-			// pegar o valor, levar para o MainController  e depois para o label lblDoc no EnderecoController
-			dGeral = denunciaEditar;
-			main.pegarDoc(dGeral);
-			
-			listarDenuncias(strPesquisa); // acho que precisa de um  parametro strpesqusia aqui 
-			selecionarDenuncia();
-			
-			modularBotoesInicial (); 
+						DenunciaTabela denunciaTabelaEditar = tvLista.getSelectionModel().getSelectedItem();
+						
+						Denuncia denuncia = new Denuncia(denunciaTabelaEditar);
+						
+						denuncia.setDenDocumento(tfDocumento.getText());
+						denuncia.setDenDocumentoSEI(tfDocSei.getText());
+						denuncia.setDenProcessoSEI(tfProcSei.getText());
+						
+						
+						if (dpDataDistribuicao.getValue() == null) {
+							denuncia.setDenDataDistribuicao(null);}
+						else {
+							denuncia.setDenDataDistribuicao(formatter.format(dpDataDistribuicao.getValue()));
+							}
+												
+							if (dpDataRecebimento.getValue() == null) {
+							denuncia.setDenDataRecebimento(null);}
+						else {
+							denuncia.setDenDataRecebimento(formatter.format(dpDataRecebimento.getValue()));
+							}
+							
+						denuncia.setDenDescricao(tfResDen.getText());
+						
+						DenunciaDao dDao = new DenunciaDao();
+						
+						dDao.mergeDenuncia(denuncia);
+						
+						// pegar o valor, levar para o MainController  e depois para o label lblDoc no EnderecoController
+						dGeral = denuncia;
+						main.pegarDoc(dGeral);
+						
+						listarDenuncias(strPesquisa); // acho que precisa de um  parametro strpesqusia aqui 
+						selecionarDenuncia();
+						
+						modularBotoesInicial ();
+						
+						Alert a = new Alert (Alert.AlertType.INFORMATION);
+						a.setTitle("Parabéns!!!");
+						a.setContentText("Cadastro editado com sucesso!!!");
+						a.setHeaderText(null);
+						a.show();
+				}
 				
 			}
 	}
@@ -265,7 +379,7 @@ public class TabDenunciaController implements Initializable {
 	
 		DenunciaTabela denunciaExcluir = tvLista.getSelectionModel().getSelectedItem();
 		
-		int id = denunciaExcluir.getCod_Denuncia(); // buscar id para deletar
+		int id = denunciaExcluir.getDenDenunciaID(); // buscar id para deletar
 		
 		DenunciaDao dDao = new DenunciaDao();
 		
@@ -307,10 +421,14 @@ public class TabDenunciaController implements Initializable {
 	private void modularBotoesInicial () {
 			
 			tfDocumento.setDisable(true);
-			tfDocumento.setDisable(true);
 			tfDocSei.setDisable(true);
 			tfProcSei.setDisable(true);
+			
+			dpDataDistribuicao.setDisable(true);
+			dpDataRecebimento.setDisable(true);
+			
 			tfResDen.setDisable(true);
+			
 			btnSalvar.setDisable(true);
 			btnEditar.setDisable(true);
 			btnExcluir.setDisable(true);

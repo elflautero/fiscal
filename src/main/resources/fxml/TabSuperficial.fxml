@@ -9,7 +9,7 @@
 
 <!-- fx:controller="controllers.TabInterfController" -->
 
-<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="215.0" prefWidth="998.0" type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/8.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="215.0" prefWidth="998.0" type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Pane layoutX="138.0" layoutY="28.0" prefHeight="159.0" prefWidth="797.0">
          <children>
@@ -28,7 +28,7 @@
             <Label layoutX="268.0" layoutY="117.0" text="Área atendida pela Caesb: " />
             <ChoiceBox fx:id="cbCaesb" layoutX="420.0" layoutY="113.0" prefHeight="25.0" prefWidth="54.0" />
             <Label layoutX="487.0" layoutY="117.0" text="Em operação desde: " />
-            <DatePicker fx:id="dtDataOperacao" layoutX="608.0" layoutY="113.0" prefHeight="25.0" prefWidth="124.0" />
+            <DatePicker fx:id="dpDataOperacao" layoutX="608.0" layoutY="113.0" prefHeight="25.0" prefWidth="124.0" />
          </children>
       </Pane>
       <ImageView fx:id="iVewSuper" fitHeight="150.0" fitWidth="141.0" layoutX="14.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true" />

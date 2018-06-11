@@ -1,6 +1,9 @@
 package controllers;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.ResourceBundle;
 
 import entity.Superficial;
@@ -9,10 +12,12 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.util.StringConverter;
 
 public class TabSuperficialController implements Initializable{
 	
@@ -28,6 +33,11 @@ public class TabSuperficialController implements Initializable{
 		superGeral.setSup_Tempo(tfTempoBomba.getText()); // tempo de captação
 		superGeral.setSup_Area(tfArea.getText()); // área da propriedade
 		superGeral.setSup_Caesb(cbCaesb.getValue()); // caesb
+		if (dpDataOperacao.getValue() == null) {
+			superGeral.setSup_Data(null);
+		} else {
+			superGeral.setSup_Data(formatter.format(dpDataOperacao.getValue()));
+		}
 		
 		
 	return superGeral;
@@ -46,15 +56,29 @@ public class TabSuperficialController implements Initializable{
 		 tfArea.setText(sup.getSup_Area());
 		 
 		 cbCaesb.setValue(sup.getSup_Caesb());
+		 if (sup.getSup_Data() == null) {
+			 dpDataOperacao.getEditor().clear();
+		 }else {
+			 dpDataOperacao.setValue((LocalDate.parse(sup.getSup_Data(), formatter)));
+		 }
 		 
-		 // falta data
+		 
+		
 		 
 	}
+	
+	
+	DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+			.parseCaseInsensitive()
+			.append(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+			.toFormatter();
 	
 	@FXML TextField tfMarcaBomba = new TextField();
 	@FXML TextField tfPotenciaBomba = new TextField();
 	@FXML TextField tfTempoBomba = new TextField();
 	@FXML TextField tfArea = new  TextField();
+	
+	@FXML DatePicker dpDataOperacao;
 	
 	@FXML Pane tabSuperficial;
 	
@@ -100,34 +124,30 @@ public class TabSuperficialController implements Initializable{
 		
 		iVewSuper.setImage(imgSuper);
 		
+		dpDataOperacao.setConverter(new StringConverter<LocalDate>() {
+			
+			@Override
+			public String toString(LocalDate t) {
+				if (t != null) {
+					return formatter.format(t);
+				}
+				return null;
+			}
+			
+			@Override
+			public LocalDate fromString(String string) {
+				if (string != null && !string.trim().isEmpty()) {
+					return LocalDate.parse(string, formatter);
+				}
+				return null;
+			}
+
+		});
+		
 		System.out.println("TabSuperficial chamado!");
 		
 		
 		
 	}
-	 
-		
-	/*
-	try {
-	    img = ImageIO.read(new File("strawberry.jpg"));
-	} catch (IOException e) {
-		e.printStackTrace();
-	}
-	
-	
-	
-	BufferedImage img = null;
-	
-	
-	
-	//getClass().getResource("/res/bitmaps/image.png");
-	
-	//ImageIO.read(getClass().getResourceAsStream("res/drawable/image.png"));
-	
-	
-	BufferedImage img1 = ImageIO.read(getClass().getResourceAsStream("res/drawable/image.png"));
-	
-	*/
-	
 
 }

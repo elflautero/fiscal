@@ -2,8 +2,6 @@ package fiscalizacao;
 
 import org.junit.Test;
 
-import dao.EnderecoDao;
-
 public class EnderecoDaoTest {
 	
 	@Test

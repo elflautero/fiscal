@@ -52,17 +52,7 @@ public class TabInterfController implements Initializable {
 	String strPesquisaInterferencia = "";
 	
 	InterferenciaTabela intTab;
-	
-	/*
-	  vazao litros dia tem que mudar, no superficial sao litros por segundo/dia.
-	  
-	   		Talvez colocar:
-	   		 	horas de captacao (converter para segundos):
-	   		
-	  			vazaoo diaria:
-	  			
-	  			e converter caso o teccnico  coloque  no formato de agua superficial ou subterraneo
-	 */
+
 	
 	//-- coordenadas do mapa javascript --//
 	public static String latDec;
@@ -78,8 +68,8 @@ public class TabInterfController implements Initializable {
     @FXML AnchorPane aPaneInt = new AnchorPane();
     
    
- 	@FXML Button btnIntLatLon = new Button();
- 	@FXML Button btnIntAtualizar = new Button();
+ 	@FXML Button btnLatLng = new Button();
+ 	@FXML Button  btnAtualizar = new Button();
 	@FXML Button btnCapturar = new Button();
 	@FXML Button btnIntNovo = new Button();
 	@FXML Button btnIntSalvar = new Button();
@@ -101,17 +91,24 @@ public class TabInterfController implements Initializable {
 	
 	@FXML TextField tfUH;
 	@FXML TextField tfCorpoHid;
+	@FXML Image imgMap = new Image(TabEnderecoController.class.getResourceAsStream("/images/map.png")); 
 	
 	
 	//-- chamar mapa --//
 	@FXML Button btnIntMaps;
 	
-	//-- trazer a coordenada do mapa --//
-	@FXML Image imgGetCoord = new Image(TabEnderecoController.class.getResourceAsStream("/images/getCoord.png")); 
-	@FXML Button btnCoord = new Button ();
+	
+	
 	
 	// --- objeto para passar os valor pelo MainControoler para outro controller --- //
-	public Endereco eGeralInt;
+	public Endereco eGeralInt = new Endereco();
+	
+	@FXML Button btnEndCoord;
+	@FXML Image imgEndCoord = new Image(TabVistoriaController.class.getResourceAsStream("/images/mapCoord.png"));
+
+	@FXML Button btnEndCoordMap = new Button();
+	@FXML Image imgEndCoordMap = new Image(TabVistoriaController.class.getResourceAsStream("/images/mapCoord.png"));
+
 	
 	
 	//-- TableView Endereco --//
@@ -163,9 +160,6 @@ public class TabInterfController implements Initializable {
 															
 															); 
 									
-								
-								
-								
 	// --- método para listar interferencias --- //
  	public void listarInterferencias (String strPesquisaInterferencia) {
  	
@@ -276,18 +270,10 @@ public class TabInterfController implements Initializable {
 		});
 	}
 	
-	public void btnBuscarIntHab (ActionEvent event) {
-
-		
-	}
- 		
-	public void btnLatLongHab (ActionEvent event) {
+	public void btnAtualizarHab (ActionEvent event) {
 		
 	}
 	
-	public void btnIntAtualizarHab (ActionEvent event) {
-		
-	}
 	public void btnIntNovoHab (ActionEvent event) {
 		
 		
@@ -314,8 +300,8 @@ public class TabInterfController implements Initializable {
 		tfIntLon.setText("");
 		tfIntLon.setDisable(false);
 		
-		btnIntLatLon.setDisable(false);
-		btnIntAtualizar.setDisable(false);
+		btnLatLng.setDisable(false);
+		btnAtualizar.setDisable(false);
 		
 		btnIntNovo.setDisable(true);
 		btnIntSalvar.setDisable(false);
@@ -335,158 +321,223 @@ public class TabInterfController implements Initializable {
 		cbSituacao.setValue("Inativa");
 		cbSituacao.setItems(olSituacao);
 		
-		
-		
-		
 	}
 	
 	//-- botao salvar --//
 	public void btnIntSalvarHab (ActionEvent event) {
 		
-		if (tipoCaptacao == 1) {
+		if (tfIntLat.getText().isEmpty()|| tfIntLon.getText().isEmpty()) {
 			
-			Interferencia interferencia = new Interferencia();
+			Alert a = new Alert (Alert.AlertType.ERROR);
+			a.setTitle("Alerta!!!");
+			a.setContentText("Coordenadas inválidas!!!");
+			a.setHeaderText(null);
+			a.show();
+		}
+			else if (eGeralInt == null) {
+				
+				Alert a = new Alert (Alert.AlertType.ERROR);
+				a.setTitle("Alerta!!!");
+				a.setContentText("Endereço relacionado não selecionado!!!");
+				a.setHeaderText(null);
+				a.show();
 			
-				interferencia.setInter_Tipo(cbTipoInt.getValue().toString());
-				interferencia.setInter_Bacia(cbBacia.getValue().toString());
-				interferencia.setInter_UH(tfUH.getText());
-				interferencia.setInter_Corpo_Hidrico(tfCorpoHid.getText());
-				interferencia.setInter_Situacao(cbSituacao.getValue().toString());
-				interferencia.setInter_Desc_Endereco(eGeralInt.getDesc_Endereco());
-				interferencia.setInter_Lat(Double.parseDouble(tfIntLat.getText()));
-				interferencia.setInter_Lng(Double.parseDouble(tfIntLon.getText()));
+				} else {
+				
+						if (tipoCaptacao == 1) {
+							
+								if (tabSubCon.obterSubterranea().getSub_Poco() == null ||
+										tabSubCon.obterSubterranea().getSub_Caesb() == null ||
+												tabSubCon.obterSubterranea().getSub_Sistema() == null
+										) {
+									
+									Alert aLat = new Alert (Alert.AlertType.ERROR);
+									aLat.setTitle("Alerta!!!");
+									aLat.setContentText("Informe: Tipo de Captação (), Área é atendida pela Caesb() e Subsistema()!!!");
+									aLat.setHeaderText(null);
+									aLat.show();
+									
+								} else {
+							
+									Interferencia interferencia = new Interferencia();
+									
+										interferencia.setInter_Tipo(cbTipoInt.getValue());
+										interferencia.setInter_Bacia(cbBacia.getValue());
+										interferencia.setInter_UH(tfUH.getText());
+										interferencia.setInter_Corpo_Hidrico(tfCorpoHid.getText());
+										interferencia.setInter_Situacao(cbSituacao.getValue());
+										interferencia.setInter_Desc_Endereco(eGeralInt.getDesc_Endereco());
+										interferencia.setInter_Lat(Double.parseDouble(tfIntLat.getText()));
+										interferencia.setInter_Lng(Double.parseDouble(tfIntLon.getText()));
+									
+									Endereco endereco = new Endereco(); // ?
+										
+										endereco = eGeralInt;// ??
+										
+										endereco.getListInterferencias().add(interferencia);  // precisa disso?
+										
+										interferencia.setInter_End_CodigoFK(endereco);
+										
+									InterferenciaDao interferenciaDao = new InterferenciaDao ();
+										
+										interferenciaDao.salvaInterferencia(interferencia);
+										interferenciaDao.mergeInterferencia(interferencia);
+										
+									Subterranea sub = new Subterranea ();
+									
+										sub.setInterf_SubFK(interferencia);
+										
+										sub.setSub_Poco(tabSubCon.obterSubterranea().getSub_Poco());
+										sub.setSub_Caesb(tabSubCon.obterSubterranea().getSub_Caesb());
+										sub.setSub_Sistema(tabSubCon.obterSubterranea().getSub_Sistema());
+										sub.setSub_Estatico(tabSubCon.obterSubterranea().getSub_Estatico());
+										sub.setSub_Dinamico(tabSubCon.obterSubterranea().getSub_Dinamico());
+										sub.setSub_Vazao(tabSubCon.obterSubterranea().getSub_Vazao());
+										sub.setSub_Profundidade(tabSubCon.obterSubterranea().getSub_Profundidade());
+										sub.setSub_Data(tabSubCon.obterSubterranea().getSub_Data());
+										
+										
+									SubterraneaDao sDao = new SubterraneaDao();
+										
+										
+									sDao.mergeSubterranea(sub);
+									
+									listarInterferencias (strPesquisaInterferencia);
+									
+									selecionarInterferencia ();
+									
+									modularBotoes ();
+									
 			
-			Endereco endereco = new Endereco(); // ?
+									//-- Alerta de endereco salvo --//
+									Alert a = new Alert (Alert.AlertType.INFORMATION);
+									a.setTitle("Parabéns!");
+									a.setContentText("Interferência salva com sucesso!");
+									a.setHeaderText(null);
+									a.show();
+									
+									}
+									
+								} // fim subterranea
+						
+						
+						if (tipoCaptacao == 2) {
+							
+								if (tabSupCon.obterSuperficial().getSup_Local() == null  ||
+										tabSupCon.obterSuperficial().getSup_Caesb() == null
+										
+										) {
+									
+									Alert aLat = new Alert (Alert.AlertType.ERROR);
+									aLat.setTitle("Alerta!!!");
+									aLat.setContentText("Informe o Local de Captação e se há Caesb!!!");
+									aLat.setHeaderText(null);
+									aLat.show();
+									
+								} else {
+							
+							
+							
+										Interferencia interferencia = new Interferencia();
+										
+											interferencia.setInter_Tipo(cbTipoInt.getValue());
+											interferencia.setInter_Bacia(cbBacia.getValue());
+											interferencia.setInter_UH(tfUH.getText());
+											interferencia.setInter_Corpo_Hidrico(tfCorpoHid.getText());
+											interferencia.setInter_Situacao(cbSituacao.getValue());
+											interferencia.setInter_Desc_Endereco(eGeralInt.getDesc_Endereco());
+											interferencia.setInter_Lat(Double.parseDouble(tfIntLat.getText()));
+											interferencia.setInter_Lng(Double.parseDouble(tfIntLon.getText()));
+										
+										Endereco endereco = new Endereco();
+											
+											endereco = eGeralInt;
+											endereco.getListInterferencias().add(interferencia);
+											interferencia.setInter_End_CodigoFK(endereco);
+											InterferenciaDao interferenciaDao = new InterferenciaDao ();
+											
+											interferenciaDao.salvaInterferencia(interferencia);
+											interferenciaDao.mergeInterferencia(interferencia);
+											
+											
+										Superficial sup = new Superficial ();
+										
+											sup.setInterf_SuperFK(interferencia);
+											
+											sup.setSup_Local(tabSupCon.obterSuperficial().getSup_Local());
+											sup.setSup_Captacao(tabSupCon.obterSuperficial().getSup_Captacao());
+											sup.setSup_Bomba(tabSupCon.obterSuperficial().getSup_Bomba());
+											sup.setSup_Potencia(tabSupCon.obterSuperficial().getSup_Bomba());
+											sup.setSup_Tempo(tabSupCon.obterSuperficial().getSup_Tempo());
+											sup.setSup_Area(tabSupCon.obterSuperficial().getSup_Area());
+											sup.setSup_Caesb(tabSupCon.obterSuperficial().getSup_Caesb());
+											sup.setSup_Data(tabSupCon.obterSuperficial().getSup_Data());
+											
+										SuperficialDao supDao = new SuperficialDao();
+										
+										supDao.mergeSuperficial(sup);
+										
+										listarInterferencias (strPesquisaInterferencia);
+										
+										selecionarInterferencia ();
+										
+										modularBotoes ();
+										
+										//-- Alerta de endereco salvo --//
+										Alert a = new Alert (Alert.AlertType.INFORMATION);
+										a.setTitle("Parabéns!");
+										a.setContentText("Interferência salva com sucesso!");
+										a.setHeaderText(null);
+										a.show();
+										
+										}
+									
+										
+									} // fim superficial //
+						
+							if (tipoCaptacao == 3) {  // salvar outras interferencias que naoo superficial ou subterranea
+							
+										Interferencia interferencia = new Interferencia();
+									
+											interferencia.setInter_Tipo(cbTipoInt.getValue());
+											interferencia.setInter_Bacia(cbBacia.getValue());
+											interferencia.setInter_UH(tfUH.getText());
+											interferencia.setInter_Corpo_Hidrico(tfCorpoHid.getText());
+											interferencia.setInter_Situacao(cbSituacao.getValue());
+											interferencia.setInter_Desc_Endereco(eGeralInt.getDesc_Endereco());
+											interferencia.setInter_Lat(Double.parseDouble(tfIntLat.getText()));
+											interferencia.setInter_Lng(Double.parseDouble(tfIntLon.getText()));
+										
+										Endereco endereco = new Endereco();
+											
+											endereco = eGeralInt;
+											endereco.getListInterferencias().add(interferencia);
+											interferencia.setInter_End_CodigoFK(endereco);
+											InterferenciaDao interferenciaDao = new InterferenciaDao ();
+											
+											interferenciaDao.salvaInterferencia(interferencia);
+											interferenciaDao.mergeInterferencia(interferencia);
+											
+										listarInterferencias (strPesquisaInterferencia);
+									
+									selecionarInterferencia ();
+									
+									modularBotoes ();
+							
+	
+										//-- Alerta de endereco salvo --//
+										Alert a = new Alert (Alert.AlertType.INFORMATION);
+										a.setTitle("Parabéns!");
+										a.setContentText("Interferência salva com sucesso!");
+										a.setHeaderText(null);
+										a.show();
+							
+								
+					} // fim superficial //
 				
-				endereco = eGeralInt;// ??
-				
-				endereco.getListInterferencias().add(interferencia);  // precisa disso?
-				
-				interferencia.setInter_End_CodigoFK(endereco);
-				
-			InterferenciaDao interferenciaDao = new InterferenciaDao ();
-				
-				interferenciaDao.salvaInterferencia(interferencia);
-				interferenciaDao.mergeInterferencia(interferencia);
-				
-			Subterranea sub = new Subterranea ();
-			
-				sub.setInterf_SubFK(interferencia);
-				
-				sub.setSub_Poco(tabSubCon.obterSubterranea().getSub_Poco());
-				sub.setSub_Caesb(tabSubCon.obterSubterranea().getSub_Caesb());
-				sub.setSub_Sistema(tabSubCon.obterSubterranea().getSub_Sistema());
-				sub.setSub_Estatico(tabSubCon.obterSubterranea().getSub_Estatico());
-				sub.setSub_Dinamico(tabSubCon.obterSubterranea().getSub_Dinamico());
-				sub.setSub_Vazao(tabSubCon.obterSubterranea().getSub_Vazao());
-				sub.setSub_Profundidade(tabSubCon.obterSubterranea().getSub_Profundidade());
-				
-			SubterraneaDao sDao = new SubterraneaDao();
-				
-				
-			sDao.mergeSubterranea(sub);
-			
-			listarInterferencias (strPesquisaInterferencia);
-			
-			selecionarInterferencia ();
-			
-			modularBotoes ();
-			
-		} // fim subterranea
+				}
 		
-		
-		if (tipoCaptacao == 2) {
-			
-			Interferencia interferencia = new Interferencia();
-			
-				interferencia.setInter_Tipo(cbTipoInt.getValue().toString());
-				interferencia.setInter_Bacia(cbBacia.getValue().toString());
-				interferencia.setInter_UH(tfUH.getText());
-				interferencia.setInter_Corpo_Hidrico(tfCorpoHid.getText());
-				interferencia.setInter_Situacao(cbSituacao.getValue().toString());
-				interferencia.setInter_Desc_Endereco(eGeralInt.getDesc_Endereco());
-				interferencia.setInter_Lat(Double.parseDouble(tfIntLat.getText()));
-				interferencia.setInter_Lng(Double.parseDouble(tfIntLon.getText()));
-			
-			Endereco endereco = new Endereco();
-				
-				endereco = eGeralInt;
-				endereco.getListInterferencias().add(interferencia);
-				interferencia.setInter_End_CodigoFK(endereco);
-				InterferenciaDao interferenciaDao = new InterferenciaDao ();
-				
-				interferenciaDao.salvaInterferencia(interferencia);
-				interferenciaDao.mergeInterferencia(interferencia);
-				
-				
-			Superficial sup = new Superficial ();
-			
-				sup.setInterf_SuperFK(interferencia);
-				
-				sup.setSup_Local(tabSupCon.obterSuperficial().getSup_Local());
-				sup.setSup_Captacao(tabSupCon.obterSuperficial().getSup_Captacao());
-				sup.setSup_Bomba(tabSupCon.obterSuperficial().getSup_Bomba());
-				sup.setSup_Potencia(tabSupCon.obterSuperficial().getSup_Bomba());
-				sup.setSup_Tempo(tabSupCon.obterSuperficial().getSup_Tempo());
-				sup.setSup_Area(tabSupCon.obterSuperficial().getSup_Area());
-				sup.setSup_Caesb(tabSupCon.obterSuperficial().getSup_Caesb());
-				
-			SuperficialDao supDao = new SuperficialDao();
-			
-			supDao.mergeSuperficial(sup);
-			
-			listarInterferencias (strPesquisaInterferencia);
-			
-			selecionarInterferencia ();
-			
-			modularBotoes ();
-			
-				
-			} // fim superficial //
-		
-			if (tipoCaptacao == 3) {  // salvar outras interferencias que naoo superficial ou subterranea
-			
-			Interferencia interferencia = new Interferencia();
-			
-				interferencia.setInter_Tipo(cbTipoInt.getValue().toString());
-				interferencia.setInter_Bacia(cbBacia.getValue().toString());
-				interferencia.setInter_UH(tfUH.getText());
-				interferencia.setInter_Corpo_Hidrico(tfCorpoHid.getText());
-				interferencia.setInter_Situacao(cbSituacao.getValue().toString());
-				interferencia.setInter_Desc_Endereco(eGeralInt.getDesc_Endereco());
-				interferencia.setInter_Lat(Double.parseDouble(tfIntLat.getText()));
-				interferencia.setInter_Lng(Double.parseDouble(tfIntLon.getText()));
-			
-			Endereco endereco = new Endereco();
-				
-				endereco = eGeralInt;
-				endereco.getListInterferencias().add(interferencia);
-				interferencia.setInter_End_CodigoFK(endereco);
-				InterferenciaDao interferenciaDao = new InterferenciaDao ();
-				
-				interferenciaDao.salvaInterferencia(interferencia);
-				interferenciaDao.mergeInterferencia(interferencia);
-				
-			listarInterferencias (strPesquisaInterferencia);
-			
-			selecionarInterferencia ();
-			
-			modularBotoes ();
-			
-				
-			} // fim superficial //
-		
-			
-			//-- Alerta de endereco salvo --//
-			Alert aSalvo = new Alert (Alert.AlertType.CONFIRMATION);
-			aSalvo.setTitle("Parabéns!");
-			aSalvo.setContentText("Interferência salva com sucesso!");
-			aSalvo.setHeaderText(null);
-			aSalvo.show();
-			
-		
-		
-	}
+		}
 	
 	//-- botao editar --//
 	public void btnIntEditHab (ActionEvent event) {
@@ -507,35 +558,57 @@ public class TabInterfController implements Initializable {
 			
 			tfIntLat.setDisable(false);
 			tfIntLon.setDisable(false);
-			btnIntLatLon.setDisable(false);
-			btnIntAtualizar.setDisable(false);
+			btnLatLng.setDisable(false);
+			btnAtualizar.setDisable(false);
 			
 		}
 		
 		else {
 			
+			if (tfIntLat.getText().isEmpty() || tfIntLon.getText().isEmpty()) {
+				
+				Alert aLat = new Alert (Alert.AlertType.ERROR);
+				aLat.setTitle("Alerta!!!");
+				aLat.setContentText("Coordenadas inválidas!!!");
+				aLat.setHeaderText(null);
+				aLat.show();
+				
+			} else {
+			
 			String strEditar = intTab.getInter_Tipo();
 			
 			if (strEditar.equals("Subterrânea")) {
 				
-				InterferenciaTabela intTabEditar = tvListaInt.getSelectionModel().getSelectedItem(); //serÃ¡ que precisa desse cÃ³digo?, verificar... Sim por causa do construtor da interferencia
+				
+				if (tabSubCon.obterSubterranea().getSub_Poco() == null ||
+						tabSubCon.obterSubterranea().getSub_Caesb() == null ||
+								tabSubCon.obterSubterranea().getSub_Sistema() == null
+						) {
+					
+					Alert aLat = new Alert (Alert.AlertType.ERROR);
+					aLat.setTitle("Alerta!!!");
+					aLat.setContentText("Informe: Tipo de Captação (), Área é atendida pela Caesb() e Subsistema()!!!");
+					aLat.setHeaderText(null);
+					aLat.show();
+					
+				} else {
+					
+				InterferenciaTabela intTabEditar = tvListaInt.getSelectionModel().getSelectedItem(); //será¡ que precisa desse cÃ³digo?, verificar... Sim por causa do construtor da interferencia
 				
 				Interferencia intEditar = new Interferencia(intTabEditar);
 				
-					intEditar.setInter_Tipo(cbTipoInt.getValue().toString());
-					intEditar.setInter_Bacia(cbBacia.getValue().toString());
+					intEditar.setInter_Tipo(cbTipoInt.getValue());
+					intEditar.setInter_Bacia(cbBacia.getValue());
 					intEditar.setInter_UH(tfUH.getText());
 					intEditar.setInter_Corpo_Hidrico(tfCorpoHid.getText());
-					intEditar.setInter_Situacao(cbSituacao.getValue().toString());
+					intEditar.setInter_Situacao(cbSituacao.getValue());
 					
 					intEditar.setInter_Lat(Double.parseDouble(tfIntLat.getText()));
 					intEditar.setInter_Lng(Double.parseDouble(tfIntLon.getText()));
 					
-					intEditar.setInter_Desc_Endereco(eGeralInt.getDesc_Endereco());  // trazer a descriÃ§Ã£o do endereÃ§o de acordo com o endereÃ§o selecionado
-					intEditar.setInter_End_CodigoFK(eGeralInt);  // trazer a foreing key do endereÃ§o selecionado na tableview ou escolhido na tab endereÃ§o
-				
-					System.out.println("ao editar, valor do intEditar cÃ³digo do endereÃ§o: " + intEditar.getInter_End_CodigoFK().getCod_Endereco());
-					
+					intEditar.setInter_Desc_Endereco(eGeralInt.getDesc_Endereco());  // trazer a descrição do endereço de acordo com o endereço selecionado
+					intEditar.setInter_End_CodigoFK(eGeralInt);  // trazer a foreing key do endereço selecionado na tableview ou escolhido na tab endereço
+									
 				InterferenciaDao interferenciaDao = new InterferenciaDao ();
 				
 				interferenciaDao.mergeInterferencia(intEditar);
@@ -553,6 +626,7 @@ public class TabInterfController implements Initializable {
 					sub.setSub_Dinamico(tabSubCon.obterSubterranea().getSub_Dinamico());
 					sub.setSub_Vazao(tabSubCon.obterSubterranea().getSub_Vazao());
 					sub.setSub_Profundidade(tabSubCon.obterSubterranea().getSub_Profundidade());
+					sub.setSub_Data(tabSubCon.obterSubterranea().getSub_Data());
 					
 				SubterraneaDao sDao = new SubterraneaDao();
 					
@@ -564,34 +638,46 @@ public class TabInterfController implements Initializable {
 				modularBotoes ();
 				
 				
-				//-- Alerta de interferÃªncia editada --//
-				Alert aSalvo = new Alert (Alert.AlertType.CONFIRMATION);
-				aSalvo.setTitle("ParabÃ©ns!");
-				aSalvo.setContentText("InterferÃªncia editada!");
-				aSalvo.setHeaderText(null);
-				aSalvo.show();
+				//-- Alerta de interferência editada --//
+				Alert a = new Alert (Alert.AlertType.INFORMATION);
+				a.setTitle("Parabéns!");
+				a.setContentText("Interferência editada!");
+				a.setHeaderText(null);
+				a.show();
 			
 			}
 			
+			
 			if (strEditar.equals("Superficial")) {
+				
+				if (tabSupCon.obterSuperficial().getSup_Local() == null  ||
+						tabSupCon.obterSuperficial().getSup_Caesb() == null
+						
+						) {
+					
+					Alert aLat = new Alert (Alert.AlertType.ERROR);
+					aLat.setTitle("Alerta!!!");
+					aLat.setContentText("Informe o Local de Captação e se há Caesb!!!");
+					aLat.setHeaderText(null);
+					aLat.show();
+					
+				} else {
 				
 				InterferenciaTabela intTabEditar = tvListaInt.getSelectionModel().getSelectedItem(); //serÃ¡ que precisa desse cÃ³digo?, verificar... Sim por causa do construtor da interferencia
 				
 				Interferencia intEditar = new Interferencia(intTabEditar);
 				
-				intEditar.setInter_Tipo(cbTipoInt.getValue().toString());
-				intEditar.setInter_Bacia(cbBacia.getValue().toString());
+				intEditar.setInter_Tipo(cbTipoInt.getValue());
+				intEditar.setInter_Bacia(cbBacia.getValue());
 				intEditar.setInter_UH(tfUH.getText());
 				intEditar.setInter_Corpo_Hidrico(tfCorpoHid.getText());
-				intEditar.setInter_Situacao(cbSituacao.getValue().toString());
+				intEditar.setInter_Situacao(cbSituacao.getValue());
 				
 				intEditar.setInter_Lat(Double.parseDouble(tfIntLat.getText()));
 				intEditar.setInter_Lng(Double.parseDouble(tfIntLon.getText()));
 				
-				intEditar.setInter_Desc_Endereco(eGeralInt.getDesc_Endereco());  // trazer a descriÃ§Ã£o do endereÃ§o de acordo com o endereÃ§o selecionado
-				intEditar.setInter_End_CodigoFK(eGeralInt);  // trazer a foreing key do endereÃ§o selecionado na tableview ou escolhido na tab endereÃ§o
-			
-				System.out.println("ao editar, valor do intEditar cÃ³digo do endereÃ§o: " + intEditar.getInter_End_CodigoFK().getCod_Endereco());
+				intEditar.setInter_Desc_Endereco(eGeralInt.getDesc_Endereco());  // trazer a descrição do endereço de acordo com o endereço selecionado
+				intEditar.setInter_End_CodigoFK(eGeralInt);  // trazer a foreing key do endereço selecionado na tableview ou escolhido na tab endereço
 				
 				InterferenciaDao interferenciaDao = new InterferenciaDao ();
 				
@@ -611,9 +697,8 @@ public class TabInterfController implements Initializable {
 				
 				sup.setSup_Area(tabSupCon.obterSuperficial().getSup_Area());
 				sup.setSup_Caesb(tabSupCon.obterSuperficial().getSup_Caesb());
-				
-				//falta data
-				
+				sup.setSup_Data(tabSupCon.obterSuperficial().getSup_Data());
+			
 				SuperficialDao supDao = new SuperficialDao();
 				
 				supDao.mergeSuperficial(sup);
@@ -623,7 +708,7 @@ public class TabInterfController implements Initializable {
 				
 				modularBotoes ();
 				
-				
+				}
 			
 			}
 			
@@ -634,21 +719,22 @@ public class TabInterfController implements Initializable {
 								strEditar.equals("Outros")	)	
 			{
 			
+				
 				InterferenciaTabela intTabEditar = tvListaInt.getSelectionModel().getSelectedItem(); //serÃ¡ que precisa desse cÃ³digo?, verificar... Sim por causa do construtor da interferencia
 				
 				Interferencia intEditar = new Interferencia(intTabEditar);
 				
-				intEditar.setInter_Tipo(cbTipoInt.getValue().toString());
-				intEditar.setInter_Bacia(cbBacia.getValue().toString());
+				intEditar.setInter_Tipo(cbTipoInt.getValue());
+				intEditar.setInter_Bacia(cbBacia.getValue());
 				intEditar.setInter_UH(tfUH.getText());
 				intEditar.setInter_Corpo_Hidrico(tfCorpoHid.getText());
-				intEditar.setInter_Situacao(cbSituacao.getValue().toString());
+				intEditar.setInter_Situacao(cbSituacao.getValue());
 				
 				intEditar.setInter_Lat(Double.parseDouble(tfIntLat.getText()));
 				intEditar.setInter_Lng(Double.parseDouble(tfIntLon.getText()));
 				
-				intEditar.setInter_Desc_Endereco(eGeralInt.getDesc_Endereco());  // trazer a descriÃ§Ã£o do endereÃ§o de acordo com o endereÃ§o selecionado
-				intEditar.setInter_End_CodigoFK(eGeralInt);  // trazer a foreing key do endereÃ§o selecionado na tableview ou escolhido na tab endereÃ§o
+				intEditar.setInter_Desc_Endereco(eGeralInt.getDesc_Endereco());  // trazer a descrição do endereço de acordo com o endereço selecionado
+				intEditar.setInter_End_CodigoFK(eGeralInt);  // trazer a foreing key do endereço selecionado na tableview ou escolhido na tab endereço
 			
 				InterferenciaDao interferenciaDao = new InterferenciaDao ();
 				
@@ -659,13 +745,22 @@ public class TabInterfController implements Initializable {
 				
 				modularBotoes ();
 				
-			}
+				}
+				}
 
-		}
-		
+			}
+			
+		}	
 	}
 	
-	
+	/*//tirar
+	public void btnBuscarIntHab (ActionEvent event) {
+		
+		google = new GoogleMap();
+		
+		google.setMarkerPosition(eGeralInt.getLat_Endereco(), eGeralInt.getLon_Endereco());
+		
+	}*/
 	//-- botao excluir --//
 	public void btnIntExcHab (ActionEvent event) {
 		
@@ -681,15 +776,15 @@ public class TabInterfController implements Initializable {
 			modularBotoes ();
 			
 			//-- Alerta de endereco salvo --//
-			Alert aSalvo = new Alert (Alert.AlertType.CONFIRMATION);
-			aSalvo.setTitle("Parabéns!");
-			aSalvo.setContentText("Interferência excluída!");
-			aSalvo.setHeaderText(null);
-			aSalvo.show();
+			Alert a = new Alert (Alert.AlertType.INFORMATION);
+			a.setTitle("Parabéns!");
+			a.setContentText("Interferência excluída!");
+			a.setHeaderText(null);
+			a.show();
 		
 	}
 	
-	//-- botÃ£o cancelar --//
+	//-- botao cancelar --//
 	public void btnIntCanHab (ActionEvent event) {
 		
 		modularBotoes ();
@@ -733,7 +828,7 @@ public class TabInterfController implements Initializable {
 	
 	}
 	
-	public void btnEndLatLonHab (ActionEvent event) {
+	public void btnLatLngHab (ActionEvent event) {
 			
 		String linkCoord = (tfLinkInt.getText());
 		
@@ -750,7 +845,7 @@ public class TabInterfController implements Initializable {
 		
 	}
 	
-	//-- mÃ©todo atualizar latitude e longitude --//
+	//-- método atualizar latitude e longitude --//
 	
 	public void setLatLng (double lat, double lng) {
 		
@@ -759,14 +854,47 @@ public class TabInterfController implements Initializable {
 			
 			
 	}
-
-	//-- buscador de endereÃ§os e coordenadas --//
+	//-- trazer a coordenada do mapa --//
+	@FXML Image imgGetCoord = new Image(TabEnderecoController.class.getResourceAsStream("/images/getCoord.png")); 
+	@FXML Button btnCoord = new Button ();
+	
+	GoogleMap google;
+	public void btnEndCoordHab (ActionEvent event) {
+	  adicMarcador();
+	  
+	}
+	
+	Double lat = -15.775073004902042;
+	Double lng = -47.940351677729836;
+	
+	// adicMarcador(); 
+	public void adicMarcador () {
+		
+    	if (eGeralInt.getLat_Endereco() != null  && eGeralInt.getLon_Endereco() != null ) {
+        	lat = Double.parseDouble(eGeralInt.getLat_Endereco().toString());
+    		lng = Double.parseDouble(eGeralInt.getLon_Endereco().toString());
+    	}
+    		try {
+    		google.setMarkerPosition(lat, lng);
+    		google.setMapCenter(lat, lng);
+    		}catch (Exception e) {
+	    		Alert a = new Alert (Alert.AlertType.ERROR);
+				a.setTitle("Alerta!!!");
+				a.setContentText("Mapa não inicializado!!! " + e);
+				a.setHeaderText(null);
+				a.show();
+    		}
+	
+    	
+	}
+		
+	//-- buscador de endereços e coordenadas --//
 	public void btnIntMapsHab (ActionEvent event) throws IOException {
 
-		GoogleMap google = new GoogleMap();
+		google = new GoogleMap();
 		
 		Group group = new Group();
-		group.getChildren().addAll(google, btnCoord);
+		group.getChildren().addAll(google, btnCoord, btnEndCoordMap);
 		
 		Scene scene = new Scene(group);
 		
@@ -774,14 +902,23 @@ public class TabInterfController implements Initializable {
 		btnCoord.setLayoutX(502);
 		btnCoord.setGraphic(new ImageView(imgGetCoord));
 		
+		btnEndCoordMap.setLayoutY(8.5);
+		btnEndCoordMap.setLayoutX(620);
+		btnEndCoordMap.setGraphic(new ImageView(imgEndCoordMap));
 		
-		btnCoord.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
-            	tfIntLat.setText(latDec);
-        		tfIntLon.setText(lngDec);
-        		
-            }
-        });
+			btnCoord.setOnAction(new EventHandler<ActionEvent>() {
+	            @Override public void handle(ActionEvent e) {
+	            	tfIntLat.setText(latDec);
+	        		tfIntLon.setText(lngDec);
+	        		
+	            }
+	        });
+		
+				btnEndCoordMap.setOnAction(new EventHandler<ActionEvent>() {
+		            @Override public void handle(ActionEvent e) {
+		            	adicMarcador();
+		            }
+		        });
 	    
 		Stage stage = new Stage(StageStyle.UTILITY);
 		stage.setWidth(1250);
@@ -814,7 +951,7 @@ public class TabInterfController implements Initializable {
 		
 		cbBacia.setItems(olBacia);
 		
-		cbSituacao.setValue("Inativa");
+		cbSituacao.setValue("Ativa");
 		cbSituacao.setItems(olSituacao);
 		
 		//selecionarInterferencia ();
@@ -841,6 +978,10 @@ public class TabInterfController implements Initializable {
 				
 				);
 		
+		btnIntMaps.setGraphic(new ImageView(imgMap));
+		btnEndCoord.setGraphic(new ImageView(imgEndCoord));
+		
+		
 		modularBotoes ();
 		
 	}
@@ -859,8 +1000,8 @@ public class TabInterfController implements Initializable {
 		
 		tfIntLat.setDisable(true);
 		tfIntLon.setDisable(true);
-		btnIntLatLon.setDisable(true);
-		btnIntAtualizar.setDisable(true);
+		btnLatLng.setDisable(true);
+		btnAtualizar.setDisable(true);
 		
 		btnIntSalvar.setDisable(true);
 		btnIntEdit.setDisable(true);
@@ -918,7 +1059,7 @@ public class TabInterfController implements Initializable {
 			
 			paneTipoInterferencia.getChildren().add(tabSupPane);
 			
-			// -- escolher tipo de captaÃ§Ã£o --//
+			// -- escolher tipo de captação --//
 			tipoCaptacao = 2;
 			
 			
@@ -938,11 +1079,9 @@ public class TabInterfController implements Initializable {
 			loader.setController(tabSubCon);
 			loader.load();
 			paneTipoInterferencia.getChildren().add(tabSubPane);
-			// -- escolher tipo de captaÃ§Ã£o --//
+			// -- escolher tipo de captação --//
 			tipoCaptacao = 1;
 			
-			
-		
 		}
 		
 		// ainda está dando null ao clicar em cancelar  e ao fazer nova pesquisa MELHOROU COLOCANDO "", MAS NO

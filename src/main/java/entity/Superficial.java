@@ -48,7 +48,9 @@ public class Superficial implements Serializable{
 	@Column (columnDefinition="varchar(4)")
 	private String sup_Tempo;  // tempo de captação (h/dia)
 	
-	
+	public Superficial (){
+		
+	}
 	
 	
 	//-- getters and setters --//

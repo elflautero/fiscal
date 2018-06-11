@@ -20,28 +20,32 @@ public class Denuncia implements Serializable {
 	private static final long serialVersionUID = -6469401230304931190L;
 
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column 
-	private int Cod_Denuncia;
+	@Column (name="denunciaID")
+	private int denunciaID;
+	
+	// @Column (name="descricaoArtigo", columnDefinition="varchar(100)")
 	
 	@ManyToOne (fetch = FetchType.EAGER) 
-	@JoinColumn (name = "Cod_Endereco")
-	private Endereco enderecoFK;
+	@JoinColumn (name = "enderecoFK")
+	private Endereco denEnderecoFK;
 	
-	@Column (columnDefinition="varchar(80)")
-	private String Doc_Denuncia;
+	@Column (name="documento", columnDefinition="varchar(80)")
+	private String denDocumento;
 	
-	@Column (columnDefinition="varchar(25)")
-	private String Doc_SEI_Denuncia;
+	@Column (name="documentoSEI", columnDefinition="varchar(25)")
+	private String denDocumentoSEI;
 	
-	@Column (columnDefinition="varchar(25)")
-	private String Proc_SEI_Denuncia;
+	@Column (name="processoSEI", columnDefinition="varchar(25)")
+	private String denProcessoSEI;
 	
-	@Column (columnDefinition="varchar(200)")
-	private String Desc_Denuncia;
+	@Column (name="descricao", columnDefinition="varchar(200)")
+	private String denDescricao;
 	
-	/*
-	@Column (name="Data_Distribuicao", nullable = false)
-	private String Data_Distribuicao;*/
+	@Column (name="dataDistribuicao", columnDefinition="varchar(15)")
+	private String denDataDistribuicao;
+	
+	@Column (name="dataRecebimento", columnDefinition="varchar(15)")
+	private String denDataRecebimento;
 	
 	
 	//CONSTRUTOR PADRÃO
@@ -52,69 +56,81 @@ public class Denuncia implements Serializable {
 	//CONSTRUTOR DE EDITAR DOCUMENTO
 	public Denuncia(DenunciaTabela denunciaTabela) {
 		
-		this.Cod_Denuncia = denunciaTabela.getCod_Denuncia();
-		this.Doc_Denuncia = denunciaTabela.getDoc_Denuncia();
-		this.Doc_SEI_Denuncia = denunciaTabela.getDoc_SEI_Denuncia();
-		this.Proc_SEI_Denuncia = denunciaTabela.getProc_SEI_Denuncia();
-		this.Desc_Denuncia = denunciaTabela.getDesc_Denuncia();
+		this.denunciaID = denunciaTabela.getDenDenunciaID();
+		this.denDocumento = denunciaTabela.getDenDocumento();
+		this.denDocumentoSEI = denunciaTabela.getDenDecumentoSEI();
+		this.denProcessoSEI = denunciaTabela.getDenProcessoSEI();
+		this.denDescricao = denunciaTabela.getDenDescricao();
+		this.denDataDistribuicao = denunciaTabela.getDenDataDistribuicao();
+		this.denDataRecebimento = denunciaTabela.getDenDataRecebimento();
 		
-		this.enderecoFK = denunciaTabela.getenderecoObjetoTabelaFK();
+		this.denEnderecoFK = denunciaTabela.getDenEnderecoFK();
 	}
 	
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-	
 			//-- foreign key --//
-			public Endereco getEnderecoFK() {
-				return enderecoFK;
+			public Endereco getDenEnderecoFK() {
+				return denEnderecoFK;
 			}
 		
-			public void setEnderecoFK(Endereco enderecoFK) {
-				this.enderecoFK = enderecoFK;
+			public void setDenEnderecoFK(Endereco denEnderecoFK) {
+				this.denEnderecoFK = denEnderecoFK;
 			}
-	
-	// GETTERS AND SETTERS
-	
-	public int getCod_Denuncia() {
-		return Cod_Denuncia;
-	}
 
-	public void setCod_Denuncia(int cod_Denuncia) {
-		Cod_Denuncia = cod_Denuncia;
-	}
+			public int getDenunciaID() {
+				return denunciaID;
+			}
 
-	public String getDoc_Denuncia() {
-		return Doc_Denuncia;
-	}
+			public void setDenunciaID(int denunciaID) {
+				this.denunciaID = denunciaID;
+			}
 
-	public void setDoc_Denuncia(String doc_Denuncia) {
-		Doc_Denuncia = doc_Denuncia;
-	}
+			public String getDenDocumento() {
+				return denDocumento;
+			}
 
-	public String getDoc_SEI_Denuncia() {
-		return Doc_SEI_Denuncia;
-	}
+			public void setDenDocumento(String denDocumento) {
+				this.denDocumento = denDocumento;
+			}
 
-	public void setDoc_SEI_Denuncia(String doc_SEI_Denuncia) {
-		Doc_SEI_Denuncia = doc_SEI_Denuncia;
-	}
+			public String getDenDocumentoSEI() {
+				return denDocumentoSEI;
+			}
 
-	public String getProc_SEI_Denuncia() {
-		return Proc_SEI_Denuncia;
-	}
+			public void setDenDocumentoSEI(String denDocumentoSEI) {
+				this.denDocumentoSEI = denDocumentoSEI;
+			}
 
-	public void setProc_SEI_Denuncia(String proc_SEI_Denuncia) {
-		Proc_SEI_Denuncia = proc_SEI_Denuncia;
-	}
+			public String getDenProcessoSEI() {
+				return denProcessoSEI;
+			}
 
-	public String getDesc_Denuncia() {
-		return Desc_Denuncia;
-	}
+			public void setDenProcessoSEI(String denProcessoSEI) {
+				this.denProcessoSEI = denProcessoSEI;
+			}
 
-	public void setDesc_Denuncia(String desc_Denuncia) {
-		Desc_Denuncia = desc_Denuncia;
-	}
+			public String getDenDescricao() {
+				return denDescricao;
+			}
+
+			public void setDenDescricao(String denDescricao) {
+				this.denDescricao = denDescricao;
+			}
+
+			public String getDenDataDistribuicao() {
+				return denDataDistribuicao;
+			}
+
+			public void setDenDataDistribuicao(String denDataDistribuicao) {
+				this.denDataDistribuicao = denDataDistribuicao;
+			}
+
+			public String getDenDataRecebimento() {
+				return denDataRecebimento;
+			}
+
+			public void setDenDataRecebimento(String denDataRecebimento) {
+				this.denDataRecebimento = denDataRecebimento;
+			}
 	
 }

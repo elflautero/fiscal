@@ -1,7 +1,6 @@
 package controllers;
 
 import java.net.URL;
-import java.text.Format;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -22,7 +21,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DataFormat;
 import javafx.scene.web.HTMLEditor;
 import tabela.LegislacaoTabela;
 
@@ -231,16 +229,6 @@ public class LegislacaoController implements Initializable {
 				
 				legGeral = leg;
 				
-				/*
-				Clipboard clip = Clipboard.getSystemClipboard();
-                ClipboardContent conteudo = new ClipboardContent();
-                
-                String html = legTab.getArtigo();
-                html = (String) clip.getContent(DataFormat.PLAIN_TEXT);
-                
-                conteudo.putString(html);
-                clip.setContent(conteudo);
-                */
 				
 				Clipboard clip = Clipboard.getSystemClipboard();
                 ClipboardContent conteudo = new ClipboardContent();

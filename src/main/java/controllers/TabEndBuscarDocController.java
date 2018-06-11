@@ -62,13 +62,15 @@ public class TabEndBuscarDocController implements Initializable {
 			}
 			for (Denuncia denuncia : denunciaList) {
 				DenunciaTabela denTab = new DenunciaTabela(
-						denuncia.getCod_Denuncia(), 
-						denuncia.getDoc_Denuncia(),
-						denuncia.getDoc_SEI_Denuncia(), 
-						denuncia.getProc_SEI_Denuncia(),
-						denuncia.getDesc_Denuncia(),
+						denuncia.getDenunciaID(), 
+						denuncia.getDenDocumento(),
+						denuncia.getDenDocumentoSEI(), 
+						denuncia.getDenProcessoSEI(),
+						denuncia.getDenDescricao(),
+						denuncia.getDenDataDistribuicao(),
+						denuncia.getDenDataRecebimento(),
 						//adicionado o objeto  endereçoFK, 
-						denuncia.getEnderecoFK()
+						denuncia.getDenEnderecoFK()
 						);
 				
 					obsListDenunciaTabela.add(denTab);

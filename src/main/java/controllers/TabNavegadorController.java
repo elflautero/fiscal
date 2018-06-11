@@ -25,6 +25,8 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.AnchorPane;
@@ -53,25 +55,31 @@ public class TabNavegadorController implements Initializable{
 	ArrayList<String> docsList = new ArrayList<String>();
 		
 	@FXML Pane pBrowser;
+	@FXML Pane pBrowserBotoes;
 	
 	@FXML AnchorPane tabNavegador = new AnchorPane();
 	
-	@FXML
-	Button btnSEI = new Button();
-	@FXML
-	Button btnCapturarDocs = new Button();
-	@FXML
-	Button btnMostrarDocs = new Button();
-	@FXML
-	Button btnGo = new Button();
+	@FXML Button btnSei = new Button();
 	
-	@FXML
-	Button btnGoogle = new Button();
+	@FXML Button btnSeiTrein = new Button();
+	
+	@FXML Button btnCapturarDocs = new Button();
+	@FXML Button btnMostrarDocs = new Button();
+	
+	@FXML Button btnGoogle = new Button();
+	@FXML Button btnWebBrowser = new Button();
+	
+	@FXML Image imgGoogle = new Image(TabNavegadorController.class.getResourceAsStream("/images/google.png"));
+	@FXML Image imgSei = new Image(TabNavegadorController.class.getResourceAsStream("/images/seiOriginal.png"));
+	@FXML Image imgSeiTrein = new Image(TabNavegadorController.class.getResourceAsStream("/images/seiTreinOriginal.png"));
+	@FXML Image imgCapturar = new Image(TabNavegadorController.class.getResourceAsStream("/images/doc24.png"));
+	@FXML Image imgMostrar = new Image(TabNavegadorController.class.getResourceAsStream("/images/showDocs24.png"));
+	@FXML Image imgWeb = new Image(TabNavegadorController.class.getResourceAsStream("/images/webBrowser.png"));
 	
 	WebView wv1;
+	
 	// numero do iframe para inserir o relatorio, TN ou AIA
 	int numIframe = 2;
-	
 	
 	// table view de documentos capturados do sei
 	ObservableList<String []> numDosObservable;
@@ -80,27 +88,46 @@ public class TabNavegadorController implements Initializable{
 	
 	WebView wv2;
 	
+	//-- botão google --//
+	public void btnWebBrowserHab (ActionEvent event) {
+		
+		navegarWeb();
+	}
+		
 	
-	//-- botÃ£o Google --//
+	
+	//-- botão google --//
 	public void btnGoogleHab (ActionEvent event) {
 		
-		link = "https://www.google.com.br/search?q=googlr&oq=googlr&aqs=chrome..69i57j0l5.2588j0j7&sourceid=chrome&ie=UTF-8";
-		navegarWeb();
+		link = "https://www.google.com.br/search?q=sei+gdf&oq=sei+gdf+&aqs=chrome..69i57j69i60l3j0l2.4027j0j4&sourceid=chrome&ie=UTF-8";
+		wv1.getEngine().load(link);
+		
+		//navegarWeb();
 		System.out.println("btn google clicado");
 		
 	}
 	
-	//-- botÃ£o SEI --//
-	public void btnSEIHab (ActionEvent event) {
+	//-- botão sei teinamento --//
+	public void btnSeiTreinHab (ActionEvent event) {
 		
 		link = "http://treinamento3.sei.df.gov.br/sip/login.php?sigla_orgao_sistema=GDF&sigla_sistema=SEI";
-		navegarWeb();
+		wv1.getEngine().load(link);
+		
 		System.out.println("btn sei treinamento clicado");
 		
 	}
+	//-- botão sei --//
+	public void btnSeiHab (ActionEvent event) {
+			
+			link = "https://sei.df.gov.br/sip/login.php?sigla_orgao_sistema=GDF&sigla_sistema=SEI";
+			wv1.getEngine().load(link);
+			
+			System.out.println("btn sei treinamento clicado");
+			
+		}
 	
 	
-	//-- botÃ£o capturar --//
+	//-- botão capturar --//
 	public void btnCapturarDocsHab (ActionEvent event) {
 		
 			// adicionar exececoes https://github.com/Microsoft/ClearScript/issues/16
@@ -134,15 +161,17 @@ public class TabNavegadorController implements Initializable{
 			+ 	"});"
 			
 			);
+			
 	}	
 		
-			
-	
+	// botão mostrar //
 	public void btnMostrarDocsHab (ActionEvent event ) {
 
 		// adicionar exceção https://github.com/Microsoft/ClearScript/issues/16
 		
 		contDocSei = (int) wv1.getEngine().executeScript("doc.length"); // quantidade de docs capturados
+		
+		System.out.println("valor de contDocSei " + contDocSei);
 		
 		docsSei = new String [contDocSei]; // para limitar a quantidade de strings na array
 		
@@ -205,24 +234,13 @@ public class TabNavegadorController implements Initializable{
 	}
 	
 	
-	//-- botÃ£o Go - atualizar navegador --//
-	public void bntGoHab (ActionEvent event) {
-		
-		link = "https://www.google.com.br/search?q=googlr&oq=googlr&aqs=chrome..69i57j0l5.2588j0j7&sourceid=chrome&ie=UTF-8";
-		navegarWeb();
-		
-		System.out.println("BotÃ£o go clicado!");
-	}
-	
-	
-	
-	
 	//-- mÃ©todo navegar --//
 	public void navegarWeb() {
 		
 		wv1 = new WebView();
-		wv1.setPrefSize(1117.0,571.0);
+		wv1.setPrefSize(1117.0,627.0);
 		//wv1.setLayoutY(78);
+		pBrowser.getChildren().add(wv1);
 		
 		
 		wv1.getEngine().setCreatePopupHandler(new Callback<PopupFeatures, WebEngine>() {
@@ -230,7 +248,7 @@ public class TabNavegadorController implements Initializable{
 		    public WebEngine call(PopupFeatures p) {
 		    	
 			    	wv2 = new WebView(); 
-					wv2.setPrefHeight(645.0); // wv2, 1140.0, 650.0
+					wv2.setPrefHeight(645.0);
 		            wv2.setPrefWidth(1140.0);
 		            wv2.setLayoutY(35);
 		            
@@ -332,11 +350,12 @@ public class TabNavegadorController implements Initializable{
 		navegarWeb();  
 		});
 		
+		btnGoogle.setGraphic(new ImageView(imgGoogle));
+		btnCapturarDocs.setGraphic(new ImageView(imgCapturar));
+		btnMostrarDocs.setGraphic(new ImageView(imgMostrar));
+		btnSei.setGraphic(new ImageView(imgSei));
+		btnSeiTrein.setGraphic(new ImageView(imgSeiTrein));
+		btnWebBrowser.setGraphic(new ImageView(imgWeb));
 	}
 
 }
-
-		
-	
-			
-

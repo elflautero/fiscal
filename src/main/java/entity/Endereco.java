@@ -51,7 +51,7 @@ public class Endereco implements Serializable{
 	private Double Lon_Endereco;
 	
 	//-- Lista de enderecos vinculados --//
-	@OneToMany (mappedBy = "enderecoFK", cascade = CascadeType.MERGE,
+	@OneToMany (mappedBy = "denEnderecoFK", cascade = CascadeType.MERGE,
 			fetch = FetchType.LAZY, targetEntity = Denuncia.class)
 	@Fetch(FetchMode.SUBSELECT) 
 	private List<Denuncia> denuncias = new ArrayList<Denuncia>();
