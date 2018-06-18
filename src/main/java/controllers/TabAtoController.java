@@ -571,6 +571,8 @@ public class TabAtoController implements Initializable{
 		
 		infrArray = ifracoes.split("");
 		
+		
+		
 		infraIncisos = new String [7];
 		
 		
@@ -619,29 +621,7 @@ public class TabAtoController implements Initializable{
 		
 		if (cbAtoTipo.getValue().equals("Termo de Notificação")) {
 			
-			//File file = null;
-			//file = new File (TabAtoController.class.getResource("/html/termoNotificacao.html").toExternalForm());
 			
-			/*
-			engTermo.load(getClass().getResource("/html/termoNotificacao.html").toExternalForm()); 
-			
-	        engTermo.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>(){ 
-
-	                public void changed(final ObservableValue<? extends Worker.State> observableValue, 
-
-	                                    final Worker.State oldState, 
-	                                    final Worker.State newState) 
-
-	                { 
-	                	if (newState == Worker.State.SUCCEEDED){  
-	                		
-	                		htmlTermo = (String) engTermo.executeScript("document.documentElement.outerHTML"); 
-	                		
-	                	} 
-	                	
-	               } 
-	        }); 
-	        */
 			
 			htmlTermo = (String) engTermo.executeScript("document.documentElement.outerHTML"); 
 	      
@@ -656,9 +636,10 @@ public class TabAtoController implements Initializable{
 			docHtml.select("terUsNome").prepend(endereco.getListUsuarios().get(u).getUsNome());
 			docHtml.select("terUsCPF").prepend(endereco.getListUsuarios().get(u).getUsCPFCNPJ());
 			docHtml.select("terUsEnd").prepend(endereco.getListUsuarios().get(u).getUsDescricaoEnd());
+			try {docHtml.select("terUsRA").prepend(endereco.getListUsuarios().get(u).getUsRA());} catch (Exception e) {docHtml.select("EndEmpRA").prepend("");};
 			docHtml.select("terUsCep").prepend(endereco.getListUsuarios().get(u).getUsCEP());
 			docHtml.select("terUsCid").prepend(endereco.getListUsuarios().get(u).getUsCidade());
-			docHtml.select("terUsUF").prepend(endereco.getListUsuarios().get(u).getUsEstado());
+			try {docHtml.select("terUsUF").prepend(endereco.getListUsuarios().get(u).getUsEstado());} catch (Exception e) {docHtml.select("terUsUF").prepend("");};
 			docHtml.select("terUsTel").prepend(endereco.getListUsuarios().get(u).getUsTelefone());
 			docHtml.select("terUsCel").prepend(endereco.getListUsuarios().get(u).getUsCelular());
 			docHtml.select("terUsEmail").prepend(endereco.getListUsuarios().get(u).getUsEmail());
@@ -666,12 +647,12 @@ public class TabAtoController implements Initializable{
 			
 			// endereco do empreedimento //      
 			docHtml.select("EndEmpDes").prepend(endereco.getDesc_Endereco());
-			docHtml.select("EndEmpRA").prepend(endereco.getRA_Endereco());
+			try {docHtml.select("EndEmpRA").prepend(endereco.getRA_Endereco());} catch (Exception e) {docHtml.select("EndEmpRA").prepend("");};
 			docHtml.select("EndEmpCep").prepend(endereco.getCEP_Endereco());
 			docHtml.select("EndEmpCid").prepend(endereco.getCid_Endereco());
-			docHtml.select("EndEmpUF").prepend(endereco.getUF_Endereco());
+			try{docHtml.select("EndEmpUF").prepend(endereco.getUF_Endereco());} catch (Exception e) {docHtml.select("EndEmpUF").prepend("");};
 			
-			docHtml.select("terDataFis").prepend(atoGeral.getAtoDataFiscalizacao());
+			try {docHtml.select("terDataFis").prepend(atoGeral.getAtoDataFiscalizacao());} catch (Exception e) {docHtml.select("terDataFis").prepend("");};
 			
 			docHtml.select("terCarac").prepend(atoGeral.getAtoCaracterizacao());
 			
@@ -760,22 +741,6 @@ public class TabAtoController implements Initializable{
 		if (cbAtoTipo.getValue().equals("Auto de Infração") || cbAtoTipo.getValue().equals("Auto de Infração de Multa") ) {
 			
 			
-			/*
-			File file = null;
-			
-			try {
-				file = new File (TabAtoController.class.getResource("/html/autoInfracao.html").toURI());
-				
-			} catch (URISyntaxException e) {
-				System.out.println("erro na leitura do relatório.html" );
-				e.printStackTrace();
-			}
-			*/
-			
-			//engAuto.load(getClass().getResource("/html/autoInfracao.html").toExternalForm()); 
-			
-			// capturar o html //
-			
 			htmlAuto = (String) engAuto.executeScript("document.documentElement.outerHTML"); 
 			
 			Document docHtml = null;
@@ -790,10 +755,10 @@ public class TabAtoController implements Initializable{
 			docHtml.select("autoUsCPF").prepend(endereco.getListUsuarios().get(u).getUsCPFCNPJ());
 			docHtml.select("autoUsEnd").prepend(endereco.getListUsuarios().get(u).getUsDescricaoEnd());
 			                             
-			docHtml.select("autoUsRA").prepend(endereco.getListUsuarios().get(u).getUsRA());
+			try {docHtml.select("autoUsRA").prepend(endereco.getListUsuarios().get(u).getUsRA());} catch (Exception e){docHtml.select("autoUsRA").prepend("");};
 			docHtml.select("autoUsCEP").prepend(endereco.getListUsuarios().get(u).getUsCEP());
 			docHtml.select("autoUsCid").prepend(endereco.getListUsuarios().get(u).getUsCidade());
-			docHtml.select("autoUsUF").prepend(endereco.getListUsuarios().get(u).getUsEstado());
+			try {docHtml.select("autoUsUF").prepend(endereco.getListUsuarios().get(u).getUsEstado());} catch (Exception e) {docHtml.select("autoUsUF").prepend("");};
 			docHtml.select("autoUsTel").prepend(endereco.getListUsuarios().get(u).getUsTelefone());
 			docHtml.select("autoUsCel").prepend(endereco.getListUsuarios().get(u).getUsCelular());
 			docHtml.select("autoUsEmail").prepend(endereco.getListUsuarios().get(u).getUsEmail());
@@ -801,10 +766,10 @@ public class TabAtoController implements Initializable{
 			//dataFis termoNot 
 			
 			docHtml.select("EndEmpDes").prepend(endereco.getDesc_Endereco());
-			docHtml.select("EndEmpRA").prepend(endereco.getRA_Endereco());
+			try {docHtml.select("EndEmpRA").prepend(endereco.getRA_Endereco());} catch (Exception e) {docHtml.select("EndEmpRA").prepend("");};
 			docHtml.select("EndEmpCep").prepend(endereco.getCEP_Endereco());
 			docHtml.select("EndEmpCid").prepend(endereco.getCid_Endereco());
-			docHtml.select("EndEmpUF").prepend(endereco.getUF_Endereco());
+			try {docHtml.select("EndEmpUF").prepend(endereco.getUF_Endereco());} catch (Exception e) {docHtml.select("EndEmpUF").prepend("");};
 			
 			// caracterização //
 			docHtml.select("autoCarac").prepend(atoGeral.getAtoCaracterizacao());
@@ -846,7 +811,8 @@ public class TabAtoController implements Initializable{
 			
 			String atenuantes = visGeral.getVisAtenuantes();
 			
-			atenArray = atenuantes.split("");
+			if (atenArray != null) {
+				atenArray = atenuantes.split("");
 			
 			atenIncisos = new String [12];
 			
@@ -911,10 +877,12 @@ public class TabAtoController implements Initializable{
 				}
 				
 			}
-
+			}
+			
 			
 			String agravantes = visGeral.getVisAgravantes();
 			
+			if (agraArray != null) {
 			agraArray = agravantes.split("");
 			
 			agraIncisos = new String [12];
@@ -990,6 +958,18 @@ public class TabAtoController implements Initializable{
 				}
 			}
 			
+			}
+			
+			docHtml.select("autoReco").append(visGeral.getVisRecomendacoes());
+			
+			if (cbAtoTipo.getValue().equals("Auto de Infração")) {
+				
+				docHtml.select("autoAdMul").prepend("ADVERT&Ecirc;NCIA");
+			}
+			if (cbAtoTipo.getValue().equals("Auto de Infração de Multa")) {
+				docHtml.select("autoAdMul").prepend("MULTA");
+			}
+			
 			String html = new String ();
 			
 			html = docHtml.toString();
@@ -1050,4 +1030,45 @@ eng.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>
 }); 
 */
 
+
+//File file = null;
+//file = new File (TabAtoController.class.getResource("/html/termoNotificacao.html").toExternalForm());
+
+/*
+engTermo.load(getClass().getResource("/html/termoNotificacao.html").toExternalForm()); 
+
+engTermo.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>(){ 
+
+        public void changed(final ObservableValue<? extends Worker.State> observableValue, 
+
+                            final Worker.State oldState, 
+                            final Worker.State newState) 
+
+        { 
+        	if (newState == Worker.State.SUCCEEDED){  
+        		
+        		htmlTermo = (String) engTermo.executeScript("document.documentElement.outerHTML"); 
+        		
+        	} 
+        	
+       } 
+}); 
+*/
+
+
+/*
+File file = null;
+
+try {
+	file = new File (TabAtoController.class.getResource("/html/autoInfracao.html").toURI());
+	
+} catch (URISyntaxException e) {
+	System.out.println("erro na leitura do relatório.html" );
+	e.printStackTrace();
+}
+*/
+
+//engAuto.load(getClass().getResource("/html/autoInfracao.html").toExternalForm()); 
+
+// capturar o html //
 

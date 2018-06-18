@@ -49,7 +49,7 @@ public class TabInterfController implements Initializable {
 	TabSuperficialController tabSupCon;
 	
 	//-- String de pesquisa de enderecos --//
-	String strPesquisaInterferencia = "";
+	String strPesquisa = "";
 	
 	InterferenciaTabela intTab;
 
@@ -159,18 +159,20 @@ public class TabInterfController implements Initializable {
 															"Inativa"
 															
 															); 
-									
+	
+	ObservableList<InterferenciaTabela> obsList; 
+	
 	// --- método para listar interferencias --- //
- 	public void listarInterferencias (String strPesquisaInterferencia) {
+ 	public void listarInterferencias (String strPesquisa) {
  	
  	// --- conexao - listar enderecos --- //
 	InterferenciaDao interferenciaDao = new InterferenciaDao();
-	List<Interferencia> interferenciaList = interferenciaDao.listInterferencia(strPesquisaInterferencia);
-	ObservableList<InterferenciaTabela> obsListInterferenciaTabela = FXCollections.observableArrayList();
+	List<Interferencia> interferenciaList = interferenciaDao.listInterferencia(strPesquisa);
+	obsList = FXCollections.observableArrayList();
 	
 	
-	if (!obsListInterferenciaTabela.isEmpty()) {
-		obsListInterferenciaTabela.clear();
+	if (!obsList.isEmpty()) {
+		obsList.clear();
 	}
 	
 		for (Interferencia interferencia : interferenciaList) {
@@ -197,16 +199,12 @@ public class TabInterfController implements Initializable {
 				
 				);
 			
-			obsListInterferenciaTabela.add(intTab);
+			obsList.add(intTab);
 			
  					
 		}
-		
-		tcDescEndInt.setCellValueFactory(new PropertyValueFactory<InterferenciaTabela, String>("inter_Desc_Endereco")); 
-		tcIntCorpoHidrico.setCellValueFactory(new PropertyValueFactory<InterferenciaTabela, String>("inter_Corpo_Hidrico")); 
-		tcIntUH.setCellValueFactory(new PropertyValueFactory<InterferenciaTabela, String>("inter_UH")); 
-		
-		tvListaInt.setItems(obsListInterferenciaTabela); 
+			
+		tvListaInt.setItems(obsList); 
 		
  	}
  	
@@ -258,6 +256,8 @@ public class TabInterfController implements Initializable {
 					tabSupCon.imprimirSuperficial(intTab.getInterSup());
 					
 				}
+				
+				System.out.println("FK " + intTab.getEnderecoInterferenciaObjetoTabelaFK());
 				
 				btnIntNovo.setDisable(true);
 				btnIntSalvar.setDisable(true);
@@ -326,6 +326,9 @@ public class TabInterfController implements Initializable {
 	//-- botao salvar --//
 	public void btnIntSalvarHab (ActionEvent event) {
 		
+		obsList = FXCollections.observableArrayList();
+		
+	
 		if (tfIntLat.getText().isEmpty()|| tfIntLon.getText().isEmpty()) {
 			
 			Alert a = new Alert (Alert.AlertType.ERROR);
@@ -398,11 +401,38 @@ public class TabInterfController implements Initializable {
 										
 										
 									SubterraneaDao sDao = new SubterraneaDao();
-										
-										
 									sDao.mergeSubterranea(sub);
 									
-									listarInterferencias (strPesquisaInterferencia);
+									interferencia.setSub_Interferencia_Codigo(sub);
+									
+									// mostrar a interferencia na tvList
+									InterferenciaTabela intTab = new InterferenciaTabela(
+											
+											interferencia.getInter_Codigo(),
+											interferencia.getInter_Tipo(),
+											interferencia.getInter_Bacia(),
+											interferencia.getInter_UH(),
+											interferencia.getInter_Corpo_Hidrico(),
+											interferencia.getInter_Lat(),
+											interferencia.getInter_Lng(),
+											interferencia.getInter_Situacao(),
+											interferencia.getInter_Desc_Endereco(),
+											
+											//-- foreign key --//
+											interferencia.getInter_End_CodigoFK(),
+											
+											interferencia.getSub_Interferencia_Codigo(),
+											
+											interferencia.getSuper_Interferencia_Codigo()
+											
+											
+											);
+										
+										
+										obsList.add(intTab);
+										
+										tvListaInt.setItems(obsList); 
+										
 									
 									selecionarInterferencia ();
 									
@@ -477,7 +507,36 @@ public class TabInterfController implements Initializable {
 										
 										supDao.mergeSuperficial(sup);
 										
-										listarInterferencias (strPesquisaInterferencia);
+										interferencia.setSuper_Interferencia_Codigo(sup);
+										
+										// mostrar a interferencia na tvList
+										InterferenciaTabela intTab = new InterferenciaTabela(
+												
+												interferencia.getInter_Codigo(),
+												interferencia.getInter_Tipo(),
+												interferencia.getInter_Bacia(),
+												interferencia.getInter_UH(),
+												interferencia.getInter_Corpo_Hidrico(),
+												interferencia.getInter_Lat(),
+												interferencia.getInter_Lng(),
+												interferencia.getInter_Situacao(),
+												interferencia.getInter_Desc_Endereco(),
+												
+												//-- foreign key --//
+												interferencia.getInter_End_CodigoFK(),
+												
+												interferencia.getSub_Interferencia_Codigo(),
+												
+												interferencia.getSuper_Interferencia_Codigo()
+												
+												
+												);
+											
+										
+										obsList.add(intTab);
+										
+											
+										tvListaInt.setItems(obsList); 
 										
 										selecionarInterferencia ();
 										
@@ -518,19 +577,45 @@ public class TabInterfController implements Initializable {
 											interferenciaDao.salvaInterferencia(interferencia);
 											interferenciaDao.mergeInterferencia(interferencia);
 											
-										listarInterferencias (strPesquisaInterferencia);
+										// mostrar a interferencia na tvList
+										InterferenciaTabela intTab = new InterferenciaTabela(
+													
+											interferencia.getInter_Codigo(),
+											interferencia.getInter_Tipo(),
+											interferencia.getInter_Bacia(),
+											interferencia.getInter_UH(),
+											interferencia.getInter_Corpo_Hidrico(),
+											interferencia.getInter_Lat(),
+											interferencia.getInter_Lng(),
+											interferencia.getInter_Situacao(),
+											interferencia.getInter_Desc_Endereco(),
+											
+											//-- foreign key --//
+											interferencia.getInter_End_CodigoFK(),
+											
+											interferencia.getSub_Interferencia_Codigo(),
+											
+											interferencia.getSuper_Interferencia_Codigo()
+													
+													
+											);
+												
 									
-									selecionarInterferencia ();
+											obsList.add(intTab);
+											
+											tvListaInt.setItems(obsList); 
 									
-									modularBotoes ();
+											selecionarInterferencia ();
+									
+											modularBotoes ();
 							
 	
-										//-- Alerta de endereco salvo --//
-										Alert a = new Alert (Alert.AlertType.INFORMATION);
-										a.setTitle("Parabéns!");
-										a.setContentText("Interferência salva com sucesso!");
-										a.setHeaderText(null);
-										a.show();
+											//-- Alerta de endereco salvo --//
+											Alert a = new Alert (Alert.AlertType.INFORMATION);
+											a.setTitle("Parabéns!");
+											a.setContentText("Interferência salva com sucesso!");
+											a.setHeaderText(null);
+											a.show();
 							
 								
 					} // fim superficial //
@@ -563,9 +648,7 @@ public class TabInterfController implements Initializable {
 			
 		}
 		
-		else {
-			
-			if (tfIntLat.getText().isEmpty() || tfIntLon.getText().isEmpty()) {
+		else if (tfIntLat.getText().isEmpty() || tfIntLon.getText().isEmpty()) {
 				
 				Alert aLat = new Alert (Alert.AlertType.ERROR);
 				aLat.setTitle("Alerta!!!");
@@ -575,202 +658,272 @@ public class TabInterfController implements Initializable {
 				
 			} else {
 			
-			String strEditar = intTab.getInter_Tipo();
+					String strEditar = intTab.getInter_Tipo();
 			
-			if (strEditar.equals("Subterrânea")) {
-				
-				
-				if (tabSubCon.obterSubterranea().getSub_Poco() == null ||
-						tabSubCon.obterSubterranea().getSub_Caesb() == null ||
-								tabSubCon.obterSubterranea().getSub_Sistema() == null
-						) {
-					
-					Alert aLat = new Alert (Alert.AlertType.ERROR);
-					aLat.setTitle("Alerta!!!");
-					aLat.setContentText("Informe: Tipo de Captação (), Área é atendida pela Caesb() e Subsistema()!!!");
-					aLat.setHeaderText(null);
-					aLat.show();
-					
-				} else {
-					
-				InterferenciaTabela intTabEditar = tvListaInt.getSelectionModel().getSelectedItem(); //será¡ que precisa desse cÃ³digo?, verificar... Sim por causa do construtor da interferencia
-				
-				Interferencia intEditar = new Interferencia(intTabEditar);
-				
-					intEditar.setInter_Tipo(cbTipoInt.getValue());
-					intEditar.setInter_Bacia(cbBacia.getValue());
-					intEditar.setInter_UH(tfUH.getText());
-					intEditar.setInter_Corpo_Hidrico(tfCorpoHid.getText());
-					intEditar.setInter_Situacao(cbSituacao.getValue());
-					
-					intEditar.setInter_Lat(Double.parseDouble(tfIntLat.getText()));
-					intEditar.setInter_Lng(Double.parseDouble(tfIntLon.getText()));
-					
-					intEditar.setInter_Desc_Endereco(eGeralInt.getDesc_Endereco());  // trazer a descrição do endereço de acordo com o endereço selecionado
-					intEditar.setInter_End_CodigoFK(eGeralInt);  // trazer a foreing key do endereço selecionado na tableview ou escolhido na tab endereço
+						if (strEditar.equals("Subterrânea")) {
+							
+							
+									if (tabSubCon.obterSubterranea().getSub_Poco() == null ||
+											tabSubCon.obterSubterranea().getSub_Caesb() == null ||
+													tabSubCon.obterSubterranea().getSub_Sistema() == null
+											) {
+										
+										Alert aLat = new Alert (Alert.AlertType.ERROR);
+										aLat.setTitle("Alerta!!!");
+										aLat.setContentText("Informe: Tipo de Captação (), Área é atendida pela Caesb() e Subsistema()!!!");
+										aLat.setHeaderText(null);
+										aLat.show();
+										
+									} else {
+										
+									InterferenciaTabela intTab = tvListaInt.getSelectionModel().getSelectedItem(); //será¡ que precisa desse cÃ³digo?, verificar... Sim por causa do construtor da interferencia
 									
-				InterferenciaDao interferenciaDao = new InterferenciaDao ();
-				
-				interferenciaDao.mergeInterferencia(intEditar);
-				
-				Subterranea sub = new Subterranea ();
-				
-					sub.setInterf_SubFK(intEditar);
-				
-					sub.setSub_Codigo(intTab.getInterSub().getSub_Codigo()); // para vir a chave primaria da subterranea
-					
-					sub.setSub_Poco(tabSubCon.obterSubterranea().getSub_Poco());
-					sub.setSub_Caesb(tabSubCon.obterSubterranea().getSub_Caesb());
-					sub.setSub_Sistema(tabSubCon.obterSubterranea().getSub_Sistema());
-					sub.setSub_Estatico(tabSubCon.obterSubterranea().getSub_Estatico());
-					sub.setSub_Dinamico(tabSubCon.obterSubterranea().getSub_Dinamico());
-					sub.setSub_Vazao(tabSubCon.obterSubterranea().getSub_Vazao());
-					sub.setSub_Profundidade(tabSubCon.obterSubterranea().getSub_Profundidade());
-					sub.setSub_Data(tabSubCon.obterSubterranea().getSub_Data());
-					
-				SubterraneaDao sDao = new SubterraneaDao();
-					
-				sDao.mergeSubterranea(sub);
-				
-				listarInterferencias (strPesquisaInterferencia);
-				selecionarInterferencia ();
-				
-				modularBotoes ();
-				
-				
-				//-- Alerta de interferência editada --//
-				Alert a = new Alert (Alert.AlertType.INFORMATION);
-				a.setTitle("Parabéns!");
-				a.setContentText("Interferência editada!");
-				a.setHeaderText(null);
-				a.show();
+									Interferencia interferencia = new Interferencia(intTab);
+									
+									interferencia.setInter_Tipo(cbTipoInt.getValue());
+									interferencia.setInter_Bacia(cbBacia.getValue());
+									interferencia.setInter_UH(tfUH.getText());
+									interferencia.setInter_Corpo_Hidrico(tfCorpoHid.getText());
+									interferencia.setInter_Situacao(cbSituacao.getValue());
+									
+									interferencia.setInter_Lat(Double.parseDouble(tfIntLat.getText()));
+									interferencia.setInter_Lng(Double.parseDouble(tfIntLon.getText()));
+									
+									interferencia.setInter_Desc_Endereco(eGeralInt.getDesc_Endereco());  // trazer a descrição do endereço de acordo com o endereço selecionado
+									interferencia.setInter_End_CodigoFK(eGeralInt);  // trazer a foreing key do endereço selecionado na tableview ou escolhido na tab endereço
+									
+									
+									Subterranea sub = new Subterranea ();
+									
+										sub.setSub_Codigo(intTab.getInterSub().getSub_Codigo()); // para vir a chave primaria da subterranea
+										
+										sub.setSub_Poco(tabSubCon.obterSubterranea().getSub_Poco());
+										sub.setSub_Caesb(tabSubCon.obterSubterranea().getSub_Caesb());
+										sub.setSub_Sistema(tabSubCon.obterSubterranea().getSub_Sistema());
+										sub.setSub_Estatico(tabSubCon.obterSubterranea().getSub_Estatico());
+										sub.setSub_Dinamico(tabSubCon.obterSubterranea().getSub_Dinamico());
+										sub.setSub_Vazao(tabSubCon.obterSubterranea().getSub_Vazao());
+										sub.setSub_Profundidade(tabSubCon.obterSubterranea().getSub_Profundidade());
+										sub.setSub_Data(tabSubCon.obterSubterranea().getSub_Data());
+									
+										sub.setInterf_SubFK(interferencia);
+										
+									interferencia.setSub_Interferencia_Codigo(sub);
+									
+									InterferenciaDao interferenciaDao = new InterferenciaDao ();
+									interferenciaDao.mergeInterferencia(interferencia);
+									
+									// mostrar a interferencia na tvList //
+									obsList.remove(intTab);
+									
+									intTab = new InterferenciaTabela(
+											
+											interferencia.getInter_Codigo(),
+											interferencia.getInter_Tipo(),
+											interferencia.getInter_Bacia(),
+											interferencia.getInter_UH(),
+											interferencia.getInter_Corpo_Hidrico(),
+											interferencia.getInter_Lat(),
+											interferencia.getInter_Lng(),
+											interferencia.getInter_Situacao(),
+											interferencia.getInter_Desc_Endereco(),
+											
+											//-- foreign key --//
+											interferencia.getInter_End_CodigoFK(),
+											
+											interferencia.getSub_Interferencia_Codigo(),
+											
+											interferencia.getSuper_Interferencia_Codigo()
+											
+											);
+										
+										obsList.add(intTab);
+										
+										System.out.println("sub data " + intTab.getInterSub().getSub_Data());
+										
+										tvListaInt.setItems(obsList);
+										
+										selecionarInterferencia ();
+										
+										modularBotoes ();
+										
+										//-- Alerta de interferência editada --//
+										Alert a = new Alert (Alert.AlertType.INFORMATION);
+										a.setTitle("Parabéns!");
+										a.setContentText("Interferência editada!");
+										a.setHeaderText(null);
+										a.show();
+									
+							}}
 			
-			}
 			
+							if (strEditar.equals("Superficial") || strEditar.equals("Canal")) {
+								
+								if (tabSupCon.obterSuperficial().getSup_Local() == null  ||
+										tabSupCon.obterSuperficial().getSup_Caesb() == null
+										
+										) {
+									
+									Alert aLat = new Alert (Alert.AlertType.ERROR);
+									aLat.setTitle("Alerta!!!");
+									aLat.setContentText("Informe o Local de Captação e se há Caesb!!!");
+									aLat.setHeaderText(null);
+									aLat.show();
+									
+								} else {
+								
+								InterferenciaTabela intTab = tvListaInt.getSelectionModel().getSelectedItem(); //serÃ¡ que precisa desse cÃ³digo?, verificar... Sim por causa do construtor da interferencia
+								
+									Interferencia interferencia = new Interferencia(intTab);
+									
+									interferencia.setInter_Tipo(cbTipoInt.getValue());
+									interferencia.setInter_Bacia(cbBacia.getValue());
+									interferencia.setInter_UH(tfUH.getText());
+									interferencia.setInter_Corpo_Hidrico(tfCorpoHid.getText());
+									interferencia.setInter_Situacao(cbSituacao.getValue());
+									
+									interferencia.setInter_Lat(Double.parseDouble(tfIntLat.getText()));
+									interferencia.setInter_Lng(Double.parseDouble(tfIntLon.getText()));
+									
+									interferencia.setInter_Desc_Endereco(eGeralInt.getDesc_Endereco());  // trazer a descrição do endereço de acordo com o endereço selecionado
+									interferencia.setInter_End_CodigoFK(eGeralInt);  // trazer a foreing key do endereço selecionado na tableview ou escolhido na tab endereço
+									
+								Superficial sup = new Superficial();
+								
+									sup.setInterf_SuperFK(interferencia);
+									
+									sup.setSup_Codigo(intTab.getInterSup().getSup_Codigo()); // obter a chave primÃ¡ria
+									
+									sup.setSup_Local(tabSupCon.obterSuperficial().getSup_Local());
+									sup.setSup_Captacao(tabSupCon.obterSuperficial().getSup_Captacao());
+									sup.setSup_Bomba(tabSupCon.obterSuperficial().getSup_Bomba());
+									sup.setSup_Potencia(tabSupCon.obterSuperficial().getSup_Potencia());
+									sup.setSup_Tempo(tabSupCon.obterSuperficial().getSup_Tempo());
+									
+									sup.setSup_Area(tabSupCon.obterSuperficial().getSup_Area());
+									sup.setSup_Caesb(tabSupCon.obterSuperficial().getSup_Caesb());
+									sup.setSup_Data(tabSupCon.obterSuperficial().getSup_Data());
+							
+								
+								interferencia.setSuper_Interferencia_Codigo(sup);
+								
+								InterferenciaDao interferenciaDao = new InterferenciaDao ();
+								
+								interferenciaDao.mergeInterferencia(interferencia);
+								
+								// mostrar a interferencia na tvList
+								obsList.remove(intTab);
+								
+								intTab = new InterferenciaTabela(
+										
+										interferencia.getInter_Codigo(),
+										interferencia.getInter_Tipo(),
+										interferencia.getInter_Bacia(),
+										interferencia.getInter_UH(),
+										interferencia.getInter_Corpo_Hidrico(),
+										interferencia.getInter_Lat(),
+										interferencia.getInter_Lng(),
+										interferencia.getInter_Situacao(),
+										interferencia.getInter_Desc_Endereco(),
+										
+										//-- foreign key --//
+										interferencia.getInter_End_CodigoFK(),
+										
+										interferencia.getSub_Interferencia_Codigo(),
+										
+										interferencia.getSuper_Interferencia_Codigo()
+										
+										
+										);
+									
+									obsList.add(intTab);
+									tvListaInt.setItems(obsList);
+									
+									selecionarInterferencia ();
+									
+									modularBotoes ();
+								
+								}}
 			
-			if (strEditar.equals("Superficial")) {
-				
-				if (tabSupCon.obterSuperficial().getSup_Local() == null  ||
-						tabSupCon.obterSuperficial().getSup_Caesb() == null
-						
-						) {
-					
-					Alert aLat = new Alert (Alert.AlertType.ERROR);
-					aLat.setTitle("Alerta!!!");
-					aLat.setContentText("Informe o Local de Captação e se há Caesb!!!");
-					aLat.setHeaderText(null);
-					aLat.show();
-					
-				} else {
-				
-				InterferenciaTabela intTabEditar = tvListaInt.getSelectionModel().getSelectedItem(); //serÃ¡ que precisa desse cÃ³digo?, verificar... Sim por causa do construtor da interferencia
-				
-				Interferencia intEditar = new Interferencia(intTabEditar);
-				
-				intEditar.setInter_Tipo(cbTipoInt.getValue());
-				intEditar.setInter_Bacia(cbBacia.getValue());
-				intEditar.setInter_UH(tfUH.getText());
-				intEditar.setInter_Corpo_Hidrico(tfCorpoHid.getText());
-				intEditar.setInter_Situacao(cbSituacao.getValue());
-				
-				intEditar.setInter_Lat(Double.parseDouble(tfIntLat.getText()));
-				intEditar.setInter_Lng(Double.parseDouble(tfIntLon.getText()));
-				
-				intEditar.setInter_Desc_Endereco(eGeralInt.getDesc_Endereco());  // trazer a descrição do endereço de acordo com o endereço selecionado
-				intEditar.setInter_End_CodigoFK(eGeralInt);  // trazer a foreing key do endereço selecionado na tableview ou escolhido na tab endereço
-				
-				InterferenciaDao interferenciaDao = new InterferenciaDao ();
-				
-				interferenciaDao.mergeInterferencia(intEditar);
-			
-				Superficial sup = new Superficial();
-				
-				sup.setInterf_SuperFK(intEditar);
-				
-				sup.setSup_Codigo(intTab.getInterSup().getSup_Codigo()); // obter a chave primÃ¡ria
-				
-				sup.setSup_Local(tabSupCon.obterSuperficial().getSup_Local());
-				sup.setSup_Captacao(tabSupCon.obterSuperficial().getSup_Captacao());
-				sup.setSup_Bomba(tabSupCon.obterSuperficial().getSup_Bomba());
-				sup.setSup_Potencia(tabSupCon.obterSuperficial().getSup_Potencia());
-				sup.setSup_Tempo(tabSupCon.obterSuperficial().getSup_Tempo());
-				
-				sup.setSup_Area(tabSupCon.obterSuperficial().getSup_Area());
-				sup.setSup_Caesb(tabSupCon.obterSuperficial().getSup_Caesb());
-				sup.setSup_Data(tabSupCon.obterSuperficial().getSup_Data());
-			
-				SuperficialDao supDao = new SuperficialDao();
-				
-				supDao.mergeSuperficial(sup);
-				
-				listarInterferencias (strPesquisaInterferencia);
-				selecionarInterferencia ();
-				
-				modularBotoes ();
-				
-				}
-			
-			}
-			
-			if (strEditar.equals("Caminhão Pipa") 					|| 
-					strEditar.equals("Lançamento de Águas Pluviais")	|| 
-						strEditar.equals("Lançamento de Efluentes")			|| 
-							strEditar.equals("Barragem")						||
-								strEditar.equals("Outros")	)	
-			{
-			
-				
-				InterferenciaTabela intTabEditar = tvListaInt.getSelectionModel().getSelectedItem(); //serÃ¡ que precisa desse cÃ³digo?, verificar... Sim por causa do construtor da interferencia
-				
-				Interferencia intEditar = new Interferencia(intTabEditar);
-				
-				intEditar.setInter_Tipo(cbTipoInt.getValue());
-				intEditar.setInter_Bacia(cbBacia.getValue());
-				intEditar.setInter_UH(tfUH.getText());
-				intEditar.setInter_Corpo_Hidrico(tfCorpoHid.getText());
-				intEditar.setInter_Situacao(cbSituacao.getValue());
-				
-				intEditar.setInter_Lat(Double.parseDouble(tfIntLat.getText()));
-				intEditar.setInter_Lng(Double.parseDouble(tfIntLon.getText()));
-				
-				intEditar.setInter_Desc_Endereco(eGeralInt.getDesc_Endereco());  // trazer a descrição do endereço de acordo com o endereço selecionado
-				intEditar.setInter_End_CodigoFK(eGeralInt);  // trazer a foreing key do endereço selecionado na tableview ou escolhido na tab endereço
-			
-				InterferenciaDao interferenciaDao = new InterferenciaDao ();
-				
-				interferenciaDao.mergeInterferencia(intEditar);
-				
-				listarInterferencias (strPesquisaInterferencia);
-				selecionarInterferencia ();
-				
-				modularBotoes ();
-				
-				}
-				}
+								if (strEditar.equals("Caminhão Pipa") 					|| 
+										strEditar.equals("Lançamento de Águas Pluviais")	|| 
+											strEditar.equals("Lançamento de Efluentes")			|| 
+												strEditar.equals("Barragem")						||
+													strEditar.equals("Outros")	)	
+									{
+								
+									
+									InterferenciaTabela intTab = tvListaInt.getSelectionModel().getSelectedItem(); //serÃ¡ que precisa desse cÃ³digo?, verificar... Sim por causa do construtor da interferencia
+									
+									Interferencia interferencia = new Interferencia(intTab);
+									
+									interferencia.setInter_Tipo(cbTipoInt.getValue());
+									interferencia.setInter_Bacia(cbBacia.getValue());
+									interferencia.setInter_UH(tfUH.getText());
+									interferencia.setInter_Corpo_Hidrico(tfCorpoHid.getText());
+									interferencia.setInter_Situacao(cbSituacao.getValue());
+									
+									interferencia.setInter_Lat(Double.parseDouble(tfIntLat.getText()));
+									interferencia.setInter_Lng(Double.parseDouble(tfIntLon.getText()));
+									
+									interferencia.setInter_Desc_Endereco(eGeralInt.getDesc_Endereco());  // trazer a descrição do endereço de acordo com o endereço selecionado
+									interferencia.setInter_End_CodigoFK(eGeralInt);  // trazer a foreing key do endereço selecionado na tableview ou escolhido na tab endereço
+								
+									InterferenciaDao interferenciaDao = new InterferenciaDao ();
+									
+									interferenciaDao.mergeInterferencia(interferencia);
+									
+									// mostrar a interferencia na tvList
+									obsList.remove(intTab);
+									
+									intTab = new InterferenciaTabela(
+											
+											interferencia.getInter_Codigo(),
+											interferencia.getInter_Tipo(),
+											interferencia.getInter_Bacia(),
+											interferencia.getInter_UH(),
+											interferencia.getInter_Corpo_Hidrico(),
+											interferencia.getInter_Lat(),
+											interferencia.getInter_Lng(),
+											interferencia.getInter_Situacao(),
+											interferencia.getInter_Desc_Endereco(),
+											
+											//-- foreign key --//
+											interferencia.getInter_End_CodigoFK(),
+											
+											interferencia.getSub_Interferencia_Codigo(),
+											
+											interferencia.getSuper_Interferencia_Codigo()
+											
+											);
+										
+										obsList.add(intTab);
+										tvListaInt.setItems(obsList);
+										
+									selecionarInterferencia ();
+									
+									modularBotoes ();
+									
+									}
+									
 
 			}
 			
-		}	
+		
 	}
 	
-	/*//tirar
-	public void btnBuscarIntHab (ActionEvent event) {
-		
-		google = new GoogleMap();
-		
-		google.setMarkerPosition(eGeralInt.getLat_Endereco(), eGeralInt.getLon_Endereco());
-		
-	}*/
 	//-- botao excluir --//
 	public void btnIntExcHab (ActionEvent event) {
 		
-			InterferenciaTabela intTabEditar = tvListaInt.getSelectionModel().getSelectedItem();
+			InterferenciaTabela intTab = tvListaInt.getSelectionModel().getSelectedItem();
 			
 			InterferenciaDao interferenciaDao = new InterferenciaDao ();
 			
-			interferenciaDao.removeInterferencia(intTabEditar.getInter_Codigo());
+			interferenciaDao.removeInterferencia(intTab.getInter_Codigo());
 			
-			listarInterferencias(strPesquisaInterferencia);
+			// remover a interferencia da lista (tvListInt)
+			obsList.remove(intTab);
+			
 			selecionarInterferencia ();
 			
 			modularBotoes ();
@@ -804,9 +957,9 @@ public class TabInterfController implements Initializable {
 	//-- botao pesquisar interferÃªncia --//
 	public void btnIntPesqHab (ActionEvent event) {
 		
-		strPesquisaInterferencia = tfIntPesq.getText();
+		strPesquisa = tfIntPesq.getText();
 		
-		listarInterferencias(strPesquisaInterferencia);
+		listarInterferencias(strPesquisa);
 		
 		selecionarInterferencia ();
 		
@@ -928,23 +1081,16 @@ public class TabInterfController implements Initializable {
         stage.setResizable(false);
         
         stage.show();
-        
-        /* para ao fechar o mapa capturar as coordenadas, mas resolvi tirar 
-         
-        stage.setOnCloseRequest(new EventHandler<javafx.stage.WindowEvent>() {
-            public void handle(javafx.stage.WindowEvent event) {
-            	//lblEndereco.setText(endMap);
-            	tfIntLat.setText(latDec);
-            	tfIntLon.setText(lngDec);
-                System.out.println("latitude e longitude da interferÃªncia captados");
-            }
-        });
-        */
+       
 	}
 	
 	
 	//-- INITIALIZE --//
 	public void initialize(URL url, ResourceBundle rb) {
+		
+		tcDescEndInt.setCellValueFactory(new PropertyValueFactory<InterferenciaTabela, String>("inter_Desc_Endereco")); 
+		tcIntCorpoHidrico.setCellValueFactory(new PropertyValueFactory<InterferenciaTabela, String>("inter_Corpo_Hidrico")); 
+		tcIntUH.setCellValueFactory(new PropertyValueFactory<InterferenciaTabela, String>("inter_UH"));
 		
 		
 		cbTipoInt.setItems(olTipoInt);
@@ -1084,8 +1230,6 @@ public class TabInterfController implements Initializable {
 			
 		}
 		
-		// ainda está dando null ao clicar em cancelar  e ao fazer nova pesquisa MELHOROU COLOCANDO "", MAS NO
-		// CHOICE BOX AINDA ESTÁ APARECENDO A ESCOLHA ANTERIOR, TIPO 'SUBTERRÂNEA'
 		
 		if (newString.equals("Caminhão Pipa") 					|| 
 				newString.equals("Lançamento de Águas Pluviais")	|| 
@@ -1094,8 +1238,10 @@ public class TabInterfController implements Initializable {
 							newString.equals("Outros")					||
 								newString.equals("") 	)	// or null para nao dar null  point ...
 		{
-			System.out.println("if caminhão, superficial etc e null" + newString);
+			
 			paneTipoInterferencia.getChildren().clear();
+			// -- escolher tipo de captação --//
+			tipoCaptacao = 3;
 		}
 		
 	}

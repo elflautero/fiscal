@@ -4,8 +4,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import dao.DenunciaDao;
-import entity.Denuncia;
+import dao.DemandaDao;
+import entity.Demanda;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -18,16 +18,16 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import tabela.DenunciaTabela;
+import tabela.DemandaTabela;
 
 public class TabEndBuscarDocController implements Initializable {
 	
 	// TABLE BUSCAR DENÚNCIA
-		@FXML private TableView <DenunciaTabela> tvListaDoc;
+		@FXML private TableView <DemandaTabela> tvListaDoc;
 		
-		@FXML private TableColumn<DenunciaTabela, String> tcDocumento;
-		@FXML private TableColumn<DenunciaTabela, String> tcDocSEI;
-		@FXML private TableColumn<DenunciaTabela, String> tcProcSEI;
+		@FXML private TableColumn<DemandaTabela, String> tcDocumento;
+		@FXML private TableColumn<DemandaTabela, String> tcDocSEI;
+		@FXML private TableColumn<DemandaTabela, String> tcProcSEI;
 		
 		
 		@FXML Button btnPesqDoc = new Button();
@@ -35,7 +35,7 @@ public class TabEndBuscarDocController implements Initializable {
 		@FXML TextField tfPesquisar = new TextField();
 		
 		//variável geral para outros controllers
-		public Denuncia dGeralEnd;
+		public Demanda dGeralEnd;
 		
 		String strPesquisaDoc = "";
 	
@@ -54,31 +54,33 @@ public class TabEndBuscarDocController implements Initializable {
 		// criar método para listar denúncias //
 		public void listarDenuncias (String srtPesquisaDoc) {
 			
-			DenunciaDao denunciaDao = new DenunciaDao();
-			List<Denuncia> denunciaList = denunciaDao.listDenuncia(srtPesquisaDoc);
-			ObservableList<DenunciaTabela> obsListDenunciaTabela= FXCollections.observableArrayList();
+			DemandaDao denunciaDao = new DemandaDao();
+			List<Demanda> denunciaList = denunciaDao.listarDemandas(srtPesquisaDoc);
+			ObservableList<DemandaTabela> obsListDenunciaTabela= FXCollections.observableArrayList();
 			if (!obsListDenunciaTabela.isEmpty()) {
 				obsListDenunciaTabela.clear();
 			}
-			for (Denuncia denuncia : denunciaList) {
-				DenunciaTabela denTab = new DenunciaTabela(
-						denuncia.getDenunciaID(), 
-						denuncia.getDenDocumento(),
-						denuncia.getDenDocumentoSEI(), 
-						denuncia.getDenProcessoSEI(),
-						denuncia.getDenDescricao(),
-						denuncia.getDenDataDistribuicao(),
-						denuncia.getDenDataRecebimento(),
-						//adicionado o objeto  endereçoFK, 
-						denuncia.getDenEnderecoFK()
+			for (Demanda denuncia : denunciaList) {
+				DemandaTabela denTab = new DemandaTabela(
+						denuncia.getDemID(),
+						denuncia.getDemDocumento(),
+						denuncia.getDemDocumentoSEI(),
+						denuncia.getDemProcessoSEI(),
+						denuncia.getDemDescricao(),
+						denuncia.getDemDistribuicao(),
+						denuncia.getDemRecebimento(),
+						
+						denuncia.getDemAtualizacao(),
+						
+						denuncia.getDemEnderecoFK()
 						);
 				
 					obsListDenunciaTabela.add(denTab);
 			}
 			
-			tcDocumento.setCellValueFactory(new PropertyValueFactory<DenunciaTabela, String>("Doc_Denuncia")); 
-	        tcDocSEI.setCellValueFactory(new PropertyValueFactory<DenunciaTabela, String>("Doc_SEI_Denuncia")); 
-	        tcProcSEI.setCellValueFactory(new PropertyValueFactory<DenunciaTabela, String>("Proc_SEI_Denuncia")); 
+			tcDocumento.setCellValueFactory(new PropertyValueFactory<DemandaTabela, String>("Doc_Denuncia")); 
+	        tcDocSEI.setCellValueFactory(new PropertyValueFactory<DemandaTabela, String>("Doc_SEI_Denuncia")); 
+	        tcProcSEI.setCellValueFactory(new PropertyValueFactory<DemandaTabela, String>("Proc_SEI_Denuncia")); 
 	        
 	        tvListaDoc.setItems(obsListDenunciaTabela); 
 		}
@@ -90,7 +92,7 @@ public class TabEndBuscarDocController implements Initializable {
 			
 			tvListaDoc.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
 				public void changed(ObservableValue<?> observable , Object oldValue, Object newValue) {
-																																							DenunciaTabela denTab = (DenunciaTabela) newValue;
+																																							DemandaTabela denTab = (DemandaTabela) newValue;
 				if (denTab == null) {
 					
 					//lblDoc.setText("Campo nulo!");
@@ -98,7 +100,7 @@ public class TabEndBuscarDocController implements Initializable {
 				} else {
 
 					
-					Denuncia dGeral = new Denuncia(denTab);
+					Demanda dGeral = new Demanda(denTab);
 					
 					dGeralEnd = dGeral;
 					//lblDoc.setText(dGeralEnd.getDoc_Denuncia() + "  |  SEI nº: " + dGeralEnd.getDoc_SEI_Denuncia());

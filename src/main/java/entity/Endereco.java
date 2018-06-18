@@ -51,10 +51,10 @@ public class Endereco implements Serializable{
 	private Double Lon_Endereco;
 	
 	//-- Lista de enderecos vinculados --//
-	@OneToMany (mappedBy = "denEnderecoFK", cascade = CascadeType.MERGE,
-			fetch = FetchType.LAZY, targetEntity = Denuncia.class)
+	@OneToMany (mappedBy = "demEnderecoFK", cascade = CascadeType.MERGE,
+			fetch = FetchType.LAZY, targetEntity = Demanda.class)
 	@Fetch(FetchMode.SUBSELECT) 
-	private List<Denuncia> denuncias = new ArrayList<Denuncia>();
+	private List<Demanda> demandas = new ArrayList<Demanda>();
 	
 		//-- Lista de interferencias vinculadas --//
 		@OneToMany (mappedBy = "inter_End_CodigoFK", cascade = CascadeType.MERGE,
@@ -121,13 +121,13 @@ public class Endereco implements Serializable{
 	}
 
 	
-	//-- get e set OneToMany List Denuncia --//
-	public List<Denuncia> getListDenuncias() {
-		return denuncias;
+	//-- get e set OneToMany List Demandas --//
+	public List<Demanda> getListDemandas() {
+		return demandas;
 	}
 
-	public void setListDenuncias(List<Denuncia> denuncias) {
-		this.denuncias = denuncias;
+	public void setListDemandas(List<Demanda> demandas) {
+		this.demandas = demandas;
 	}
 	
 		//-- get e set OneToMany List Interferencia --//

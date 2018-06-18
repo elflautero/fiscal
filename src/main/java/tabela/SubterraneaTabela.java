@@ -17,7 +17,7 @@ public class SubterraneaTabela {
 	private final SimpleStringProperty sub_Profundidade;
 	private final SimpleStringProperty sub_Data;
 	
-	private SimpleObjectProperty<Interferencia> intSubterraneaObjetoFK;
+	private SimpleObjectProperty<Interferencia> interferenciaFK;
 	
 	
 	
@@ -32,7 +32,7 @@ public class SubterraneaTabela {
 			String sub_Vazao,
 			String sub_Profundidade,
 			String sub_Data,
-			Interferencia intSubterraneaObjetoFK
+			Interferencia interferenciaFK
 			
 			) {
 		
@@ -47,9 +47,8 @@ public class SubterraneaTabela {
 		this.sub_Vazao = new SimpleStringProperty(sub_Vazao);
 		this.sub_Profundidade = new SimpleStringProperty(sub_Profundidade);
 		this.sub_Data = new SimpleStringProperty(sub_Data);
-		this.intSubterraneaObjetoFK = new SimpleObjectProperty<>(intSubterraneaObjetoFK);
 		
-		
+		this.interferenciaFK = new SimpleObjectProperty<>(interferenciaFK);
 		
 	}
 
@@ -89,8 +88,8 @@ public class SubterraneaTabela {
 		return sub_Data.get();
 	}
 	
-	public Interferencia getIntSubterraneaObjetoFK () {
-		return intSubterraneaObjetoFK.get();
+	public Interferencia getInterferenciaFK () {
+		return interferenciaFK.get();
 	}
 
 }

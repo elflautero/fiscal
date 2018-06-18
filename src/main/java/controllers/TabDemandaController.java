@@ -3,13 +3,15 @@ package controllers;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import dao.DenunciaDao;
-import entity.Denuncia;
+import dao.DemandaDao;
+import entity.Demanda;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -27,15 +29,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import tabela.DenunciaTabela;
+import tabela.DemandaTabela;
 
 
-public class TabDenunciaController implements Initializable {
+public class TabDemandaController implements Initializable {
 	
 	// --- Controller Principal - MainController --- //
 	@FXML private MainController main;
 	
-	@FXML AnchorPane tabDenuncia = new AnchorPane();
+	@FXML AnchorPane tabDemanda = new AnchorPane();
 	
 	@FXML TextField tfDocumento = new TextField();
 	@FXML TextField tfDocSei = new TextField();
@@ -43,7 +45,7 @@ public class TabDenunciaController implements Initializable {
 	@FXML TextField tfResDen = new TextField();
 	@FXML TextField tfPesquisar = new TextField();
 	
-	// ----- Label - endereco da denuncia ------ //
+	// ----- Label - endereco da demanda ------ //
 	@FXML Label lblDenEnd = new Label ();
 
 	@FXML Button btnNovo = new Button();
@@ -58,17 +60,19 @@ public class TabDenunciaController implements Initializable {
 	@FXML DatePicker dpDataRecebimento = new DatePicker();
 	
 	// -- Tabela --  //
-	@FXML private TableView <DenunciaTabela> tvLista;
+	@FXML private TableView <DemandaTabela> tvLista;
 	
 	// -- Colunas -- //
-	@FXML private TableColumn<DenunciaTabela, String> tcDocumento;
-	@FXML private TableColumn<DenunciaTabela, String> tcDocSEI;
-	@FXML private TableColumn<DenunciaTabela, String> tcProcSEI;
+	@FXML private TableColumn<DemandaTabela, String> tcDocumento;
+	@FXML private TableColumn<DemandaTabela, String> tcDocSEI;
+	@FXML private TableColumn<DemandaTabela, String> tcProcSEI;
 	
 	@FXML DatePicker dpDoc;
 	
-	// capturar denuncia para a TabEnderecoController
-	private static Denuncia dGeral;
+	@FXML Label lblDataAtualizacao;
+	
+	// capturar demanda para a TabEnderecoController
+	private static Demanda dGeral;
 	
 	// --- String para primeira pesquisa --- //
 	String strPesquisa = "";
@@ -79,52 +83,62 @@ public class TabDenunciaController implements Initializable {
 			.parseCaseInsensitive()
 			.append(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
 			.toFormatter();
+	
+	DateTimeFormatter formatterDT = new DateTimeFormatterBuilder()
+			.parseCaseInsensitive()
+			.append(DateTimeFormatter.ofPattern("dd/MM/yyyy H:mm:ss"))
+			.toFormatter();
 		
-	// --- m�todo listarDenuncias --- //
-	public void listarDenuncias (String strPesquisa) {
+	ObservableList<DemandaTabela> obsList;
+	
+	// --- método listar demandas --- //
+	public void listarDemandas(String strPesquisa) {
 		
 		// -- Conexão e pesquisa de den�ncias -- //
-		DenunciaDao denunciaDao = new DenunciaDao();	//passar classe
-		List<Denuncia> denunciaList = denunciaDao.listDenuncia(strPesquisa); //passar string de pesquisar
-		ObservableList<DenunciaTabela> obsListDenunciaTabela = FXCollections.observableArrayList(); //chamar observable list e outra classe
+		DemandaDao demandaDao = new DemandaDao();	//passar classe
+		List<Demanda> demandaList = demandaDao.listarDemandas(strPesquisa); //passar string de pesquisar
+		obsList = FXCollections.observableArrayList(); //chamar observable list e outra classe
 
 		
-		if (!obsListDenunciaTabela.isEmpty()) {
-			obsListDenunciaTabela.clear();
+		if (!obsList.isEmpty()) {
+			obsList.clear();
 		}
-		for (Denuncia denuncia : denunciaList) {
+		for (Demanda demanda : demandaList) {
 			
-			DenunciaTabela denTab = new DenunciaTabela(
-					denuncia.getDenunciaID(), 
-					denuncia.getDenDocumento(),
-					denuncia.getDenDocumentoSEI(), 
-					denuncia.getDenProcessoSEI(),
-					denuncia.getDenDescricao(),
-					denuncia.getDenDataDistribuicao(),
-					denuncia.getDenDataRecebimento(),
+			DemandaTabela denTab = new DemandaTabela(
+					demanda.getDemID(),
+					demanda.getDemDocumento(),
+					demanda.getDemDocumentoSEI(),
+					demanda.getDemProcessoSEI(),
+					demanda.getDemDescricao(),
+					demanda.getDemDistribuicao(),
+					demanda.getDemRecebimento(),
 					
-					denuncia.getDenEnderecoFK()
+					demanda.getDemAtualizacao(),
+					
+					demanda.getDemEnderecoFK()
 					);
 			
-				obsListDenunciaTabela.add(denTab);
+				obsList.add(denTab);
+				
 		}
 		
-		tcDocumento.setCellValueFactory(new PropertyValueFactory<DenunciaTabela, String>("denDocumento")); 
-        tcDocSEI.setCellValueFactory(new PropertyValueFactory<DenunciaTabela, String>("denDocumentoSEI")); 
-        tcProcSEI.setCellValueFactory(new PropertyValueFactory<DenunciaTabela, String>("denProcessoSEI")); 
+		// para trazer o resultado por id (do maior para o menor) //
+		Comparator<DemandaTabela> comparar = Comparator.comparing(DemandaTabela::getDemID);
+		obsList.sort(comparar.reversed());
+		
+        tvLista.setItems(obsList); 
         
-        tvLista.setItems(obsListDenunciaTabela); 
 	}
 	
-	
 	// -- selecionar denúncia -- //
-	public void selecionarDenuncia () {
+	public void selecionarDemanda () {
 		
-		// TableView - selecionar denúncia ao clicar -- //
+		// TableView - selecionar denúncia ao clicar //
 		tvLista.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
 			public void changed(ObservableValue<?> observable , Object oldValue, Object newValue) {
 			
-			DenunciaTabela denTab = (DenunciaTabela) newValue;
+			DemandaTabela denTab = (DemandaTabela) newValue;
 				
 			if (denTab == null) {
 				
@@ -146,47 +160,47 @@ public class TabDenunciaController implements Initializable {
 				
 			} else {
 
-				// preencher os campos
-				tfDocumento.setText(denTab.getDenDocumento());
-				tfDocSei.setText(denTab.getDenDecumentoSEI());
-				tfProcSei.setText(denTab.getDenProcessoSEI());
+				// preencher os campos //
+				tfDocumento.setText(denTab.getDemDocumento());
+				tfDocSei.setText(denTab.getDemDocumentoSEI());
+				tfProcSei.setText(denTab.getDemProcessoSEI());
 				
-				if (denTab.getDenDataDistribuicao() == null) {
+				if (denTab.getDemDistribuicao() == null) {
 					dpDataDistribuicao.getEditor().clear();
  				} else {
- 					dpDataDistribuicao.setValue(LocalDate.parse(denTab.getDenDataDistribuicao(), formatter));
+ 					dpDataDistribuicao.setValue(LocalDate.parse(denTab.getDemDistribuicao(), formatter));
  				}
  				
- 				if (denTab.getDenDataRecebimento() == null) {
+ 				if (denTab.getDemRecebimento() == null) {
  					dpDataRecebimento.getEditor().clear();
  				} else {
- 					dpDataRecebimento.setValue((LocalDate.parse(denTab.getDenDataRecebimento(), formatter)));
+ 					dpDataRecebimento.setValue((LocalDate.parse(denTab.getDemRecebimento(), formatter)));
  				}
  				
- 				System.out.println("selecionando denuncias, datas: ");
- 				System.out.println(denTab.getDenDataDistribuicao());
- 				System.out.println(denTab.getDenDataRecebimento());
  				
  				
- 				
-				tfResDen.setText(denTab.getDenDescricao());
+				tfResDen.setText(denTab.getDemDescricao());
 				
-				
-				if (denTab.getDenEnderecoFK() != null) {
-					
-					lblDenEnd.setText(denTab.getDenEnderecoFK().getDesc_Endereco() + ", " + denTab.getDenEnderecoFK().getRA_Endereco());
+				// endereço relacionado //
+				if (denTab.getDemEnderecoFK() != null) {
+					lblDenEnd.setText(denTab.getDemEnderecoFK().getDesc_Endereco() + ", " + denTab.getDemEnderecoFK().getRA_Endereco());
 					lblDenEnd.setTextFill(Color.BLACK);
 				} else {
 					lblDenEnd.setText("Sem endereço cadastrado!");
-					lblDenEnd.setTextFill(Color.RED);
-					
+					lblDenEnd.setTextFill(Color.RED);	
 				}
 				
-				Denuncia dGeral = new Denuncia(denTab);
+				// data de autalização //
+				try {lblDataAtualizacao.setText("Data de Atualização: " + formatterDT.format(denTab.getDemAtualizacao()));
+						lblDataAtualizacao.setTextFill(Color.BLACK);
+				}catch (Exception e) {lblDataAtualizacao.setText("Não há data de atualização!");
+						lblDataAtualizacao.setTextFill(Color.RED);}
+				
+				Demanda dGeral = new Demanda(denTab);
 
 				main.pegarDoc(dGeral);
 				
-				// habilitar e desabilitar botões
+				// habilitar e desabilitar botões //
 				btnNovo.setDisable(true);
 				btnSalvar.setDisable(true);
 				btnEditar.setDisable(false);
@@ -227,6 +241,8 @@ public class TabDenunciaController implements Initializable {
 	// -- botão salvar -- //
 	public void btnSalvarSalvar (ActionEvent event) {
 		
+        obsList = FXCollections.observableArrayList();
+        
 		try {
 			
 			if (tfDocSei.getText().isEmpty()  ||
@@ -241,37 +257,59 @@ public class TabDenunciaController implements Initializable {
 				
 			} else {
 			
-					Denuncia denuncia = new Denuncia();
+					Demanda demanda = new Demanda();
 					
-					denuncia.setDenDocumento(tfDocumento.getText()); 
+					demanda.setDemDocumento(tfDocumento.getText()); 
 					
-					denuncia.setDenDocumentoSEI(tfDocSei.getText()); 
-					denuncia.setDenProcessoSEI(tfProcSei.getText());
+					demanda.setDemDocumentoSEI(tfDocSei.getText()); 
+					demanda.setDemProcessoSEI(tfProcSei.getText());
 					
 					if (dpDataDistribuicao.getValue() == null) {
-						denuncia.setDenDataDistribuicao(null);}
+						demanda.setDemDistribuicao(null);}
 					else {
-						denuncia.setDenDataDistribuicao(formatter.format(dpDataDistribuicao.getValue()));
+						demanda.setDemDistribuicao(formatter.format(dpDataDistribuicao.getValue()));
 						}
 											
 						if (dpDataRecebimento.getValue() == null) {
-						denuncia.setDenDataRecebimento(null);}
+						demanda.setDemRecebimento(null);}
 					else {
-						denuncia.setDenDataRecebimento(formatter.format(dpDataRecebimento.getValue()));
+						demanda.setDemRecebimento(formatter.format(dpDataRecebimento.getValue()));
 						}
 
-					denuncia.setDenDescricao(tfResDen.getText());
+					demanda.setDemDescricao(tfResDen.getText());
 					
-					DenunciaDao dao = new DenunciaDao();
+					demanda.setDemAtualizacao((LocalDateTime.now()));
 					
-					dao.salvaDenuncia(denuncia);
+					DemandaDao dao = new DemandaDao();
+					
+					dao.salvarDemanda(demanda);
 					
 					// pegar o valor, levar para o MainController  e depois para o label lblDoc no EnderecoController
-					dGeral = denuncia;
+					dGeral = demanda;
 					main.pegarDoc(dGeral);
+						
+					DemandaTabela denTab = new DemandaTabela(
+							demanda.getDemID(),
+							demanda.getDemDocumento(),
+							demanda.getDemDocumentoSEI(),
+							demanda.getDemProcessoSEI(),
+							demanda.getDemDescricao(),
+							demanda.getDemDistribuicao(),
+							demanda.getDemRecebimento(),
+							
+							demanda.getDemAtualizacao(),
+							
+							demanda.getDemEnderecoFK()
+							);
 					
-					listarDenuncias(strPesquisa);
-					selecionarDenuncia();
+					obsList.add(denTab);
+					
+					tvLista.setItems(obsList);
+					
+					System.out.println("btnSalvar - Data da atualização " + denTab.getDemAtualizacao());
+					
+							
+					selecionarDemanda();
 				
 					modularBotoesInicial ();
 					
@@ -328,41 +366,71 @@ public class TabDenunciaController implements Initializable {
 					
 				} else {
 			
-						DenunciaTabela denunciaTabelaEditar = tvLista.getSelectionModel().getSelectedItem();
+						DemandaTabela denTab = tvLista.getSelectionModel().getSelectedItem();
 						
-						Denuncia denuncia = new Denuncia(denunciaTabelaEditar);
+						Demanda demanda = new Demanda(denTab);
 						
-						denuncia.setDenDocumento(tfDocumento.getText());
-						denuncia.setDenDocumentoSEI(tfDocSei.getText());
-						denuncia.setDenProcessoSEI(tfProcSei.getText());
+						demanda.setDemDocumento(tfDocumento.getText());
+						demanda.setDemDocumentoSEI(tfDocSei.getText());
+						demanda.setDemProcessoSEI(tfProcSei.getText());
 						
 						
 						if (dpDataDistribuicao.getValue() == null) {
-							denuncia.setDenDataDistribuicao(null);}
+							demanda.setDemDistribuicao(null);}
 						else {
-							denuncia.setDenDataDistribuicao(formatter.format(dpDataDistribuicao.getValue()));
+							demanda.setDemDistribuicao(formatter.format(dpDataDistribuicao.getValue()));
 							}
 												
 							if (dpDataRecebimento.getValue() == null) {
-							denuncia.setDenDataRecebimento(null);}
+							demanda.setDemRecebimento(null);}
 						else {
-							denuncia.setDenDataRecebimento(formatter.format(dpDataRecebimento.getValue()));
+							demanda.setDemRecebimento(formatter.format(dpDataRecebimento.getValue()));
 							}
 							
-						denuncia.setDenDescricao(tfResDen.getText());
+						demanda.setDemDescricao(tfResDen.getText());
+						 
+						DemandaDao dDao = new DemandaDao();
 						
-						DenunciaDao dDao = new DenunciaDao();
-						
-						dDao.mergeDenuncia(denuncia);
-						
+						dDao.mergeDemanda(demanda);
+							
 						// pegar o valor, levar para o MainController  e depois para o label lblDoc no EnderecoController
-						dGeral = denuncia;
+						dGeral = demanda;
 						main.pegarDoc(dGeral);
 						
-						listarDenuncias(strPesquisa); // acho que precisa de um  parametro strpesqusia aqui 
-						selecionarDenuncia();
+						
+						
+						// atualizar os dados na tabela
+						obsList.remove(denTab);
+						
+						denTab = new DemandaTabela(
+								demanda.getDemID(),
+								demanda.getDemDocumento(),
+								demanda.getDemDocumentoSEI(),
+								demanda.getDemProcessoSEI(),
+								demanda.getDemDescricao(),
+								demanda.getDemDistribuicao(),
+								demanda.getDemRecebimento(),
+								
+								demanda.getDemAtualizacao(),
+								
+								demanda.getDemEnderecoFK()
+								);
+						
+						obsList.addAll(denTab);
+						
+						// para trazer o resultado por id (do maior para o menor) //
+						Comparator<DemandaTabela> comparar = Comparator.comparing(DemandaTabela::getDemID);
+						obsList.sort(comparar.reversed());
+						
+						System.out.println("bntEditar - Data da atualização " + denTab.getDemID());
+						
+						tvLista.setItems(obsList);
+						
+						selecionarDemanda();
 						
 						modularBotoesInicial ();
+						
+						//System.out.println("data e hora : " + demanda.getDataHoraAtualizacao());
 						
 						Alert a = new Alert (Alert.AlertType.INFORMATION);
 						a.setTitle("Parabéns!!!");
@@ -377,16 +445,17 @@ public class TabDenunciaController implements Initializable {
 	// -- botão excluir -- //
 	public void btnExcluirHabilitar (ActionEvent event) {
 	
-		DenunciaTabela denunciaExcluir = tvLista.getSelectionModel().getSelectedItem();
+		DemandaTabela denTab = tvLista.getSelectionModel().getSelectedItem();
 		
-		int id = denunciaExcluir.getDenDenunciaID(); // buscar id para deletar
+		int id = denTab.getDemID(); // buscar id para deletar
 		
-		DenunciaDao dDao = new DenunciaDao();
+		DemandaDao dDao = new DemandaDao();
 		
-		dDao.removeDenuncia(id);
+		dDao.removerDemanda(id);
 		
-		listarDenuncias(strPesquisa);
-		selecionarDenuncia();
+		obsList.remove(denTab);
+		
+		selecionarDemanda();
 		
 		modularBotoesInicial (); 		
 	}
@@ -402,8 +471,8 @@ public class TabDenunciaController implements Initializable {
 		
 		strPesquisa = (String) tfPesquisar.getText();
 		
-		listarDenuncias(strPesquisa);
-		selecionarDenuncia();
+		listarDemandas(strPesquisa);
+		selecionarDemanda();
 		
 		modularBotoesInicial (); 
 		
@@ -411,6 +480,10 @@ public class TabDenunciaController implements Initializable {
 	
 	// -- INITIALIZE -- //
 	public void initialize(URL url, ResourceBundle rb) {
+		
+		tcDocumento.setCellValueFactory(new PropertyValueFactory<DemandaTabela, String>("demDocumento")); 
+        tcDocSEI.setCellValueFactory(new PropertyValueFactory<DemandaTabela, String>("demDocumentoSEI")); 
+        tcProcSEI.setCellValueFactory(new PropertyValueFactory<DemandaTabela, String>("demProcessoSEI")); 
 		
         // --- habilitar e desabilitar botões ---- //
 		modularBotoesInicial();

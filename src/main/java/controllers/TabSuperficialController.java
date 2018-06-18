@@ -21,58 +21,6 @@ import javafx.util.StringConverter;
 
 public class TabSuperficialController implements Initializable{
 	
-	Superficial superGeral = new Superficial();
-	
-	public Superficial obterSuperficial () {
-		
-		
-		superGeral.setSup_Local(cbCaptacao.getValue());		// sup_Local; //-- () canal () rio () reservatório () lago natural () nascente
-		superGeral.setSup_Captacao(cbFormaCaptacao.getValue()); // sup_Captacao; // gravidade, bombeamento, outro
-		superGeral.setSup_Bomba(tfMarcaBomba.getText()); // marca da bomba
-		superGeral.setSup_Potencia(tfPotenciaBomba.getText()); // potência da bomba
-		superGeral.setSup_Tempo(tfTempoBomba.getText()); // tempo de captação
-		superGeral.setSup_Area(tfArea.getText()); // área da propriedade
-		superGeral.setSup_Caesb(cbCaesb.getValue()); // caesb
-		if (dpDataOperacao.getValue() == null) {
-			superGeral.setSup_Data(null);
-		} else {
-			superGeral.setSup_Data(formatter.format(dpDataOperacao.getValue()));
-		}
-		
-		
-	return superGeral;
-	
-	};
-	
-	public void imprimirSuperficial (Superficial sup) {
-		
-		 cbCaptacao.setValue(sup.getSup_Local());
-		 cbFormaCaptacao.setValue(sup.getSup_Captacao());
-		 
-		 tfMarcaBomba.setText(sup.getSup_Bomba());
-		 tfPotenciaBomba.setText(sup.getSup_Potencia());
-		 tfTempoBomba.setText(sup.getSup_Tempo());
-		 
-		 tfArea.setText(sup.getSup_Area());
-		 
-		 cbCaesb.setValue(sup.getSup_Caesb());
-		 if (sup.getSup_Data() == null) {
-			 dpDataOperacao.getEditor().clear();
-		 }else {
-			 dpDataOperacao.setValue((LocalDate.parse(sup.getSup_Data(), formatter)));
-		 }
-		 
-		 
-		
-		 
-	}
-	
-	
-	DateTimeFormatter formatter = new DateTimeFormatterBuilder()
-			.parseCaseInsensitive()
-			.append(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-			.toFormatter();
-	
 	@FXML TextField tfMarcaBomba = new TextField();
 	@FXML TextField tfPotenciaBomba = new TextField();
 	@FXML TextField tfTempoBomba = new TextField();
@@ -114,6 +62,57 @@ public class TabSuperficialController implements Initializable{
 			
 	@FXML ImageView	iVewSuper = new ImageView();
 	Image imgSuper = new Image(TabSuperficialController.class.getResourceAsStream("/images/superficial.png"));
+	
+	Superficial superGeral = new Superficial();
+	
+	public Superficial obterSuperficial () {
+		
+		
+		superGeral.setSup_Local(cbCaptacao.getValue());		// sup_Local; //-- () canal () rio () reservatório () lago natural () nascente
+		superGeral.setSup_Captacao(cbFormaCaptacao.getValue()); // sup_Captacao; // gravidade, bombeamento, outro
+		superGeral.setSup_Bomba(tfMarcaBomba.getText()); // marca da bomba
+		superGeral.setSup_Potencia(tfPotenciaBomba.getText()); // potência da bomba
+		superGeral.setSup_Tempo(tfTempoBomba.getText()); // tempo de captação
+		superGeral.setSup_Area(tfArea.getText()); // área da propriedade
+		superGeral.setSup_Caesb(cbCaesb.getValue()); // caesb
+		if (dpDataOperacao.getValue() == null) {
+			superGeral.setSup_Data(null);
+		} else {
+			superGeral.setSup_Data(formatter.format(dpDataOperacao.getValue()));
+		}
+		
+		
+	return superGeral;
+	
+	};
+	
+	public void imprimirSuperficial (Superficial sup) {
+		
+		 try {cbCaptacao.setValue(sup.getSup_Local());} catch (Exception e) {cbCaptacao.setValue("");}
+		 try {cbFormaCaptacao.setValue(sup.getSup_Captacao());} catch (Exception e) {cbFormaCaptacao.setValue("");};
+		 
+		 tfMarcaBomba.setText(sup.getSup_Bomba());
+		 tfPotenciaBomba.setText(sup.getSup_Potencia());
+		 tfTempoBomba.setText(sup.getSup_Tempo());
+		 
+		 tfArea.setText(sup.getSup_Area());
+		 
+		 cbCaesb.setValue(sup.getSup_Caesb());
+		 if (sup.getSup_Data() == null) {
+			 dpDataOperacao.getEditor().clear();
+		 }else {
+			 dpDataOperacao.setValue((LocalDate.parse(sup.getSup_Data(), formatter)));
+		 }
+		 
+	}
+	
+	
+	DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+			.parseCaseInsensitive()
+			.append(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+			.toFormatter();
+	
+	
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {

@@ -742,32 +742,6 @@ public class TabVistoriaController implements Initializable{
 	
 	public void btnRelatorioHab (ActionEvent event) {
 		
-		//File file = null;
-		//file = new File (TabVistoriaController.class.getResource("/html/relatorioVistoria.html").getFile());
-		
-		/*
-		WebView webView = new WebView(); 
-		WebEngine eng = webView.getEngine(); 
-		eng.load(getClass().getResource("/html/relatorioVistoria.html").toExternalForm()); 
-		*/
-		
-		/*
-        eng.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>(){ 
-
-                public void changed(final ObservableValue<? extends Worker.State> observableValue, 
-
-                                    final Worker.State oldState, 
-                                    final Worker.State newState) 
-
-                { 
-                	if (newState == Worker.State.SUCCEEDED){  
-                		htmlRel = (String) eng.executeScript("document.documentElement.outerHTML"); 
-                		
-                	} 
-                	
-               } 
-        }); 
-        */
 		
 		htmlRel = (String) engVistoria.executeScript("document.documentElement.outerHTML");
 		
@@ -797,48 +771,46 @@ public class TabVistoriaController implements Initializable{
 		session.close();
 		
 		//-- preencher a vistoria --//
-		try {docHtml.select("nRela").prepend(visGeral.getVisIdentificacao());} catch (Exception e){docHtml.select("nRela").prepend("");};
-		try {docHtml.select("nRelSEI").prepend(visGeral.getVisSEI());} catch (Exception e){docHtml.select("nRelSEI").prepend("");};
+		docHtml.select("nRela").prepend(visGeral.getVisIdentificacao());
+		try {docHtml.select("nRelSEI").prepend(visGeral.getVisSEI());} catch (Exception e) {docHtml.select("nRelSEI").prepend("");};
 	
-		if (endereco.getListUsuarios() != null) { // não está funcionando... melhorar
+		if (endereco.getListUsuarios() != null) {
 			
 			//-- usuario atraves do endereco --//
-			try {docHtml.select("nomeUs").prepend(endereco.getListUsuarios().get(0).getUsNome());} catch (Exception e) {docHtml.select("nomeUs").prepend("");};
-			try {docHtml.select("cpfUs").prepend(endereco.getListUsuarios().get(0).getUsCPFCNPJ());} catch (Exception e) {docHtml.select("cpfUs").prepend("");};
-			try {docHtml.select("endUs").prepend(endereco.getListUsuarios().get(0).getUsDescricaoEnd());} catch (Exception e) {docHtml.select("endUs").prepend("");};
+			docHtml.select("nomeUs").prepend(endereco.getListUsuarios().get(0).getUsNome());
+			docHtml.select("cpfUs").prepend(endereco.getListUsuarios().get(0).getUsCPFCNPJ());
+			docHtml.select("endUs").prepend(endereco.getListUsuarios().get(0).getUsDescricaoEnd());
 			
-			if (endereco.getListUsuarios().get(0).getUsRA() != null) { //se o combox diferente de null, não acontece o mesmo no textfield
-				docHtml.select("raUs").prepend(endereco.getListUsuarios().get(0).getUsRA());
-			}
+			try {docHtml.select("raUs").prepend(endereco.getListUsuarios().get(0).getUsRA());}catch (Exception e) {docHtml.select("raUs").prepend("");};
 			
 			// endereco do usuario atraves do endereco //
-			try {docHtml.select("cepUs").prepend(endereco.getListUsuarios().get(0).getUsCEP());}catch (Exception e){docHtml.select("cepUs").prepend("");};
-			try {docHtml.select("cidUs").prepend(endereco.getListUsuarios().get(0).getUsCidade());}catch (Exception e){docHtml.select("cidUs").prepend("");};
+			docHtml.select("cepUs").prepend(endereco.getListUsuarios().get(0).getUsCEP());
+			docHtml.select("cidUs").prepend(endereco.getListUsuarios().get(0).getUsCidade());
 			try {docHtml.select("ufUs").prepend(endereco.getListUsuarios().get(0).getUsEstado());}catch (Exception e){docHtml.select("ufUs").prepend("");};
-			try {docHtml.select("telUs").prepend(endereco.getListUsuarios().get(0).getUsTelefone());}catch (Exception e){docHtml.select("telUs").prepend("");};
-			try {docHtml.select("celUs").prepend(endereco.getListUsuarios().get(0).getUsCelular());}catch (Exception e){docHtml.select("celUs").prepend("");};
-			try {docHtml.select("emailUs").prepend(endereco.getListUsuarios().get(0).getUsEmail());}catch (Exception e){docHtml.select("emailUs").prepend("");};
+			docHtml.select("telUs").prepend(endereco.getListUsuarios().get(0).getUsTelefone());
+			docHtml.select("celUs").prepend(endereco.getListUsuarios().get(0).getUsCelular());
+			docHtml.select("emailUs").prepend(endereco.getListUsuarios().get(0).getUsEmail());
 			
 			// catch (Exception e){};
 			// endereco do empreedimento //  
 			 
-			try { docHtml.select("EndEmpDes").prepend(endereco.getDesc_Endereco());} catch (Exception e){docHtml.select("EndEmpDes").prepend("");};
+			docHtml.select("EndEmpDes").prepend(endereco.getDesc_Endereco());
 			try { docHtml.select("EndEmpRA").prepend(endereco.getRA_Endereco());} catch (Exception e){docHtml.select("EndEmpRA").prepend("");};
-			try { docHtml.select("EndEmpCep").prepend(endereco.getCEP_Endereco());} catch (Exception e){docHtml.select("EndEmpCep").prepend("");};
-			try { docHtml.select("EndEmpCid").prepend(endereco.getCid_Endereco());} catch (Exception e){docHtml.select("EndEmpCid").prepend("");};
+			docHtml.select("EndEmpCep").prepend(endereco.getCEP_Endereco());
+			docHtml.select("EndEmpCid").prepend(endereco.getCid_Endereco());
 			try { docHtml.select("EndEmpUF").prepend(endereco.getUF_Endereco());} catch (Exception e){docHtml.select("EndEmpUF").prepend("");};
 			
 		}
 		
 		//-- latitude e longitude do endereço --//
-		try {docHtml.select("latEnd").prepend(endereco.getLat_Endereco().toString());} catch (Exception e){docHtml.select("latEnd").prepend("");};
-		try {docHtml.select("lngEnd").prepend(endereco.getLon_Endereco().toString());} catch (Exception e){docHtml.select("lngEnd").prepend("");};
+		docHtml.select("latEnd").prepend(endereco.getLat_Endereco().toString());
+		docHtml.select("lngEnd").prepend(endereco.getLon_Endereco().toString());
 		 
 		//-- objecto, apresentação, relato e recomendações --//
-		try {docHtml.select("objVis").prepend(visGeral.getVisObjeto());} catch (Exception e){docHtml.select("objVis").prepend("");};
-		try {docHtml.select("apreVis").prepend(visGeral.getVisApresentacao());} catch (Exception e){docHtml.select("apreVis").prepend("");};
-		try {docHtml.select("relVis").prepend(visGeral.getVisRelato());} catch (Exception e){docHtml.select("relVis").prepend("");};
-		try {docHtml.select("recVis").prepend(visGeral.getVisRecomendacoes());} catch (Exception e){docHtml.select("recVis").prepend("");};
+		docHtml.select("objVis").prepend(visGeral.getVisObjeto());
+		docHtml.select("apreVis").prepend(visGeral.getVisApresentacao());
+		docHtml.select("relVis").prepend(visGeral.getVisRelato());
+		docHtml.select("recVis").prepend(visGeral.getVisRecomendacoes());
 		
 		// <br><p>Tipo: Superficial, Bacia: Paranoá, UH: 23, Corpo Hídrico: rio das pedras, Coordenadas: -15, -48</p><br>
 		//interEnd
@@ -891,7 +863,6 @@ public class TabVistoriaController implements Initializable{
 			
 		}
 	
-		
 		//-- infrações --//
 		for (int i = 0; i<infrArray.length; i++) {
 			
@@ -918,6 +889,8 @@ public class TabVistoriaController implements Initializable{
 			}
 			
 		}
+
+
 		
 		//-- atenuantes --//
 		for (int i = 0; i<atenArray.length; i++) {
@@ -952,6 +925,7 @@ public class TabVistoriaController implements Initializable{
 			
 		}
 
+		
 		//tem que colocar um  if
 		for (int i = 0; i<agraArray.length; i++) {
 			if (agraArray[i].equals("a") ) {
@@ -1082,11 +1056,13 @@ public class TabVistoriaController implements Initializable{
 
 		});
 		
+		/*
 		dpDataFiscalizacao.setOnAction((ActionEvent event) -> {
 			
 		}
 				
 		);
+		*/
 		
 		
 		ObterArtigos ();
@@ -1301,10 +1277,7 @@ public class TabVistoriaController implements Initializable{
 					if (infr != null) {
 						
 						infrArray = infr.split("");
-						
-						//System.out.println("valor string infra auto selecionadas  " + infr);
-						
-						
+							
 						for (int i = 0; i<infrArray.length; i++) {
 							if (infrArray[i].equals("1") ) {
 								checkInfra1.setSelected(true);
@@ -1948,3 +1921,33 @@ public class TabVistoriaController implements Initializable{
 	 }
 	
 }
+
+
+
+//File file = null;
+		//file = new File (TabVistoriaController.class.getResource("/html/relatorioVistoria.html").getFile());
+		
+		/*
+		WebView webView = new WebView(); 
+		WebEngine eng = webView.getEngine(); 
+		eng.load(getClass().getResource("/html/relatorioVistoria.html").toExternalForm()); 
+		*/
+		
+		/*
+      eng.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>(){ 
+
+              public void changed(final ObservableValue<? extends Worker.State> observableValue, 
+
+                                  final Worker.State oldState, 
+                                  final Worker.State newState) 
+
+              { 
+              	if (newState == Worker.State.SUCCEEDED){  
+              		htmlRel = (String) eng.executeScript("document.documentElement.outerHTML"); 
+              		
+              	} 
+              	
+             } 
+      }); 
+      */
+		

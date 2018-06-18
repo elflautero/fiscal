@@ -7,7 +7,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
-import entity.Denuncia;
+import entity.Demanda;
 import entity.HibernateUtil;
 import entity.Interferencia;
 import entity.Subterranea;
@@ -88,7 +88,7 @@ public void salvaInterferencia (Interferencia interferencia) {
 		
 		s.beginTransaction();
 		
-		Criteria crit = s.createCriteria(Denuncia.class);
+		Criteria crit = s.createCriteria(Demanda.class);
 		crit.add(Restrictions.like("sub_Interferencia_Codigo", strSubPesquisa));
 		list = crit.list();
 		

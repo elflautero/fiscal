@@ -90,19 +90,21 @@ public class Interferencia implements Serializable {
 		}
 		
 		//CONSTRUTOR DE EDITAR DOCUMENTO
-		public Interferencia (InterferenciaTabela interferenciaTabela) {
+		public Interferencia (InterferenciaTabela intTab) {
 			
-			this.inter_Codigo = interferenciaTabela.getInter_Codigo();
-			this.inter_Tipo = interferenciaTabela.getInter_Tipo();
-			this.inter_Bacia = interferenciaTabela.getInter_Bacia();
-			this.inter_UH = interferenciaTabela.getInter_UH();
-			this.inter_Corpo_Hidrico = interferenciaTabela.getInter_Corpo_Hidrico();
-			this.inter_Lat = interferenciaTabela.getInter_Lat();
-			this.inter_Lat = interferenciaTabela.getInter_Lng();
-			this.inter_Situacao = interferenciaTabela.getInter_Situacao();
-			this.inter_Desc_Endereco = interferenciaTabela.getInter_Desc_Endereco();
+			this.inter_Codigo = intTab.getInter_Codigo();
+			this.inter_Tipo = intTab.getInter_Tipo();
+			this.inter_Bacia = intTab.getInter_Bacia();
+			this.inter_UH = intTab.getInter_UH();
+			this.inter_Corpo_Hidrico = intTab.getInter_Corpo_Hidrico();
+			this.inter_Lat = intTab.getInter_Lat();
+			this.inter_Lat = intTab.getInter_Lng();
+			this.inter_Situacao = intTab.getInter_Situacao();
+			this.inter_Desc_Endereco = intTab.getInter_Desc_Endereco();
 			
-			this.inter_End_CodigoFK = interferenciaTabela.getEnderecoInterferenciaObjetoTabelaFK();
+			this.inter_End_CodigoFK = intTab.getEnderecoInterferenciaObjetoTabelaFK();
+			
+			this.sub_Interferencia_Codigo = intTab.getInterSub();
 			
 		}
 	

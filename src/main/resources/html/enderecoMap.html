@@ -1,42 +1,51 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <style>
-       #map {
-        height: 400px;
-        width: 100%;
-       }
-    </style>
-  </head>
-  <body>
-    
-  	<div id="map"></div>
-    <script id="end">
-    
-      function initMap() {
-          
-	    // adasa -15.7751152,-47.9403877
-	    //var uluru = {lat: -15.7751152, lng: -47.9403877};
-	    
-        var map = new google.maps.Map(document.getElementById('map'), {
-        	mapTypeId: 'hybrid',
-          	zoom: 14,
-          	center: uluru,
-          	heading: 90,
-            tilt: 45,
-        	scaleControl: true,
-        	streetViewControl: false,
-        });
+<head>
+    <title>Java-Buddy: Google Maps</title>
+    <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+    <style>#mapcanvas { height: 400px; width: 100%}</style>
+
+
+
+</head>
+<body>
+
+<div id="mapcanvas">
+
+    <script type="text/javascript">
+        document.map = new google.maps.Map(document.getElementById("mapcanvas"));
+        var latlng = new google.maps.LatLng(-15.7749852,-47.9404105);
+        var Options = {
+            zoom: 10,
+            center: latlng,
+            mapTypeId: google.maps.MapTypeId.HYBRID
+        };
+        var map = new google.maps.Map(document.getElementById("mapcanvas"), Options);
         
+        //var carMarkerImage = new google.maps.MarkerImage('resources/images/car.png');
         var marker = new google.maps.Marker({
-          position: uluru,
-          map: map
-          //mapTypeId: 'satellite'
+            position: new google.maps.LatLng(35.857908, 10.598997),
+            map: map,
+            draggable: false,
+			//icon: carMarkerImage,
+            title: "",
+            autoPan: true
         });
-      }
+        var infobulle = new google.maps.InfoWindow({
+            content: "ddddd"
+        });
+        google.maps.event.addListener(marker, 'mouseover', function() {
+            infobulle.open(map, marker);
+        });
+        document.goToLocation = function(x, y) {
+            alert("goToLocation, x: " + x +", y:" + y);
+            var latLng = new google.maps.LatLng(x, y);
+            marker.setPosition(latLng);
+            map.setCenter(latLng);
+        }
     </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDnDFMB5jZdijtWMqKg29OgvnCPEtxyMkI&callback=initMap">
-    </script>
-  </body>
+
+
+</div>
+</body>
 </html>

@@ -2,7 +2,7 @@ package controllers;
 
 import java.io.IOException;
 
-import entity.Denuncia;
+import entity.Demanda;
 import entity.Endereco;
 import entity.Vistoria;
 import javafx.event.ActionEvent;
@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 
 public class MainController {
 	
-	 	@FXML private TabDenunciaController tabDenunciaController;
+	 	@FXML private TabDemandaController tabDemandaController;
 	    @FXML private TabInterfController tabInterferenciaController;
 	    @FXML private TabUsuarioController tabUsuarioController;
 	    @FXML private TabEnderecoController tabEnderecoController;
@@ -72,7 +72,7 @@ public class MainController {
 	    	
 	       System.out.println("Application Started!");
 	       
-	       tabDenunciaController.init(this);
+	       tabDemandaController.init(this);
 	       tabEnderecoController.init(this);
 	       tabInterferenciaController.init(this);
 	       tabAtoController.init(this);
@@ -84,10 +84,10 @@ public class MainController {
 	    }
 
 	    // mudei voi para retornar  Denuncia
-		public void pegarDoc(Denuncia dGeral) {
+		public void pegarDoc(Demanda dGeral) {
 			
 			//-- para a tab endereço --//
-			tabEnderecoController.lblDoc.setText(dGeral.getDenDocumento() + "  |  SEI nº: " + dGeral.getDenDocumentoSEI());
+			tabEnderecoController.lblDoc.setText(dGeral.getDemDocumento()+ "  |  SEI nº: " + dGeral.getDemDocumentoSEI());
 			tabEnderecoController.dGeralEnd = dGeral;
 		}
 		

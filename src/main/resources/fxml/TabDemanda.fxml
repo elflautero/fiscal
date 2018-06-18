@@ -10,13 +10,13 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane fx:id="tabDenuncia" minHeight="0.0" minWidth="0.0" prefHeight="750.0" prefWidth="1140.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabDenunciaController">
+<AnchorPane fx:id="tabDemanda" minHeight="0.0" minWidth="0.0" prefHeight="750.0" prefWidth="1140.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabDemandaController">
    <children>
       <ScrollPane layoutY="-1.0" prefHeight="680.0" prefWidth="1140.0">
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="900.0" prefWidth="1127.0">
                <children>
-                  <TableView fx:id="tvLista" layoutX="127.0" layoutY="244.0" prefHeight="113.0" prefWidth="889.0">
+                  <TableView fx:id="tvLista" layoutX="127.0" layoutY="244.0" prefHeight="134.0" prefWidth="889.0">
                     <columns>
                       <TableColumn fx:id="tcDocumento" prefWidth="409.0" text="Documento" />
                       <TableColumn fx:id="tcDocSEI" minWidth="0.0" prefWidth="232.0" text="Doc SEI" />
@@ -34,8 +34,8 @@
                         <TextField fx:id="tfPesquisar" layoutX="464.0" layoutY="11.0" prefHeight="23.0" prefWidth="295.0" />
                      </children>
                   </Pane>
-                  <Label fx:id="lblDenEnd" layoutX="188.0" layoutY="400.0" prefHeight="23.0" prefWidth="500.0" />
-                  <Label layoutX="127.0" layoutY="403.0" text="Endereço:" />
+                  <Label fx:id="lblDenEnd" layoutX="190.0" layoutY="414.0" prefHeight="23.0" prefWidth="500.0" />
+                  <Label layoutX="127.0" layoutY="417.0" text="Endereço:" />
                   <Pane layoutX="102.0" layoutY="27.0" prefHeight="160.0" prefWidth="924.0">
                      <children>
                         <TextField fx:id="tfDocumento" layoutX="35.0" layoutY="29.0" prefHeight="25.0" prefWidth="520.0" />
@@ -52,6 +52,7 @@
                         <Label layoutX="480.0" layoutY="62.0" text="Data de Recebimento: " />
                      </children>
                   </Pane>
+                  <Label fx:id="lblDataAtualizacao" layoutX="781.0" layoutY="388.0" prefHeight="22.0" prefWidth="234.0" />
                </children>
             </AnchorPane>
         </content>

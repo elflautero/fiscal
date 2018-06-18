@@ -8,7 +8,7 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="758.0" prefWidth="1290.0" xmlns="http://javafx.com/javafx/8.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="758.0" prefWidth="1290.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainController">
    <children>
    
       <TabPane layoutX="8.0" layoutY="41.0" prefHeight="750.0" prefWidth="1140.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="142.0" AnchorPane.topAnchor="41.0">
@@ -21,9 +21,9 @@
                </content>
           </Tab>
         	
-          <Tab text="  Denúncia  ">
+          <Tab text="  Demanda  ">
                <content>
-                  <fx:include fx:id="tabDenuncia" source="TabDenuncia.fxml" />
+                  <fx:include fx:id="tabDemanda" source="TabDemanda.fxml" />
                </content>
           </Tab>
           
@@ -44,13 +44,13 @@
                </content>
           </Tab>
                 
-          <Tab text="   Vistoria   ">
+          <Tab text="    Vistoria    ">
                <content>
                   <fx:include fx:id="tabVistoria" source="TabVistoria.fxml" />
                </content>
           </Tab>
            
-            <Tab text="     Ato     ">
+            <Tab text="       Ato       ">
                <content>
                   <fx:include fx:id="tabAto" source="TabAto.fxml" />
                </content>

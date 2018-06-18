@@ -7,70 +7,70 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
-import entity.Denuncia;
+import entity.Demanda;
 import entity.HibernateUtil;
 
 
-public class DenunciaDao {
+public class DemandaDao {
 	
-public void salvaDenuncia (Denuncia denuncia) {
+public void salvarDemanda (Demanda demanda) {
 		
 		Session s = HibernateUtil.getSessionFactory().openSession();
 		s.beginTransaction();
-		s.save(denuncia);
+		s.save(demanda);
 		s.getTransaction().commit();
 		s.close();
 		
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Denuncia> listDenuncia(String strPesquisa) {
-		List<Denuncia> list = new ArrayList<Denuncia>();
+	public List<Demanda> listarDemandas(String strPesquisa) {
+		List<Demanda> list = new ArrayList<Demanda>();
 		
 		Session s = HibernateUtil.getSessionFactory().openSession();
 		
 		s.beginTransaction();
 		
-		Criteria crit = s.createCriteria(Denuncia.class);
-		crit.add(Restrictions.like("denDocumento", '%' + strPesquisa + '%'));
+		Criteria crit = s.createCriteria(Demanda.class);
+		crit.add(Restrictions.like("demDocumento", '%' + strPesquisa + '%'));
 		list = crit.list();
-		// SQL list = s.createSQLQuery("SELECT * FROM Denuncia WHERE Documento_Denuncia LIKE '%strPesquisa%'").list();
-		//list = s.createQuery("from Denuncia d where d.Documento_Denuncia= : strPesquisa").setString("strPesquisa",strPesquisa).list();
+		// SQL list = s.createSQLQuery("SELECT * FROM Demanda WHERE Documento_Denuncia LIKE '%strPesquisa%'").list();
+		//list = s.createQuery("from Demanda d where d.Documento_Denuncia= : strPesquisa").setString("strPesquisa",strPesquisa).list();
 		
 		s.getTransaction().commit();
 		s.close();
 		return list;
 	}
 	
-	public void removeDenuncia(Integer id) {
+	public void removerDemanda(Integer id) {
 		Session s = HibernateUtil.getSessionFactory().openSession();
 		s.beginTransaction();
-		Denuncia c = (Denuncia) s.load(Denuncia.class, id);
+		Demanda c = (Demanda) s.load(Demanda.class, id);
 		s.delete(c);
 		s.getTransaction().commit();
 		s.close();
 	}
 
-	public void editarDenuncia(Denuncia denuncia) {
+	public void editarDemanda(Demanda demanda) {
 		Session s = HibernateUtil.getSessionFactory().openSession();
 		s.beginTransaction();
-		s.update(denuncia);
+		s.update(demanda);
 		s.getTransaction().commit();
 		s.close();
 	}
 	
-	public void mergeDenuncia(Denuncia denuncia) {
+	public void mergeDemanda(Demanda demanda) {
 		Session s = HibernateUtil.getSessionFactory().openSession();
 		s.beginTransaction();
-		s.merge(denuncia);
+		s.merge(demanda);
 		s.getTransaction().commit();
 		s.close();
 	}
 	
-	public void persistDenuncia(Denuncia denuncia) {
+	public void persistDemanda(Demanda demanda) {
 		Session s = HibernateUtil.getSessionFactory().openSession();
 		s.beginTransaction();
-		s.persist(denuncia);
+		s.persist(demanda);
 		s.getTransaction().commit();
 		s.close();
 	}

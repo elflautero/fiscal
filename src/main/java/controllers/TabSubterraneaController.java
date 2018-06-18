@@ -21,6 +21,21 @@ import javafx.util.StringConverter;
 
 public class TabSubterraneaController implements Initializable {
 	
+	Image imgSub = new Image(TabSubterraneaController.class.getResourceAsStream("/images/subterranea.png"));
+	@FXML ImageView	iVewSubt = new ImageView();
+	
+	@FXML
+	TextField tfVazao = new TextField();
+	@FXML
+	TextField tfEstatico = new TextField();
+	@FXML
+	TextField tfDinamico = new TextField();
+	@FXML
+	TextField tfProfundidade = new TextField();
+	
+	
+	@FXML public DatePicker dpDataSubterranea = new DatePicker();
+	
 	public Subterranea sGeral = new Subterranea();
 	
 	public Subterranea obterSubterranea () {
@@ -47,7 +62,6 @@ public class TabSubterraneaController implements Initializable {
 		
 		cbTipoCaptacao.setValue(sub.getSub_Poco());
 		cbSubSis.setValue(sub.getSub_Sistema());
-		
 		tfVazao.setText(sub.getSub_Vazao());
 		tfEstatico.setText(sub.getSub_Estatico());
 		tfDinamico.setText(sub.getSub_Dinamico());
@@ -111,20 +125,7 @@ public class TabSubterraneaController implements Initializable {
 							); 
 		
 	
-	Image imgSub = new Image(TabSubterraneaController.class.getResourceAsStream("/images/subterranea.png"));
-	@FXML ImageView	iVewSubt = new ImageView();
 	
-	@FXML
-	TextField tfVazao = new TextField();
-	@FXML
-	TextField tfEstatico = new TextField();
-	@FXML
-	TextField tfDinamico = new TextField();
-	@FXML
-	TextField tfProfundidade = new TextField();
-	
-	
-	@FXML public DatePicker dpDataSubterranea = new DatePicker();
 	
 	
 	//-- Main Controller --//
