@@ -128,7 +128,7 @@ public class VistoriaTabela {
 		return visIdentificacao.get();
 	}
 	
-	public String getVisSei () {
+	public String getVisSEI() {
 		return visSEI.get();
 	}
 	

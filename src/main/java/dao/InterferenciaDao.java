@@ -26,8 +26,10 @@ public void salvaInterferencia (Interferencia interferencia) {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Interferencia> listInterferencia(String strPesquisaInterferencia) {
+	public List<Interferencia> listInterferencia(String strPesquisa) throws Exception {
 		
+		
+		/*
 		List<Interferencia> list = new ArrayList<Interferencia>();
 		
 		Session s = HibernateUtil.getSessionFactory().openSession();
@@ -37,7 +39,51 @@ public void salvaInterferencia (Interferencia interferencia) {
 		Criteria crit = s.createCriteria(Interferencia.class);
 		crit.add(Restrictions.like("inter_Desc_Endereco", '%' + strPesquisaInterferencia + '%'));
 		list = crit.list();
+		*/
+		
+		//JOIN FETCH i.sub_Interferencia_Codigo JOIN FETCH i.super_Interferencia_Codigo 
+		// sub_Interferencia_Codigo
+		//super_Interferencia_Codigo
+		//inter_End_CodigoFK
+		
+		Session s = HibernateUtil.getSessionFactory().openSession();
+		
+		s.beginTransaction();
+		
+		List<Interferencia> list = new ArrayList<Interferencia>();
+		
+		/*
+		List<Interferencia> listSub = s.createQuery(
+				"SELECT i FROM Interferencia AS i "
+				+ "JOIN FETCH i.inter_End_CodigoFK JOIN FETCH i.sub_Interferencia_Codigo "
+				+ "WHERE ( i.inter_Desc_Endereco LIKE '%"+strPesquisa+"%' "
+						+ "OR i.inter_Tipo LIKE '%"+strPesquisa+"%')"
+				).list();
+		
+		List<Interferencia> listSup = s.createQuery(
+				"SELECT i FROM Interferencia AS i "
+				+ "JOIN FETCH i.inter_End_CodigoFK JOIN FETCH i.super_Interferencia_Codigo "
+				+ "WHERE ( i.inter_Desc_Endereco LIKE '%"+strPesquisa+"%' "
+						+ "OR i.inter_Tipo LIKE '%"+strPesquisa+"%')"
+				).list();
+				*/
+		//try {
+		List<Interferencia> listOutros = s.createQuery(
+					"SELECT i FROM Interferencia AS i "
+				+ 	"JOIN FETCH i.inter_End_CodigoFK "
+				+	"LEFT OUTER JOIN FETCH i.super_Interferencia_Codigo "		
+				+	"LEFT OUTER JOIN FETCH i.sub_Interferencia_Codigo "
+				+ 	"WHERE ( i.inter_Desc_Endereco LIKE '%"+strPesquisa+"%' OR i.inter_Tipo LIKE '%"+strPesquisa+"%')"
+				).list();
+		/*} catch (Exception e) {
 			
+		}*/
+		
+		//JOIN FETCH i.inter_End_CodigoFK 
+		//list.addAll(listSub);
+		//list.addAll(listSup);
+		list.addAll(listOutros);
+		
 		s.getTransaction().commit();
 		s.close();
 		return list;

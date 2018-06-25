@@ -27,11 +27,11 @@
                         <Button fx:id="btnCancelar" layoutX="399.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnCancelarHab" prefHeight="22.0" prefWidth="76.0" text="Cancelar" />
                         <Button fx:id="btnPesquisar" layoutX="792.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnPesquisarHab" prefHeight="22.0" prefWidth="76.0" text="Pesquisar" />
                         <TextField fx:id="tfPesquisar" layoutX="486.0" layoutY="14.0" prefHeight="23.0" prefWidth="295.0" />
-                        <TableView fx:id="tvVistoria" layoutX="14.0" layoutY="49.0" prefHeight="113.0" prefWidth="889.0">
+                        <TableView fx:id="tvVistoria" layoutX="14.0" layoutY="52.0" prefHeight="113.0" prefWidth="889.0">
                            <columns>
                               <TableColumn fx:id="tcNumero" prefWidth="409.0" text="Número" />
                               <TableColumn fx:id="tcSEI" minWidth="0.0" prefWidth="232.0" text="SEI" />
-                              <TableColumn fx:id="tcData" prefWidth="232.0" text="Data" />
+                              <TableColumn fx:id="tcData" prefWidth="232.0" text="Data da Fiscalização" />
                            </columns>
                         </TableView>
                      </children>

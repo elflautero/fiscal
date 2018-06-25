@@ -51,7 +51,7 @@
                            </children>
                         </Pane>
                         <Button fx:id="btnEndLatLon" layoutX="775.0" layoutY="121.0" mnemonicParsing="false" onAction="#btnEndLatLonHab" prefHeight="25.0" prefWidth="69.0" text="Lat Lon" />
-                        <TableView fx:id="tvLista" layoutX="22.0" layoutY="239.0" prefHeight="134.0" prefWidth="889.0">
+                        <TableView fx:id="tvLista" layoutX="22.0" layoutY="239.0" prefHeight="140.0" prefWidth="889.0">
                            <columns>
                               <TableColumn fx:id="tcDesEnd" prefWidth="409.0" text="Endereço" />
                               <TableColumn fx:id="tcEndRA" minWidth="0.0" prefWidth="232.0" text="RA" />

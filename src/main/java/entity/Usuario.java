@@ -2,7 +2,7 @@ package entity;
 
 import java.io.Serializable;
 
-
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -24,8 +24,10 @@ public class Usuario implements Serializable {
 	@Column (name = "us_codigo")
 	private int usCodigo;
 	
-	@ManyToOne (fetch = FetchType.EAGER) 
+	@ManyToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL) 
 	@JoinColumn (name = "us_end_codigoFK")
+	//@Fetch(FetchMode.SUBSELECT)
+	//@Fetch(FetchMode.JOIN) 
 	private Endereco usEndCodigoFK;
 	
 	@Column (name = "us_tipo", columnDefinition="varchar(8)")

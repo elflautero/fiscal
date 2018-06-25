@@ -16,33 +16,86 @@
         document.map = new google.maps.Map(document.getElementById("mapcanvas"));
         var latlng = new google.maps.LatLng(-15.7749852,-47.9404105);
         var Options = {
-            zoom: 10,
+            zoom: 12,
             center: latlng,
             mapTypeId: google.maps.MapTypeId.HYBRID
         };
         var map = new google.maps.Map(document.getElementById("mapcanvas"), Options);
         
         //var carMarkerImage = new google.maps.MarkerImage('resources/images/car.png');
+        var imgMarcadorEndereco = new google.maps.MarkerImage('http://icons.iconarchive.com/icons/iconshock/super-vista-general/48/home-icon.png');
         var marker = new google.maps.Marker({
+        	
             position: new google.maps.LatLng(35.857908, 10.598997),
             map: map,
             draggable: false,
-			//icon: carMarkerImage,
+			icon: imgMarcadorEndereco,
             title: "",
             autoPan: true
         });
         var infobulle = new google.maps.InfoWindow({
-            content: "ddddd"
+            content: "endereço"
         });
         google.maps.event.addListener(marker, 'mouseover', function() {
             infobulle.open(map, marker);
         });
+        
         document.goToLocation = function(x, y) {
             alert("goToLocation, x: " + x +", y:" + y);
             var latLng = new google.maps.LatLng(x, y);
             marker.setPosition(latLng);
             map.setCenter(latLng);
         }
+
+       
+        document.buscarCoordenadas = function (coordenadas) {
+
+        		var markers = [];
+        		var a = coordenadas[0].split(',');
+        	   	var p;
+
+        	   	for (var i = 0; i<coordenadas.length; i++){
+
+    			var imgMarcador;
+    			
+    			if (i == 0) {
+	            	imgMarcador = 'http://icons.iconarchive.com/icons/iconshock/super-vista-general/48/home-icon.png';
+	            } else {
+	            	imgMarcador = 'http://icons.iconarchive.com/icons/icons-land/vista-map-markers/48/Map-Marker-Ball-Azure-icon.png';
+	            }
+
+	    		p = coordenadas[i].split(',');
+	    		var posicao = new google.maps.LatLng(p[0],p[1]);
+	
+	            var marker = new google.maps.Marker({
+	                position: posicao,
+	                icon: imgMarcador,
+	                map: map
+	            });
+	            
+	            console.log(a[0] + ' e ' + a[1]);
+	            console.log(p[0] + ' e p ' + p[1]);
+	            
+	            var linhaPosicao = [
+	              {lat: parseFloat(a[0]), lng: parseFloat(a[1])},
+	              {lat: parseFloat(p[0]), lng: parseFloat(p[1])},
+	              
+	            ];
+	            
+	            var linhaConteudo = new google.maps.Polyline({
+	              path: linhaPosicao,
+	              geodesic: true,
+	              strokeColor: '#62CBEC',
+	              strokeOpacity: 1.0,
+	              strokeWeight: 2
+	            });
+	
+	            linhaConteudo.setMap(map);
+            
+      }
+        	        
+				
+            }
     </script>
 
 

@@ -16,7 +16,7 @@
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="900.0" prefWidth="1127.0">
                <children>
-                  <TableView fx:id="tvLista" layoutX="127.0" layoutY="244.0" prefHeight="134.0" prefWidth="889.0">
+                  <TableView fx:id="tvLista" layoutX="127.0" layoutY="244.0" prefHeight="140.0" prefWidth="889.0">
                     <columns>
                       <TableColumn fx:id="tcDocumento" prefWidth="409.0" text="Documento" />
                       <TableColumn fx:id="tcDocSEI" minWidth="0.0" prefWidth="232.0" text="Doc SEI" />
@@ -34,25 +34,32 @@
                         <TextField fx:id="tfPesquisar" layoutX="464.0" layoutY="11.0" prefHeight="23.0" prefWidth="295.0" />
                      </children>
                   </Pane>
-                  <Label fx:id="lblDenEnd" layoutX="190.0" layoutY="414.0" prefHeight="23.0" prefWidth="500.0" />
-                  <Label layoutX="127.0" layoutY="417.0" text="Endereço:" />
+                  <Label fx:id="lblDenEnd" layoutX="190.0" layoutY="420.0" prefHeight="23.0" prefWidth="500.0" />
+                  <Label layoutX="127.0" layoutY="423.0" text="Endereço:" />
                   <Pane layoutX="102.0" layoutY="27.0" prefHeight="160.0" prefWidth="924.0">
                      <children>
                         <TextField fx:id="tfDocumento" layoutX="35.0" layoutY="29.0" prefHeight="25.0" prefWidth="520.0" />
                         <TextField fx:id="tfDocSei" layoutX="569.0" layoutY="29.0" prefHeight="25.0" prefWidth="160.0" />
                         <TextField fx:id="tfProcSei" layoutX="742.0" layoutY="29.0" prefHeight="25.0" prefWidth="160.0" />
+                        
+                        <DatePicker fx:id="dpDataDistribuicao" layoutX="345.0" layoutY="85.0" prefHeight="25.0" prefWidth="125.0" promptText="01/01/0000" />
+                         <DatePicker fx:id="dpDataRecebimento" layoutX="481.0" layoutY="85.0" prefHeight="25.0" prefWidth="125.0" promptText="01/01/0000" />
+                        
                         <TextField fx:id="tfResDen" layoutX="19.0" layoutY="121.0" prefHeight="25.0" prefWidth="889.0" />
                         <Label layoutX="35.0" layoutY="8.0" prefHeight="17.0" prefWidth="77.0" text="Documento:" />
                         <Label layoutX="570.0" layoutY="6.0" prefHeight="17.0" prefWidth="71.0" text="Número SEI:" />
                         <Label layoutX="743.0" layoutY="6.0" prefHeight="17.0" prefWidth="80.0" text="Processo SEI:" />
-                        <Label layoutX="19.0" layoutY="101.0" prefHeight="17.0" prefWidth="120.0" text="Resumo da Denúncia:" />
-                        <DatePicker fx:id="dpDataDistribuicao" layoutX="345.0" layoutY="85.0" prefHeight="25.0" prefWidth="125.0" promptText="01/01/0000" />
+                        
+                        
                         <Label layoutX="345.0" layoutY="62.0" text="Data de Distruibuição:" />
-                        <DatePicker fx:id="dpDataRecebimento" layoutX="481.0" layoutY="85.0" prefHeight="25.0" prefWidth="125.0" promptText="01/01/000" />
+                       
                         <Label layoutX="480.0" layoutY="62.0" text="Data de Recebimento: " />
+                        
+                        <Label layoutX="19.0" layoutY="101.0" prefHeight="17.0" prefWidth="120.0" text="Resumo da Denúncia:" />
+                        
                      </children>
                   </Pane>
-                  <Label fx:id="lblDataAtualizacao" layoutX="781.0" layoutY="388.0" prefHeight="22.0" prefWidth="234.0" />
+                  <Label fx:id="lblDataAtualizacao" layoutX="781.0" layoutY="394.0" prefHeight="22.0" prefWidth="234.0" />
                </children>
             </AnchorPane>
         </content>

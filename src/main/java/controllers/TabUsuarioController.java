@@ -22,6 +22,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import tabela.InterferenciaTabela;
 import tabela.UsuarioTabela;
@@ -404,6 +405,8 @@ public class TabUsuarioController implements Initializable {
 		List<Usuario> usuarioList = usDao.listUsuario(strPesquisa);
 		ObservableList<UsuarioTabela> olUsuarioTabela = FXCollections.observableArrayList();
 		
+		System.out.println(usuarioList.get(0).getUsNome());
+		System.out.println(usuarioList.get(0).getUsEndCodigoFK().getDesc_Endereco());
 		
 		if (!olUsuarioTabela.isEmpty()) {
 			olUsuarioTabela.clear();
@@ -495,6 +498,7 @@ public class TabUsuarioController implements Initializable {
 					tfUsEmail.setText(usTab.getUsEmail());
 					
 					//-- mudar endereço relacionado à denúncia --//
+					
 					eGeralUs = usTab.getEnderecoUsObjetoTabelaFK();
 					lblEndUsuario.setText(eGeralUs.getDesc_Endereco()  + " |  RA: "  +  eGeralUs.getRA_Endereco());
 					
@@ -515,6 +519,12 @@ public class TabUsuarioController implements Initializable {
 	//-- INITIALIZE --//
 	public void initialize(URL url, ResourceBundle rb) {
 		
+		tfUsPesquisar.setOnKeyReleased(event -> {
+	  		  if (event.getCode() == KeyCode.ENTER){
+	  		     btnUsPesq.fire();
+	  		  }
+	  		});
+	        
 
 		cbTipoPessoa.setValue("Física");
 		cbTipoPessoa.setItems(olTipoPessoa);

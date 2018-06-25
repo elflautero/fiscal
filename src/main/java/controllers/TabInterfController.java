@@ -17,6 +17,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -26,6 +27,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -34,8 +36,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import tabela.InterferenciaTabela;
@@ -101,7 +107,7 @@ public class TabInterfController implements Initializable {
 	
 	
 	// --- objeto para passar os valor pelo MainControoler para outro controller --- //
-	public Endereco eGeralInt = new Endereco();
+	public Endereco eGeralInt;
 	
 	@FXML Button btnEndCoord;
 	@FXML Image imgEndCoord = new Image(TabVistoriaController.class.getResourceAsStream("/images/mapCoord.png"));
@@ -165,53 +171,89 @@ public class TabInterfController implements Initializable {
 	// --- método para listar interferencias --- //
  	public void listarInterferencias (String strPesquisa) {
  	
- 	// --- conexao - listar enderecos --- //
-	InterferenciaDao interferenciaDao = new InterferenciaDao();
-	List<Interferencia> interferenciaList = interferenciaDao.listInterferencia(strPesquisa);
-	obsList = FXCollections.observableArrayList();
-	
-	
-	if (!obsList.isEmpty()) {
-		obsList.clear();
-	}
-	
-		for (Interferencia interferencia : interferenciaList) {
+	 	// --- conexao - listar enderecos --- //
+		InterferenciaDao interferenciaDao = new InterferenciaDao();
+		List<Interferencia> interferenciaList = null;
+		
+		try {
+				interferenciaList = interferenciaDao.listInterferencia(strPesquisa);
+				obsList = FXCollections.observableArrayList();
 			
-			InterferenciaTabela intTab = new InterferenciaTabela(
+				//System.out.println(interferenciaList.get(0).getInter_End_CodigoFK().getDesc_Endereco());
+				//System.out.println(interferenciaList.get(0).getSub_Interferencia_Codigo().getSub_Caesb());
 				
-				interferencia.getInter_Codigo(),
-				interferencia.getInter_Tipo(),
-				interferencia.getInter_Bacia(),
-				interferencia.getInter_UH(),
-				interferencia.getInter_Corpo_Hidrico(),
-				interferencia.getInter_Lat(),
-				interferencia.getInter_Lng(),
-				interferencia.getInter_Situacao(),
-				interferencia.getInter_Desc_Endereco(),
+				if (!obsList.isEmpty()) {
+					obsList.clear();
+				}
 				
-				//-- foreign key --//
-				interferencia.getInter_End_CodigoFK(),
-				
-				interferencia.getSub_Interferencia_Codigo(),
-				
-				interferencia.getSuper_Interferencia_Codigo()
-				
-				
-				);
+					for (Interferencia interferencia : interferenciaList) {
+						
+						InterferenciaTabela intTab = new InterferenciaTabela(
+							
+							interferencia.getInter_Codigo(),
+							interferencia.getInter_Tipo(),
+							interferencia.getInter_Bacia(),
+							interferencia.getInter_UH(),
+							interferencia.getInter_Corpo_Hidrico(),
+							interferencia.getInter_Lat(),
+							interferencia.getInter_Lng(),
+							interferencia.getInter_Situacao(),
+							interferencia.getInter_Desc_Endereco(),
+							
+							//-- foreign key --//
+							interferencia.getInter_End_CodigoFK(),
+							
+							interferencia.getSub_Interferencia_Codigo(),
+							
+							interferencia.getSuper_Interferencia_Codigo()
+							
+							
+							);
+						
+						obsList.add(intTab);
+						
+			 					
+					}
+						
+					tvListaInt.setItems(obsList); 
 			
-			obsList.add(intTab);
-			
- 					
-		}
-			
-		tvListaInt.setItems(obsList); 
+			} catch (Exception e) {
+				System.out.println("erro");
+				Alert a = new Alert (Alert.AlertType.ERROR);
+				a.setTitle("Alerta!!!");
+				a.setContentText("Não há resultado para a consulta!!!" + " \n[" + e + "]");
+				a.setHeaderText(null);
+				a.show();
+				e.printStackTrace();
+				
+				
+				/*
+								 * try {
+				    userDao.save(user); //might throw exception
+				} catch(ConstraintViolationException e) {
+				    //Email Address already exists
+				} catch(JDBCConnectionException e) {
+				    //Lost the connection
+				}
+				and with the e.getCause() method you can retrieve the underlying SQLException and analyse it further:
+				
+				try {
+				    userDao.save(user); //might throw exception
+				} catch(JDBCException e) {
+				    SQLException cause = (SQLException) e.getCause();
+				    //evaluate cause and find out what was the problem
+				    System.out.println(cause.getMessage());
+}
+				 */
+			}
 		
  	}
  	
  	// metodo selecionar interferencia -- //
  	public void selecionarInterferencia () {
 	
-		tvListaInt.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
+ 		tvListaInt.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
+			
 			public void changed(ObservableValue<?> observable , Object oldValue, Object newValue) {
 			
 			intTab = (InterferenciaTabela) newValue;
@@ -257,7 +299,44 @@ public class TabInterfController implements Initializable {
 					
 				}
 				
-				System.out.println("FK " + intTab.getEnderecoInterferenciaObjetoTabelaFK());
+				//System.out.println("FK " + intTab.getEnderecoInterferenciaObjetoTabelaFK());
+				
+				//Double lat = Double.parseDouble(tfIntLat.getText());
+				//Double  lng = Double.parseDouble(tfIntLon.getText() );
+				
+				if (wv1 != null) {
+					
+					String endCoord = "" + intTab.getEnderecoInterferenciaObjetoTabelaFK().getLat_Endereco() + ","
+									+ intTab.getEnderecoInterferenciaObjetoTabelaFK().getLon_Endereco();
+					
+					String intCoord = "" + intTab.getInter_Lat() +  "," + intTab.getInter_Lng();
+					
+					//System.out.println(endCoord);
+					//System.out.println(intCoord);
+					
+					webEng.executeScript("" +
+	                        "window.coordenadas = [" 
+	                        + 	"'" + endCoord + "'," 
+	                        +	"'" + intCoord + "'" 
+	                        + "];"
+	                        + "document.buscarCoordenadas(coordenadas);"
+	                        + " map.setCenter({lat: " 
+	                        + intTab.getEnderecoInterferenciaObjetoTabelaFK().getLat_Endereco()
+	                        + ", lng: "  
+	                        + intTab.getEnderecoInterferenciaObjetoTabelaFK().getLon_Endereco()
+	                        + "});"
+	                    );
+	                    
+					
+					/*
+					webEng.executeScript("" +
+	                        "window.lat = " + lat + ";" +
+	                        "window.lon = " + lng + ";" +
+	                        "document.goToLocation(window.lat, window.lon);"
+	                    );
+	                    */
+					
+				}
 				
 				btnIntNovo.setDisable(true);
 				btnIntSalvar.setDisable(true);
@@ -739,7 +818,7 @@ public class TabInterfController implements Initializable {
 										
 										obsList.add(intTab);
 										
-										System.out.println("sub data " + intTab.getInterSub().getSub_Data());
+										//System.out.println("sub data " + intTab.getInterSub().getSub_Data());
 										
 										tvListaInt.setItems(obsList);
 										
@@ -1023,6 +1102,8 @@ public class TabInterfController implements Initializable {
 	// adicMarcador(); 
 	public void adicMarcador () {
 		
+		System.out.println("latitude endereço " + eGeralInt.getLat_Endereco() + " e " + eGeralInt.getLon_Endereco());
+		
     	if (eGeralInt.getLat_Endereco() != null  && eGeralInt.getLon_Endereco() != null ) {
         	lat = Double.parseDouble(eGeralInt.getLat_Endereco().toString());
     		lng = Double.parseDouble(eGeralInt.getLon_Endereco().toString());
@@ -1084,7 +1165,7 @@ public class TabInterfController implements Initializable {
        
 	}
 	
-	
+
 	//-- INITIALIZE --//
 	public void initialize(URL url, ResourceBundle rb) {
 		
@@ -1092,6 +1173,12 @@ public class TabInterfController implements Initializable {
 		tcIntCorpoHidrico.setCellValueFactory(new PropertyValueFactory<InterferenciaTabela, String>("inter_Corpo_Hidrico")); 
 		tcIntUH.setCellValueFactory(new PropertyValueFactory<InterferenciaTabela, String>("inter_UH"));
 		
+		tfIntPesq.setOnKeyReleased(event -> {
+	  		  if (event.getCode() == KeyCode.ENTER){
+	  		     btnIntPesq.fire();
+	  		  }
+	  		});
+	        
 		
 		cbTipoInt.setItems(olTipoInt);
 		
@@ -1109,7 +1196,7 @@ public class TabInterfController implements Initializable {
 				{
 					try {
 						
-						System.out.println("nova string selecionada no  initialize " + newString);
+						//System.out.println("nova string selecionada no  initialize " + newString);
 						if (newString == null)
 							abrirTabs("");
 						else {
@@ -1246,7 +1333,74 @@ public class TabInterfController implements Initializable {
 		
 	}
 	
+	@FXML CheckBox checkMap;
+	
+
+	public void checkMapHab (ActionEvent event) {
+		
+		int count = 0;
+		
+		if (checkMap.isSelected()) {
+			count ++;
+			abrirMapa("");
+		}
+		else {
+			 aPaneInt.getChildren().remove(root);
+		}
+		
+		System.out.println("checkbox" + count);
+	}
+	
+	
+WebView wv1;
+WebEngine webEng;
+BorderPane root;
+
+public void abrirMapa (String strMarcador) {
+		
+	/*
+		File file = null;
+		file = new File (TabEnderecoController.class.getResource("/html/enderecoMap.html").getFile());
+		
+		Document docHtml = null;
+		
+		try {
+			docHtml = Jsoup.parse(file, "UTF-8");  // retirei o  .clone()
+	
+		} catch (IOException e1) {
+			System.out.println("Erro na leitura no parse Jsoup!!!");
+			e1.printStackTrace();
+		}
+		
+		String strHTMLMap = docHtml.toString();
+		*/
+		
+		wv1 = new WebView();
+		webEng = wv1.getEngine();
+		webEng.load(getClass().getResource("/html/enderecoMap.html").toExternalForm());
+		
+		wv1.setPrefSize(887,400);
+		wv1.getEngine();
+	
+		root = new BorderPane();
+		root.setCenter(wv1);
+		root.setPrefSize(887, 418);
+		root.setLayoutY(425);
+		root.setLayoutX(125);
+		
+        aPaneInt.getChildren().add(root);
+	
+		webEng.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
+            if (Worker.State.SUCCEEDED.equals(newValue)) {
+            	webEng.executeScript(strMarcador);
+            }
+        });
+		
+	}
+
 }
+	
+
 
 
 

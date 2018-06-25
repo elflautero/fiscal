@@ -1,14 +1,10 @@
 package controllers;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 import dao.EnderecoDao;
 import entity.Demanda;
@@ -38,6 +34,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -247,7 +244,7 @@ public class TabEnderecoController implements Initializable {
 				btnEndCan.setDisable(false);
 				
 				Endereco eGeral = new Endereco(endTab);
-			
+				
 				main.pegarEnd(eGeral);
 				
 				Double lat = Double.parseDouble(tfEndLat.getText());
@@ -535,6 +532,8 @@ public class TabEnderecoController implements Initializable {
 			obsList.remove(endTab);
 			tvLista.setItems(obsList);
 			
+			// não precisa do selecionar enderecos? //
+			
 			modularBotoesInicial();
 			
 			Alert a = new Alert (Alert.AlertType.INFORMATION);
@@ -713,6 +712,12 @@ public class TabEnderecoController implements Initializable {
 		tcEndRA.setCellValueFactory(new PropertyValueFactory<EnderecoTabela, String>("RA_Endereco")); 
 		tcEndCid.setCellValueFactory(new PropertyValueFactory<EnderecoTabela, String>("CEP_Endereco")); 
 		
+		tfEndPesq.setOnKeyReleased(event -> {
+	  		  if (event.getCode() == KeyCode.ENTER){
+	  		     btnEndPesq.fire();
+	  		  }
+	  		});
+	        
 		//-- Modular a forma de abrir dos botÃµes --//
 		modularBotoesInicial ();
 		//-- Selecionar endereco --//
@@ -750,14 +755,12 @@ public class TabEnderecoController implements Initializable {
 	WebView wv1;
 	WebEngine webEng;
 	
+	
 	public void abrirMapa (String strMarcador) {
 		
-		//String latMap = tfEndLat.getText();
-		//String lonMap = tfEndLon.getText();
-		
+		/*
 		File file = null;
 		file = new File (TabEnderecoController.class.getResource("/html/enderecoMap.html").getFile());
-		
 		
 		Document docHtml = null;
 		
@@ -772,20 +775,20 @@ public class TabEnderecoController implements Initializable {
 		//docHtml.select("script").prepend("var uluru = {lat: " + latMap + ", lng: " + lonMap + "};");
 	
 		strHTMLMap = docHtml.toString();
-		
+		*/
 
 		wv1 = new WebView();
 		webEng = wv1.getEngine();
-		webEng.loadContent(strHTMLMap);
-		
+		webEng.load(getClass().getResource("/html/enderecoMap.html").toExternalForm());
+			
 		wv1.setPrefSize(700,500);
 		wv1.getEngine();
 	
 		BorderPane root = new BorderPane();
 		root.setCenter(wv1);
-		root.setPrefSize(700, 420);
-		root.setLayoutY(395);
-		root.setLayoutX(220);
+		root.setPrefSize(887, 420);
+		root.setLayoutY(410);
+		root.setLayoutX(127);
 		
 		aPaneEnd.getChildren().add(root);
 	

@@ -11,9 +11,9 @@ public class AtoTabela {
 
 	private final SimpleObjectProperty<Vistoria>atoVistoriaFK;
 	
-	private final SimpleStringProperty atoTipo;
-	private final SimpleStringProperty atoIdentificacao;
-	private final SimpleStringProperty atoSEI;
+	private final SimpleStringProperty atoTipo; // atoTipo
+	private final SimpleStringProperty atoIdentificacao; // atoIdentificacao
+	private final SimpleStringProperty atoSEI; // atoSEI
 	private final SimpleStringProperty atoCaracterizacao;
 	private final SimpleStringProperty atoDataFiscalizacao;
 	private final SimpleStringProperty atoDataCriacao;

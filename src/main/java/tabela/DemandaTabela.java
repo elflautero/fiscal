@@ -12,7 +12,9 @@ public class DemandaTabela {
 	
 	private final SimpleIntegerProperty demID;
 	private final SimpleStringProperty demDocumento;
-	private final SimpleStringProperty demDocumentoSEI;
+	private final SimpleStringProperty demDocumentoSEI; 
+									// demDocumentoSEI
+	
 	private final SimpleStringProperty demProcessoSEI;
 	private final SimpleStringProperty demDescricao;
 	private final SimpleStringProperty demDistribuicao;

@@ -2,7 +2,6 @@ package controllers;
 
 
 import java.net.URL;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -27,6 +26,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import tabela.DemandaTabela;
@@ -167,15 +167,15 @@ public class TabDemandaController implements Initializable {
 				
 				if (denTab.getDemDistribuicao() == null) {
 					dpDataDistribuicao.getEditor().clear();
- 				} else {
- 					dpDataDistribuicao.setValue(LocalDate.parse(denTab.getDemDistribuicao(), formatter));
- 				}
+	 				} else {
+	 					dpDataDistribuicao.getEditor().setText(denTab.getDemDistribuicao());
+	 				}
  				
  				if (denTab.getDemRecebimento() == null) {
  					dpDataRecebimento.getEditor().clear();
- 				} else {
- 					dpDataRecebimento.setValue((LocalDate.parse(denTab.getDemRecebimento(), formatter)));
- 				}
+	 				} else {
+	 					dpDataRecebimento.getEditor().setText(denTab.getDemRecebimento());
+	 				}
  				
  				
  				
@@ -264,6 +264,7 @@ public class TabDemandaController implements Initializable {
 					demanda.setDemDocumentoSEI(tfDocSei.getText()); 
 					demanda.setDemProcessoSEI(tfProcSei.getText());
 					
+					/*
 					if (dpDataDistribuicao.getValue() == null) {
 						demanda.setDemDistribuicao(null);}
 					else {
@@ -275,7 +276,20 @@ public class TabDemandaController implements Initializable {
 					else {
 						demanda.setDemRecebimento(formatter.format(dpDataRecebimento.getValue()));
 						}
-
+						*/
+					
+					if (dpDataDistribuicao.getValue() == null) {
+						demanda.setDemDistribuicao(null);}
+						else {
+							demanda.setDemDistribuicao(dpDataDistribuicao.getEditor().getText());
+							}
+											
+					if (dpDataRecebimento.getValue() == null) {
+					demanda.setDemRecebimento(null);}
+						else {
+							demanda.setDemRecebimento(dpDataRecebimento.getEditor().getText());
+							}
+						
 					demanda.setDemDescricao(tfResDen.getText());
 					
 					demanda.setDemAtualizacao((LocalDateTime.now()));
@@ -377,15 +391,15 @@ public class TabDemandaController implements Initializable {
 						
 						if (dpDataDistribuicao.getValue() == null) {
 							demanda.setDemDistribuicao(null);}
-						else {
-							demanda.setDemDistribuicao(formatter.format(dpDataDistribuicao.getValue()));
-							}
+							else {
+								demanda.setDemDistribuicao(dpDataDistribuicao.getEditor().getText());
+								}
 												
-							if (dpDataRecebimento.getValue() == null) {
-							demanda.setDemRecebimento(null);}
-						else {
-							demanda.setDemRecebimento(formatter.format(dpDataRecebimento.getValue()));
-							}
+						if (dpDataRecebimento.getValue() == null) {
+						demanda.setDemRecebimento(null);}
+							else {
+								demanda.setDemRecebimento(dpDataRecebimento.getEditor().getText());
+								}
 							
 						demanda.setDemDescricao(tfResDen.getText());
 						 
@@ -465,7 +479,10 @@ public class TabDemandaController implements Initializable {
 			
 		modularBotoesInicial();
 	}
-		
+	
+	
+	
+	
 	// -- botão pesquisar denúncia -- //
 	public void btnPesquisarHabilitar (ActionEvent event) {
 		
@@ -485,6 +502,13 @@ public class TabDemandaController implements Initializable {
         tcDocSEI.setCellValueFactory(new PropertyValueFactory<DemandaTabela, String>("demDocumentoSEI")); 
         tcProcSEI.setCellValueFactory(new PropertyValueFactory<DemandaTabela, String>("demProcessoSEI")); 
 		
+        
+        tfPesquisar.setOnKeyReleased(event -> {
+  		  if (event.getCode() == KeyCode.ENTER){
+  		     btnPesquisar.fire();
+  		  }
+  		});
+        
         // --- habilitar e desabilitar botões ---- //
 		modularBotoesInicial();
 		

@@ -25,7 +25,7 @@ public class Ato implements Serializable{
 	private int atoCodigo;
 	
 		//-- vistoria --//
-		@ManyToOne (fetch = FetchType.EAGER) 
+		@ManyToOne (fetch = FetchType.LAZY) 
 		@JoinColumn (name = "ato_vis_codigoFK")
 		private Vistoria atoVisCodigoFK;
 	

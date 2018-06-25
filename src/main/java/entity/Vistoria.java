@@ -30,7 +30,7 @@ public class Vistoria implements Serializable{
 	private int visCodigo;
 	
 		//-- endereço --//
-		@ManyToOne (fetch = FetchType.EAGER) 
+		@ManyToOne (fetch = FetchType.LAZY) 
 		@JoinColumn (name = "vis_end_codigo")
 		private Endereco visEndCodigoFK;
 		
@@ -84,7 +84,7 @@ public class Vistoria implements Serializable{
 		this.visEndCodigoFK = visTab.getVisEndCodigoFK();
 		this.visListAtos = visTab.getListAtos();
 		this.visIdentificacao = visTab.getVisIdentificacao();
-		this.visSEI = visTab.getVisSei();
+		this.visSEI = visTab.getVisSEI();
 		this.visInfracoes = visTab.getVisInfracoes();
 		this.visPenalidades = visTab.getVisPenalidades();
 		this.visAtenuantes = visTab.getVisAtenuantes();

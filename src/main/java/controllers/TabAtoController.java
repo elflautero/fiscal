@@ -171,6 +171,8 @@ public class TabAtoController implements Initializable{
 
 	public void btnSalvarHab (ActionEvent event) {
 		
+		obsList = FXCollections.observableArrayList();
+		
 		if (visGeral == null) {
 			
 			Alert a = new Alert (Alert.AlertType.ERROR);
@@ -201,15 +203,15 @@ public class TabAtoController implements Initializable{
 				
 				if (dpDataFiscalizacao.getValue() == null) {
 					ato.setAtoDataFiscalizacao(null);}
-				else {
-					ato.setAtoDataFiscalizacao(formatter.format(dpDataFiscalizacao.getValue())); // DATA
-				}
+					else {
+						ato.setAtoDataFiscalizacao(dpDataFiscalizacao.getEditor().getText()); // DATA
+					}
 				
 				if (dpDataCriacaoAto.getValue() == null) {
 					ato.setAtoDataCriacao(null);}
-				else {
-					ato.setAtoDataCriacao(formatter.format(dpDataCriacaoAto.getValue())); // DATA
-				}
+					else {
+						ato.setAtoDataCriacao(dpDataCriacaoAto.getEditor().getText()); // DATA
+					}
 				
 				ato.setAtoCaracterizacao(htmlCaracterizar.getHtmlText());
 				
@@ -219,7 +221,22 @@ public class TabAtoController implements Initializable{
 				
 				atoDao.mergeAto(ato);
 				
-				listarAtos (strPesquisa);
+				AtoTabela atoTab = new AtoTabela(
+						
+						ato.getAtoCodigo(),
+						ato.getAtoVisCodigoFK(),  // tipo identificacao sei cara infr atenu agrav datafis datacri
+						ato.getAtoTipo(),
+						ato.getAtoIdentificacao(),
+						ato.getAtoSEI(),
+						ato.getAtoCaracterizacao(),
+						ato.getAtoDataFiscalizacao(),
+						ato.getAtoDataCriacao()
+						
+						);
+						
+				obsList.add(atoTab);
+				tvAto.setItems(obsList);
+					
 				selecionarAto();
 				
 				atoGeral = ato;
@@ -274,15 +291,15 @@ public class TabAtoController implements Initializable{
 			
 			if (dpDataFiscalizacao.getValue() == null) {
 				ato.setAtoDataFiscalizacao(null);}
-			else {
-				ato.setAtoDataFiscalizacao(formatter.format(dpDataFiscalizacao.getValue())); // DATA
-			}
+				else {
+					ato.setAtoDataFiscalizacao(dpDataFiscalizacao.getEditor().getText()); // DATA
+				}
 			
 			if (dpDataCriacaoAto.getValue() == null) {
 				ato.setAtoDataCriacao(null);}
-			else {
-				ato.setAtoDataCriacao(formatter.format(dpDataCriacaoAto.getValue())); // DATA
-			}
+				else {
+					ato.setAtoDataCriacao(dpDataCriacaoAto.getEditor().getText()); // DATA
+				}
 
 			ato.setAtoCaracterizacao(htmlCaracterizar.getHtmlText());
 			
@@ -290,7 +307,24 @@ public class TabAtoController implements Initializable{
 			
 			atoDao.mergeAto(ato);
 			
-			listarAtos(strPesquisa);
+			obsList.remove(atoTab);
+			
+			atoTab = new AtoTabela(
+					
+					ato.getAtoCodigo(),
+					ato.getAtoVisCodigoFK(),
+					ato.getAtoTipo(),
+					ato.getAtoIdentificacao(),
+					ato.getAtoSEI(),
+					ato.getAtoCaracterizacao(),
+					ato.getAtoDataFiscalizacao(),
+					ato.getAtoDataCriacao()
+					
+					);
+					
+			obsList.add(atoTab);
+			tvAto.setItems(obsList);
+			
 			selecionarAto();
 			
 			modularBotoes();
@@ -320,7 +354,9 @@ public class TabAtoController implements Initializable{
 		
 		atoDao.removerAto(atoTab.getAtoCodigo());
 		
-		listarAtos(strPesquisa);
+		obsList.remove(atoTab);
+		tvAto.setItems(obsList);
+		
 		selecionarAto();
 		
 		modularBotoes();
@@ -370,6 +406,16 @@ public class TabAtoController implements Initializable{
 	
 	// INITIALIZE //
 	public void initialize(URL url, ResourceBundle rb) {
+		
+		tcTipo.setCellValueFactory(new PropertyValueFactory<AtoTabela, String>("atoTipo")); 
+		tcNumero.setCellValueFactory(new PropertyValueFactory<AtoTabela, String>("atoIdentificacao")); 
+		tcSEI.setCellValueFactory(new PropertyValueFactory<AtoTabela, String>("atoSEI")); 
+		
+		tfPesquisar.setOnKeyReleased(event -> {
+	  		  if (event.getCode() == KeyCode.ENTER){
+	  		     btnPesquisar.fire();
+	  		  }
+	  		});
 		
 		cbAtoTipo.setItems(olAtoTipo);
 		
@@ -429,17 +475,19 @@ public class TabAtoController implements Initializable{
 		
 	}
 	
+	ObservableList<AtoTabela> obsList;
+	
 	//  metodo para listar interferencias  //
  	public void listarAtos (String strPesquisaAto) {
  	
 	 	// --- conexão - listar endereços --- //
 		AtoDao atoDao = new AtoDao();
 		List<Ato> atoList = atoDao.listAto(strPesquisaAto);
-		ObservableList<AtoTabela> olAto = FXCollections.observableArrayList();
+		obsList = FXCollections.observableArrayList();
 		
 		
-		if (!olAto.isEmpty()) {
-			olAto.clear();
+		if (!obsList.isEmpty()) {
+			obsList.clear();
 		}
 		
 			for (Ato ato : atoList) {
@@ -457,16 +505,11 @@ public class TabAtoController implements Initializable{
 				
 				);
 				
-				
-			olAto.add(atoTab);
+			obsList.add(atoTab);
 			
 		}
 		
-		tcTipo.setCellValueFactory(new PropertyValueFactory<AtoTabela, String>("atoTipo")); 
-		tcNumero.setCellValueFactory(new PropertyValueFactory<AtoTabela, String>("atoIdentificacao")); 
-		tcSEI.setCellValueFactory(new PropertyValueFactory<AtoTabela, String>("atoSEI")); 
-		
-		tvAto.setItems(olAto);
+		tvAto.setItems(obsList);
  	}
 		
  	// método selecionar interferência //
@@ -496,15 +539,15 @@ public class TabAtoController implements Initializable{
  				
  				if (atoTab.getAtoDataFiscalizacao() == null) {
  					dpDataFiscalizacao.getEditor().clear();
- 				} else {
- 					dpDataFiscalizacao.setValue(LocalDate.parse(atoTab.getAtoDataFiscalizacao(), formatter));
- 				}
+	 				} else {
+	 					dpDataFiscalizacao.getEditor().setText(atoTab.getAtoDataFiscalizacao());
+	 				}
  				
  				if (atoTab.getAtoDataCriacao() == null) {
  					dpDataCriacaoAto.getEditor().clear();
- 				} else {
- 					dpDataCriacaoAto.setValue(LocalDate.parse(atoTab.getAtoDataCriacao(), formatter));
- 				}
+	 				} else {
+	 					dpDataCriacaoAto.getEditor().setText(atoTab.getAtoDataCriacao());
+	 				}
  				
  				
  				htmlCaracterizar.setHtmlText(atoTab.getAtoCaracterizacao());
@@ -565,14 +608,10 @@ public class TabAtoController implements Initializable{
 		
 		u = Integer.parseInt(cbUsuario.getValue());
 		
-		System.out.println("número do  usuario " + u);
-		
-		String ifracoes = visGeral.getVisInfracoes();
-		
-		infrArray = ifracoes.split("");
+		String infracoes = visGeral.getVisInfracoes();
 		
 		
-		
+		// INFRAÇÕES //
 		infraIncisos = new String [7];
 		
 		
@@ -608,9 +647,6 @@ public class TabAtoController implements Initializable{
 		
 		// inicializar as listas //
 		Hibernate.initialize(endereco.getListUsuarios());
-		//Hibernate.initialize(endereco.getListInterferencias());
-		
-		System.out.println("Usuario u : " + endereco.getListUsuarios().get(u).getUsNome());
 		
 		if (tx.getStatus().equals(TransactionStatus.ACTIVE)) { 
 		    tx.commit();
@@ -633,7 +669,17 @@ public class TabAtoController implements Initializable{
 			docHtml.select("terNum").prepend(atoGeral.getAtoIdentificacao());
 			docHtml.select("terSei").prepend(atoGeral.getAtoSEI());
 			
-			docHtml.select("terUsNome").prepend(endereco.getListUsuarios().get(u).getUsNome());
+			try {docHtml.select("terUsNome").prepend(endereco.getListUsuarios().get(u).getUsNome());}
+			
+				catch (Exception e) {
+					Alert a = new Alert (Alert.AlertType.ERROR);
+					a.setTitle("Alerta!!!");
+					a.setContentText("Não há usuário cadastrado!!!");
+					a.setHeaderText(null);
+					a.show();
+					
+				};
+				
 			docHtml.select("terUsCPF").prepend(endereco.getListUsuarios().get(u).getUsCPFCNPJ());
 			docHtml.select("terUsEnd").prepend(endereco.getListUsuarios().get(u).getUsDescricaoEnd());
 			try {docHtml.select("terUsRA").prepend(endereco.getListUsuarios().get(u).getUsRA());} catch (Exception e) {docHtml.select("EndEmpRA").prepend("");};
@@ -656,52 +702,56 @@ public class TabAtoController implements Initializable{
 			
 			docHtml.select("terCarac").prepend(atoGeral.getAtoCaracterizacao());
 			
+			if (infracoes != null) {
+				
+				infrArray = infracoes.split("");
 			
-			//-- infrações --//
-			for (int i = 0; i<infrArray.length; i++) {
-				
-				if (infrArray[i].equals("1") ) {
-					docHtml.select("infraDescInc").append(infraIncisos[0]);
-					docHtml.select("infraNumInc").append("<p>I</p>");
-					docHtml.select("infraValor").append("<p>Infração LEVE: Multa no valor base de R$ 400,00 (quatrocentos reais)</p>");
-					docHtml.select("infraAlinea").append("<p>I, Alíneas a e b1</p>");
-				}
-				if (infrArray[i].equals("2") ) {
-					docHtml.select("infraDescInc").append(infraIncisos[1]);
-					docHtml.select("infraNumInc").append("<p>II</p>");
-					docHtml.select("infraValor").append("<p>Infração LEVE: Multa no valor base de R$ 1.000,00 (um mil reais)</p>");
-					docHtml.select("infraAlinea").append("<p>II, Alíneas a e b1</p>");
-				}
-				if (infrArray[i].equals("3")  ) {
-					docHtml.select("infraDescInc").append(infraIncisos[2]);
-					docHtml.select("infraNumInc").append("<p>III</p>");
-					docHtml.select("infraValor").append("<p>Infração GRAVE: Multa no valor base de R$ 10.001 (dez mil e um reais)</p>");
-					docHtml.select("infraAlinea").append("<p>III, Alíneas a e b1</p>");
-				}
-				if (infrArray[i].equals("4") ) {
-					docHtml.select("infraDescInc").append(infraIncisos[3]);
-					docHtml.select("infraNumInc").append("<p>IV</p>");
-					docHtml.select("infraValor").append("<p>Infração LEVE: Multa no valor base de R$ 1.000,00 (um mil reais)</p>");
-					docHtml.select("infraAlinea").append("<p>IV, Alíneas a e b1</p>");
-				}
-				if (infrArray[i].equals("5")  ) {
-					docHtml.select("infraDescInc").append(infraIncisos[4]);
-					docHtml.select("infraNumInc").append("<p>V</p>");
-					docHtml.select("infraValor").append("<p>Infração GRAVE: Multa no valor base de R$ 10.001 (dez mil e um reais)</p>");
-					docHtml.select("infraAlinea").append("<p>V, Alíneas a e b1</p>");
-				}
-				
-				if (infrArray[i].equals("6") ) {
-					docHtml.select("infraDescInc").append(infraIncisos[5]);
-					docHtml.select("infraNumInc").append("<p>VI</p>");
-					docHtml.select("infraValor").append("<p>Infração GRAVE: Multa no valor base de R$ 10.001 (dez mil e um reais)</p>");
-					docHtml.select("infraAlinea").append("<p>VI, Alíneas a e b1</p>");
-				}
-				if (infrArray[i].equals("7")  ) {
-					docHtml.select("infraDescInc").append(infraIncisos[6]);
-					docHtml.select("infraNumInc").append("<p>VII</p>");
-					docHtml.select("infraValor").append("<p>Infração LEVE: Multa no valor base de R$ 600,00 (seiscentos reais)</p>");
-					docHtml.select("infraAlinea").append("<p>VII, Alíneas a e b1</p>");
+					//-- infrações --//
+					for (int i = 0; i<infrArray.length; i++) {
+						
+						if (infrArray[i].equals("1") ) {
+							docHtml.select("infraDescInc").append(infraIncisos[0]);
+							docHtml.select("infraNumInc").append("<p>I</p>");
+							docHtml.select("infraValor").append("<p>Infração LEVE: Multa no valor base de R$ 400,00 (quatrocentos reais)</p>");
+							docHtml.select("infraAlinea").append("<p>I, Alíneas a e b1</p>");
+						}
+						if (infrArray[i].equals("2") ) {
+							docHtml.select("infraDescInc").append(infraIncisos[1]);
+							docHtml.select("infraNumInc").append("<p>II</p>");
+							docHtml.select("infraValor").append("<p>Infração LEVE: Multa no valor base de R$ 1.000,00 (um mil reais)</p>");
+							docHtml.select("infraAlinea").append("<p>II, Alíneas a e b1</p>");
+						}
+						if (infrArray[i].equals("3")  ) {
+							docHtml.select("infraDescInc").append(infraIncisos[2]);
+							docHtml.select("infraNumInc").append("<p>III</p>");
+							docHtml.select("infraValor").append("<p>Infração GRAVE: Multa no valor base de R$ 10.001 (dez mil e um reais)</p>");
+							docHtml.select("infraAlinea").append("<p>III, Alíneas a e b1</p>");
+						}
+						if (infrArray[i].equals("4") ) {
+							docHtml.select("infraDescInc").append(infraIncisos[3]);
+							docHtml.select("infraNumInc").append("<p>IV</p>");
+							docHtml.select("infraValor").append("<p>Infração LEVE: Multa no valor base de R$ 1.000,00 (um mil reais)</p>");
+							docHtml.select("infraAlinea").append("<p>IV, Alíneas a e b1</p>");
+						}
+						if (infrArray[i].equals("5")  ) {
+							docHtml.select("infraDescInc").append(infraIncisos[4]);
+							docHtml.select("infraNumInc").append("<p>V</p>");
+							docHtml.select("infraValor").append("<p>Infração GRAVE: Multa no valor base de R$ 10.001 (dez mil e um reais)</p>");
+							docHtml.select("infraAlinea").append("<p>V, Alíneas a e b1</p>");
+						}
+						
+						if (infrArray[i].equals("6") ) {
+							docHtml.select("infraDescInc").append(infraIncisos[5]);
+							docHtml.select("infraNumInc").append("<p>VI</p>");
+							docHtml.select("infraValor").append("<p>Infração GRAVE: Multa no valor base de R$ 10.001 (dez mil e um reais)</p>");
+							docHtml.select("infraAlinea").append("<p>VI, Alíneas a e b1</p>");
+						}
+						if (infrArray[i].equals("7")  ) {
+							docHtml.select("infraDescInc").append(infraIncisos[6]);
+							docHtml.select("infraNumInc").append("<p>VII</p>");
+							docHtml.select("infraValor").append("<p>Infração LEVE: Multa no valor base de R$ 600,00 (seiscentos reais)</p>");
+							docHtml.select("infraAlinea").append("<p>VII, Alíneas a e b1</p>");
+						}
 				}
 			}
 			
@@ -751,7 +801,16 @@ public class TabAtoController implements Initializable{
 			docHtml.select("autoNum").prepend(atoGeral.getAtoIdentificacao());
 			docHtml.select("autoSEI").prepend(atoGeral.getAtoSEI());
 			
-			docHtml.select("autoUs").prepend(endereco.getListUsuarios().get(u).getUsNome());
+			try {docHtml.select("autoUs").prepend(endereco.getListUsuarios().get(u).getUsNome());}
+				catch (Exception e) {
+					Alert a = new Alert (Alert.AlertType.ERROR);
+					a.setTitle("Alerta!!!");
+					a.setContentText("Não há usuário cadastrado!!!");
+					a.setHeaderText(null);
+					a.show();
+					
+				};
+			
 			docHtml.select("autoUsCPF").prepend(endereco.getListUsuarios().get(u).getUsCPFCNPJ());
 			docHtml.select("autoUsEnd").prepend(endereco.getListUsuarios().get(u).getUsDescricaoEnd());
 			                             
@@ -774,189 +833,197 @@ public class TabAtoController implements Initializable{
 			// caracterização //
 			docHtml.select("autoCarac").prepend(atoGeral.getAtoCaracterizacao());
 			
-			
-			//-- penalidades --//
-			for (int i = 0; i<infrArray.length; i++) {
+			if (infracoes != null) {
 				
-				if (infrArray[i].equals("1") ) {
-					docHtml.select("infraDescInc").append(infraIncisos[0]);
-					docHtml.select("penaDescInci").append("<p>Infração LEVE: Multa no valor base de R$ 400,00 (quatrocentos reais) a  R$ 10.000,00 (dez mil reais).</p><p>Art. 14, Inciso I</p>");
-				}
-				if (infrArray[i].equals("2") ) {
-					docHtml.select("infraDescInc").append(infraIncisos[1]);
-					docHtml.select("penaDescInci").append("<p>Infração LEVE: Multa no valor base de R$ R$ 1.000,00 (um mil reais) a   R$ 10.000,00 (dez mil reais).</p><p>Art. 14, Inciso II</p>");
-				}
-				if (infrArray[i].equals("3")  ) {
-					docHtml.select("infraDescInc").append(infraIncisos[2]);
-					docHtml.select("penaDescInci").append("<p>Infração GRAVE: Multa no valor base de R$ 10.001 (dez mil e um reais) a R$ 30.000,00 (trinta mil reais).</p><p>Art. 14, Inciso III</p>");
-				}
-				if (infrArray[i].equals("4") ) {
-					docHtml.select("infraDescInc").append(infraIncisos[3]);
-					docHtml.select("penaDescInci").append("<p>Infração LEVE: Multa no valor base de R$ 1.000,00 (um mil reais)R$  a 10.000,00 (dez mil reais).</p><p>Art. 14, Inciso IV</p>");
-				}
-				if (infrArray[i].equals("5")  ) {
-					docHtml.select("infraDescInc").append(infraIncisos[4]);
-					docHtml.select("penaDescInci").append("<p>Infração GRAVE: Multa no valor base de 10.001 (dez mil e um reais) a 25.000,00 (vinte e cinco mil reais).</p><p>Art. 14, Inciso V</p>");
-				}
-				
-				if (infrArray[i].equals("6") ) {
-					docHtml.select("infraDescInc").append(infraIncisos[5]);
-					docHtml.select("penaDescInci").append("<p>Infração GRAVE: Multa no valor base de R$ 10.001 (dez mil e um reais) a 30.000,00 (trinta mil reais).</p><p>Art. 14, Inciso VI</p>");
-				}
-				if (infrArray[i].equals("7")  ) {
-					docHtml.select("infraDescInc").append(infraIncisos[6]);
-					docHtml.select("penaDescInci").append("<p>Infração LEVE: Multa no valor base de R$ 600,00 (seiscentos reais) a R$ 10.000,00 (dez mil reais).</p><p>Art. 14, Inciso VII</p>");
-				}
+					infrArray = infracoes.split("");
+					//-- penalidades --//
+					for (int i = 0; i<infrArray.length; i++) {
+						
+						if (infrArray[i].equals("1") ) {
+							docHtml.select("infraDescInc").append(infraIncisos[0]);
+							docHtml.select("penaDescInci").append("<p>Infração LEVE: Multa no valor base de R$ 400,00 (quatrocentos reais) a  R$ 10.000,00 (dez mil reais).</p><p>Art. 14, Inciso I</p>");
+						}
+						if (infrArray[i].equals("2") ) {
+							docHtml.select("infraDescInc").append(infraIncisos[1]);
+							docHtml.select("penaDescInci").append("<p>Infração LEVE: Multa no valor base de R$ R$ 1.000,00 (um mil reais) a   R$ 10.000,00 (dez mil reais).</p><p>Art. 14, Inciso II</p>");
+						}
+						if (infrArray[i].equals("3")  ) {
+							docHtml.select("infraDescInc").append(infraIncisos[2]);
+							docHtml.select("penaDescInci").append("<p>Infração GRAVE: Multa no valor base de R$ 10.001 (dez mil e um reais) a R$ 30.000,00 (trinta mil reais).</p><p>Art. 14, Inciso III</p>");
+						}
+						if (infrArray[i].equals("4") ) {
+							docHtml.select("infraDescInc").append(infraIncisos[3]);
+							docHtml.select("penaDescInci").append("<p>Infração LEVE: Multa no valor base de R$ 1.000,00 (um mil reais)R$  a 10.000,00 (dez mil reais).</p><p>Art. 14, Inciso IV</p>");
+						}
+						if (infrArray[i].equals("5")  ) {
+							docHtml.select("infraDescInc").append(infraIncisos[4]);
+							docHtml.select("penaDescInci").append("<p>Infração GRAVE: Multa no valor base de 10.001 (dez mil e um reais) a 25.000,00 (vinte e cinco mil reais).</p><p>Art. 14, Inciso V</p>");
+						}
+						
+						if (infrArray[i].equals("6") ) {
+							docHtml.select("infraDescInc").append(infraIncisos[5]);
+							docHtml.select("penaDescInci").append("<p>Infração GRAVE: Multa no valor base de R$ 10.001 (dez mil e um reais) a 30.000,00 (trinta mil reais).</p><p>Art. 14, Inciso VI</p>");
+						}
+						if (infrArray[i].equals("7")  ) {
+							docHtml.select("infraDescInc").append(infraIncisos[6]);
+							docHtml.select("penaDescInci").append("<p>Infração LEVE: Multa no valor base de R$ 600,00 (seiscentos reais) a R$ 10.000,00 (dez mil reais).</p><p>Art. 14, Inciso VII</p>");
+						}
+					}
 			}
 			
 			String atenuantes = visGeral.getVisAtenuantes();
 			
-			if (atenArray != null) {
+			System.out.println("atenuantes " + atenuantes);
+			
+			if (atenuantes != null) {
+				
 				atenArray = atenuantes.split("");
 			
-			atenIncisos = new String [12];
-			
-			//-- atenuantes --//
-			atenIncisos = new String [9];
-			
-			
-			atenIncisos [0] = "<p>I - baixo grau de instrução ou escolaridade do usuário dos recursos hídricos;</p>";
-			
-			atenIncisos [1] = "<p>II - arrependimento do usuário, manifestado pela espontânea reparação do dano ou pela " + 
-					"mitigação significativa da degradação causada aos recursos hídricos;</p>";
-			
-			atenIncisos [2] = "<p>III - comunicação prévia, pelo usuário, de perigo iminente de degradação dos recursos " + 
-					"hídricos; </p>";
-			
-			atenIncisos [3] = "<p>IV - oficialização do comprometimento do usuário em sanar as irregularidades e reparar " + 
-					"os danos delas decorrentes;</p>";
-			
-			atenIncisos [4] = "<p>V - colaboração explícita com a fiscalização;</p>";
-			
-			atenIncisos [5] = "<p>VI - tratando-se de usuário não outorgado, haver espontaneamente procurado a Agência " + 
-					"para regularização do uso dos recursos hídricos; </p>";
-			
-			atenIncisos [6] = "<p>VII - atendimento a todas as recomendações e exigências, nos prazos fixados pela " + 
-					"Agência; </p>";
-			
-			atenIncisos [7] = "<p>VIII - reconstituição dos recursos hídricos degradados ou sua recomposição na forma " + 
-					"exigida; </p>";
-			
-			atenIncisos [8] = "<p>IX - não ter sido autuado por infração nos últimos 5 (cinco) anos anteriores ao fato.</p>";
-			
-			
-			//-- atenuantes --//
-			for (int i = 0; i<atenArray.length; i++) {
+						atenIncisos = new String [12];
+						
+						//-- atenuantes --//
+						atenIncisos = new String [9];
+						
+						
+						atenIncisos [0] = "<p>I - baixo grau de instrução ou escolaridade do usuário dos recursos hídricos;</p>";
+						
+						atenIncisos [1] = "<p>II - arrependimento do usuário, manifestado pela espontânea reparação do dano ou pela " + 
+								"mitigação significativa da degradação causada aos recursos hídricos;</p>";
+						
+						atenIncisos [2] = "<p>III - comunicação prévia, pelo usuário, de perigo iminente de degradação dos recursos " + 
+								"hídricos; </p>";
+						
+						atenIncisos [3] = "<p>IV - oficialização do comprometimento do usuário em sanar as irregularidades e reparar " + 
+								"os danos delas decorrentes;</p>";
+						
+						atenIncisos [4] = "<p>V - colaboração explícita com a fiscalização;</p>";
+						
+						atenIncisos [5] = "<p>VI - tratando-se de usuário não outorgado, haver espontaneamente procurado a Agência " + 
+								"para regularização do uso dos recursos hídricos; </p>";
+						
+						atenIncisos [6] = "<p>VII - atendimento a todas as recomendações e exigências, nos prazos fixados pela " + 
+								"Agência; </p>";
+						
+						atenIncisos [7] = "<p>VIII - reconstituição dos recursos hídricos degradados ou sua recomposição na forma " + 
+								"exigida; </p>";
+						
+						atenIncisos [8] = "<p>IX - não ter sido autuado por infração nos últimos 5 (cinco) anos anteriores ao fato.</p>";
+						
+						
+						//-- atenuantes --//
+						for (int i = 0; i<atenArray.length; i++) {
+							
+							if (atenArray[i].equals("1") ) {
+								docHtml.select("aten").append(atenIncisos[0]);
+							}
+							if (atenArray[i].equals("2") ) {
+								docHtml.select("aten").append(atenIncisos[1]);
+							}
+							if (atenArray[i].equals("3")  ) {
+								docHtml.select("aten").append(atenIncisos[2]);
+							}
+							if (atenArray[i].equals("4") ) {
+								docHtml.select("aten").append(atenIncisos[3]);
+							}
+							if (atenArray[i].equals("5")  ) {
+								docHtml.select("aten").append(atenIncisos[4]);
+							}
+							if (atenArray[i].equals("6") ) {
+								docHtml.select("aten").append(atenIncisos[5]);
+							}
+							if (atenArray[i].equals("7")  ) {
+								docHtml.select("aten").append(atenIncisos[6]);
+							}
+							if (atenArray[i].equals("8")  ) {
+								docHtml.select("aten").append(atenIncisos[7]);
+							}
+							if (atenArray[i].equals("9")  ) {
+								docHtml.select("aten").append(atenIncisos[8]);
+							}
 				
-				if (atenArray[i].equals("1") ) {
-					docHtml.select("aten").append(atenIncisos[0]);
-				}
-				if (atenArray[i].equals("2") ) {
-					docHtml.select("aten").append(atenIncisos[1]);
-				}
-				if (atenArray[i].equals("3")  ) {
-					docHtml.select("aten").append(atenIncisos[2]);
-				}
-				if (atenArray[i].equals("4") ) {
-					docHtml.select("aten").append(atenIncisos[3]);
-				}
-				if (atenArray[i].equals("5")  ) {
-					docHtml.select("aten").append(atenIncisos[4]);
-				}
-				if (atenArray[i].equals("6") ) {
-					docHtml.select("aten").append(atenIncisos[5]);
-				}
-				if (atenArray[i].equals("7")  ) {
-					docHtml.select("aten").append(atenIncisos[6]);
-				}
-				if (atenArray[i].equals("8")  ) {
-					docHtml.select("aten").append(atenIncisos[7]);
-				}
-				if (atenArray[i].equals("9")  ) {
-					docHtml.select("aten").append(atenIncisos[8]);
-				}
-				
-			}
+					}
 			}
 			
 			
 			String agravantes = visGeral.getVisAgravantes();
+			System.out.println("string agravantes " + agravantes);
 			
-			if (agraArray != null) {
-			agraArray = agravantes.split("");
+			if (agravantes != null) {
+				
+						agraArray = agravantes.split("");
+					
+					agraIncisos = new String [12];
+					
+					//-- agravantes --//
+					agraIncisos = new String [12];
+					
+					agraIncisos [0] = "<p>a) para obter vantagem pecuniária;</p>";
+					
+					agraIncisos [1] = "<p>b) mediante coação de outrem para a sua execução material;</p>";
+					
+					agraIncisos [2] = "<p>c) com implicações graves à saúde pública ou ao meio ambiente, em especial aos " + 
+							"recursos hídricos;</p>";
+					
+					agraIncisos [3] = "<p>d) que atinja áreas de unidades de conservação ou áreas sujeitas, por ato do Poder " + 
+							"Público, a regime especial de uso;</p>";
+					
+					agraIncisos [4] = "<p>e) que atinja áreas urbanas ou quaisquer assentamentos humanos;</p>";
+					
+					agraIncisos [5] = "<p>f) em época de racionamento do uso de água ou em condições sazonais adversas ao seu " + 
+							"uso;</p>";
+					
+					agraIncisos [6] = "<p>g) mediante fraude ou abuso de confiança;</p>";
+					
+					agraIncisos [7] = "<p>h) mediante abuso do direito de uso do recurso hídrico;</p>";
+					
+					agraIncisos [8] = "<p>i) em favor do interesse de pessoa jurídica mantida total ou parcialmente por recursos " + 
+							"públicos ou beneficiada por incentivos fiscais;</p>";
+					
+					agraIncisos [9] = "<p>j) sem proceder à reparação integral dos danos causados;</p>";
+					
+					agraIncisos [10] = "<p>k) que tenha sido facilitada por funcionário público no exercício de suas funções;</p>";
+					
+					agraIncisos [11] = "<p>l) mediante fraude documental;</p>";
 			
-			agraIncisos = new String [12];
-			
-			//-- agravantes --//
-			agraIncisos = new String [12];
-			
-			agraIncisos [0] = "<p>a) para obter vantagem pecuniária;</p>";
-			
-			agraIncisos [1] = "<p>b) mediante coação de outrem para a sua execução material;</p>";
-			
-			agraIncisos [2] = "<p>c) com implicações graves à saúde pública ou ao meio ambiente, em especial aos " + 
-					"recursos hídricos;</p>";
-			
-			agraIncisos [3] = "<p>d) que atinja áreas de unidades de conservação ou áreas sujeitas, por ato do Poder " + 
-					"Público, a regime especial de uso;</p>";
-			
-			agraIncisos [4] = "<p>e) que atinja áreas urbanas ou quaisquer assentamentos humanos;</p>";
-			
-			agraIncisos [5] = "<p>f) em época de racionamento do uso de água ou em condições sazonais adversas ao seu " + 
-					"uso;</p>";
-			
-			agraIncisos [6] = "<p>g) mediante fraude ou abuso de confiança;</p>";
-			
-			agraIncisos [7] = "<p>h) mediante abuso do direito de uso do recurso hídrico;</p>";
-			
-			agraIncisos [8] = "<p>i) em favor do interesse de pessoa jurídica mantida total ou parcialmente por recursos " + 
-					"públicos ou beneficiada por incentivos fiscais;</p>";
-			
-			agraIncisos [9] = "<p>j) sem proceder à reparação integral dos danos causados;</p>";
-			
-			agraIncisos [10] = "<p>k) que tenha sido facilitada por funcionário público no exercício de suas funções;</p>";
-			
-			agraIncisos [11] = "<p>l) mediante fraude documental;</p>";
-			
-			//tem que colocar um  if
-			for (int i = 0; i<agraArray.length; i++) {
-				if (agraArray[i].equals("a") ) {
-					docHtml.select("agra").append(agraIncisos[0]);
-				}
-				if (agraArray[i].equals("b") ) {
-					docHtml.select("agra").append(agraIncisos[1]);
-				}
-				if (agraArray[i].equals("c")  ) {
-					docHtml.select("agra").append(agraIncisos[2]);
-				}
-				if (agraArray[i].equals("d") ) {
-					docHtml.select("agra").append(agraIncisos[3]);
-				}
-				if (agraArray[i].equals("e")  ) {
-					docHtml.select("agra").append(agraIncisos[4]);
-				}
-				if (agraArray[i].equals("f") ) {
-					docHtml.select("agra").append(agraIncisos[5]);
-				}
-				if (agraArray[i].equals("g")  ) {
-					docHtml.select("agra").append(agraIncisos[6]);
-				}
-				if (agraArray[i].equals("h")  ) {
-					docHtml.select("agra").append(agraIncisos[7]);
-				}
-				if (agraArray[i].equals("i")  ) {
-					docHtml.select("agra").append(agraIncisos[8]);
-				}
-				if (agraArray[i].equals("j")  ) {
-					docHtml.select("agra").append(agraIncisos[9]);
-				}
-				if (agraArray[i].equals("k")  ) {
-					docHtml.select("agra").append(agraIncisos[10]);
-				}
-				if (agraArray[i].equals("l")  ) {
-					docHtml.select("agra").append(agraIncisos[11]);
-				}
-			}
+								//tem que colocar um  if
+								for (int i = 0; i<agraArray.length; i++) {
+									if (agraArray[i].equals("a") ) {
+										docHtml.select("agra").append(agraIncisos[0]);
+									}
+									if (agraArray[i].equals("b") ) {
+										docHtml.select("agra").append(agraIncisos[1]);
+									}
+									if (agraArray[i].equals("c")  ) {
+										docHtml.select("agra").append(agraIncisos[2]);
+									}
+									if (agraArray[i].equals("d") ) {
+										docHtml.select("agra").append(agraIncisos[3]);
+									}
+									if (agraArray[i].equals("e")  ) {
+										docHtml.select("agra").append(agraIncisos[4]);
+									}
+									if (agraArray[i].equals("f") ) {
+										docHtml.select("agra").append(agraIncisos[5]);
+									}
+									if (agraArray[i].equals("g")  ) {
+										docHtml.select("agra").append(agraIncisos[6]);
+									}
+									if (agraArray[i].equals("h")  ) {
+										docHtml.select("agra").append(agraIncisos[7]);
+									}
+									if (agraArray[i].equals("i")  ) {
+										docHtml.select("agra").append(agraIncisos[8]);
+									}
+									if (agraArray[i].equals("j")  ) {
+										docHtml.select("agra").append(agraIncisos[9]);
+									}
+									if (agraArray[i].equals("k")  ) {
+										docHtml.select("agra").append(agraIncisos[10]);
+									}
+									if (agraArray[i].equals("l")  ) {
+										docHtml.select("agra").append(agraIncisos[11]);
+									}
+						}
 			
 			}
 			

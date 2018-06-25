@@ -26,7 +26,7 @@ public class Demanda implements Serializable {
 	
 	// @Column (name="descricaoArtigo", columnDefinition="varchar(100)")
 	
-	@ManyToOne (fetch = FetchType.EAGER) 
+	@ManyToOne (fetch = FetchType.LAZY) 
 	@JoinColumn (name = "enderecoFK") // MUDAR PARA demEnderecoFK nas próximas criações de tabelas...
 	private Endereco demEnderecoFK;
 	
@@ -34,7 +34,8 @@ public class Demanda implements Serializable {
 	private String demDocumento;
 	
 	@Column (name="dem_documento_sei", columnDefinition="varchar(25)")
-	private String demDocumentoSEI;
+	private String demDocumentoSEI; 
+				// demDocumentoSEI
 	
 	@Column (name="dem_processo_sei", columnDefinition="varchar(25)")
 	private String demProcessoSEI;

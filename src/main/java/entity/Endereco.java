@@ -63,9 +63,9 @@ public class Endereco implements Serializable{
 		private List<Interferencia> interferencias = new ArrayList<Interferencia>();
 	
 				//-- Lista de usuários vinculados --//
-				@OneToMany (mappedBy = "usEndCodigoFK", cascade = CascadeType.MERGE,
+				@OneToMany (mappedBy = "usEndCodigoFK", cascade = CascadeType.ALL,
 						fetch = FetchType.LAZY, targetEntity = Usuario.class)
-				@Fetch(FetchMode.SUBSELECT) 
+				@Fetch(FetchMode.SUBSELECT)
 				private List<Usuario> usuarios = new ArrayList<Usuario>();
 		
 						//-- Lista de fiscais vinculados --//
@@ -88,14 +88,17 @@ public class Endereco implements Serializable{
 	}
 	
 	//-- Construtor --//
-	public Endereco (EnderecoTabela enderecoTabela) {
+	public Endereco (EnderecoTabela endTab) {
 		
-		this.Cod_Endereco = enderecoTabela.getCod_Endereco();
-		this.Desc_Endereco = enderecoTabela.getDesc_Endereco();
-		this.RA_Endereco = enderecoTabela.getRA_Endereco();
-		this.CEP_Endereco = enderecoTabela.getCEP_Endereco();
-		this.Cid_Endereco = enderecoTabela.getCid_Endereco();
-		this.UF_Endereco = enderecoTabela.getUF_Endereco();
+		this.Cod_Endereco = endTab.getCod_Endereco();
+		this.Desc_Endereco = endTab.getDesc_Endereco();
+		this.RA_Endereco = endTab.getRA_Endereco();
+		this.CEP_Endereco = endTab.getCEP_Endereco();
+		this.Cid_Endereco = endTab.getCid_Endereco();
+		this.UF_Endereco = endTab.getUF_Endereco();
+		
+		this.Lat_Endereco = endTab.getLat_Endereco();
+		this.Lon_Endereco = endTab.getLon_Endereco();
 	}
 	
 	// -- GETTERS AND SETTERS - //

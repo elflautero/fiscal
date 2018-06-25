@@ -2,7 +2,6 @@ package controllers;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.List;
@@ -52,7 +51,6 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.util.StringConverter;
 import tabela.VistoriaTabela;
 
 public class TabVistoriaController implements Initializable{
@@ -100,11 +98,11 @@ public class TabVistoriaController implements Initializable{
 	
 	
 	// TableView Endereço //
-			@FXML private TableView <VistoriaTabela> tvVistoria;
-			
-			@FXML TableColumn<VistoriaTabela, String> tcNumero;
-			@FXML TableColumn<VistoriaTabela, String> tcSEI;
-			@FXML TableColumn<VistoriaTabela, String> tcData;
+	@FXML private TableView <VistoriaTabela> tvVistoria;
+	
+	@FXML TableColumn<VistoriaTabela, String> tcNumero;
+	@FXML TableColumn<VistoriaTabela, String> tcSEI;
+	@FXML TableColumn<VistoriaTabela, String> tcData;
 	
 	@FXML TextArea taObjeto;
 	@FXML TextArea taApresentacao;
@@ -413,6 +411,8 @@ public class TabVistoriaController implements Initializable{
 	
 	public void btnSalvarHab (ActionEvent event) {
 		
+		obsList = FXCollections.observableArrayList();
+		
 		if (eGeralVis == null) {
 			
 			Alert aLat = new Alert (Alert.AlertType.ERROR);
@@ -442,6 +442,7 @@ public class TabVistoriaController implements Initializable{
 						vis.setVisIdentificacao(tfAto.getText());
 						vis.setVisSEI(tfAtoSEI.getText());
 						
+						/*
 						if (dpDataFiscalizacao.getValue() == null) {
 							vis.setVisDataFiscalizacao(null);}
 						else {
@@ -452,6 +453,19 @@ public class TabVistoriaController implements Initializable{
 							vis.setVisDataCriacao(null);}
 						else {
 							vis.setVisDataCriacao(formatter.format(dpDataCriacaoAto.getValue()));
+						}
+						*/
+						
+						if (dpDataFiscalizacao.getValue() == null) {
+							vis.setVisDataFiscalizacao(null);}
+						else {
+							vis.setVisDataFiscalizacao(dpDataFiscalizacao.getEditor().getText());
+						}
+						
+						if (dpDataCriacaoAto.getValue() == null) {
+							vis.setVisDataCriacao(null);}
+						else {
+							vis.setVisDataCriacao(dpDataCriacaoAto.getEditor().getText());
 						}
 						
 						vis.setVisInfracoes(strInfracoes);
@@ -472,7 +486,28 @@ public class TabVistoriaController implements Initializable{
 						visDao.salvarVistoria(vis);
 						visDao.mergeVistoria(vis);
 						
-						listarVistorias(strPesquisa);
+						VistoriaTabela visTab = new VistoriaTabela(
+									
+									vis.getVisCodigo(),
+									vis.getVisEndCodigoFK(),
+									vis.getVisObjeto(),
+									vis.getVisApresentacao(),
+									vis.getVisRelato(),
+									vis.getVisRecomendacoes(),
+									vis.getVisInfracoes(),
+									vis.getVisPenalidades(),
+									vis.getVisAtenuantes(),
+									vis.getVisAgravantes(),
+									vis.getVisIdentificacao(),
+									vis.getVisSEI(),
+									vis.getVisDataFiscalizacao(),
+									vis.getVisDataCriacao(),
+									vis.getVisListAtos()
+									
+									);
+						obsList.add(visTab);
+						tvVistoria.setItems(obsList);
+						
 						selecionarVistoria();
 						modularBotoes();
 						fecharEditorHTML();
@@ -543,13 +578,13 @@ public class TabVistoriaController implements Initializable{
 					if (dpDataFiscalizacao.getValue() == null) {
 						vis.setVisDataFiscalizacao(null);}
 					else {
-						vis.setVisDataFiscalizacao(formatter.format(dpDataFiscalizacao.getValue()));
+						vis.setVisDataFiscalizacao(dpDataFiscalizacao.getEditor().getText());
 					}
 					
 					if (dpDataCriacaoAto.getValue() == null) {
 						vis.setVisDataCriacao(null);}
 					else {
-						vis.setVisDataCriacao(formatter.format(dpDataCriacaoAto.getValue()));
+						vis.setVisDataCriacao(dpDataCriacaoAto.getEditor().getText());
 					}
 					
 					vis.setVisInfracoes(strInfracoes);
@@ -566,8 +601,31 @@ public class TabVistoriaController implements Initializable{
 							
 							visDao.mergeVistoria(vis);
 							
-	
-							listarVistorias(strPesquisa);
+							obsList.remove(visTab);
+							
+							visTab = new VistoriaTabela(
+									
+									vis.getVisCodigo(),
+									vis.getVisEndCodigoFK(),
+									vis.getVisObjeto(),
+									vis.getVisApresentacao(),
+									vis.getVisRelato(),
+									vis.getVisRecomendacoes(),
+									vis.getVisInfracoes(),
+									vis.getVisPenalidades(),
+									vis.getVisAtenuantes(),
+									vis.getVisAgravantes(),
+									vis.getVisIdentificacao(),
+									vis.getVisSEI(),
+									vis.getVisDataFiscalizacao(),
+									vis.getVisDataCriacao(),
+									vis.getVisListAtos()
+									
+									);
+									
+							obsList.add(visTab);
+							tvVistoria.setItems(obsList);
+									
 							selecionarVistoria();
 							
 							modularBotoes();
@@ -613,7 +671,9 @@ public class TabVistoriaController implements Initializable{
 			
 			visDao.removerVistoria(visTab.getVisCodigo());
 			
-			listarVistorias(strPesquisa);
+			obsList.remove(visTab);
+			tvVistoria.setItems(obsList);
+			
 			selecionarVistoria();
 			
 			modularBotoes();
@@ -753,10 +813,7 @@ public class TabVistoriaController implements Initializable{
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction tx = session.beginTransaction();
 		Endereco endereco = (Endereco) session.get(Endereco.class, eGeralVis.getCod_Endereco());
-		
-		System.out.println("código do endereço: " + eGeralVis.getCod_Endereco());
-		
-		
+	
 		// inicializar as listas //
 		Hibernate.initialize(endereco.getListUsuarios());
 		Hibernate.initialize(endereco.getListInterferencias());
@@ -765,8 +822,8 @@ public class TabVistoriaController implements Initializable{
 		    tx.commit();
 		}
 		
-		System.out.println("usuario para imprimir relatorio abaixo: ");
-		System.out.println(endereco.getListUsuarios().get(0).getUsNome());
+		//System.out.println("usuario para imprimir relatorio abaixo: ");
+		//System.out.println(endereco.getListUsuarios().get(0).getUsNome());
 		
 		session.close();
 		
@@ -777,7 +834,19 @@ public class TabVistoriaController implements Initializable{
 		if (endereco.getListUsuarios() != null) {
 			
 			//-- usuario atraves do endereco --//
-			docHtml.select("nomeUs").prepend(endereco.getListUsuarios().get(0).getUsNome());
+			
+			try {docHtml.select("nomeUs").prepend(endereco.getListUsuarios().get(0).getUsNome());}
+			
+				catch (Exception e) {
+					Alert a = new Alert (Alert.AlertType.ERROR);
+					a.setTitle("Alerta!!!");
+					a.setContentText("Não há usuário cadastrado!!!");
+					a.setHeaderText(null);
+					a.show();
+					
+				};
+			
+			
 			docHtml.select("cpfUs").prepend(endereco.getListUsuarios().get(0).getUsCPFCNPJ());
 			docHtml.select("endUs").prepend(endereco.getListUsuarios().get(0).getUsDescricaoEnd());
 			
@@ -817,7 +886,7 @@ public class TabVistoriaController implements Initializable{
 		
 		if (endereco.getListInterferencias() != null) {
 			
-			System.out.println("quantidade de interferencias " + endereco.getListInterferencias().size());
+			//System.out.println("quantidade de interferencias " + endereco.getListInterferencias().size());
 			
 			for (int i  = 0; i< endereco.getListInterferencias().size(); i++) {
 				
@@ -1014,8 +1083,20 @@ public class TabVistoriaController implements Initializable{
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		
+		tcNumero.setCellValueFactory(new PropertyValueFactory<VistoriaTabela, String>("visIdentificacao"));  // visIdentificacao
+		tcSEI.setCellValueFactory(new PropertyValueFactory<VistoriaTabela, String>("visSEI"));  
+		tcData.setCellValueFactory(new PropertyValueFactory<VistoriaTabela, String>("visDataFiscalizacao")); 
+		
+		tfPesquisar.setOnKeyReleased(event -> {
+	  		  if (event.getCode() == KeyCode.ENTER){
+	  		     btnPesquisar.fire();
+	  		  }
+	  		});
+	        
+		
 		modularBotoes();
 		
+		/*
 		dpDataFiscalizacao.setConverter(new StringConverter<LocalDate>() {
 			
 			@Override
@@ -1023,7 +1104,7 @@ public class TabVistoriaController implements Initializable{
 				if (t != null) {
 					return formatter.format(t);
 				}
-				return null;
+				return "";
 			}
 			
 			@Override
@@ -1043,7 +1124,7 @@ public class TabVistoriaController implements Initializable{
 				if (t != null) {
 					return formatter.format(t);
 				}
-				return null;
+				return "";
 			}
 			
 			@Override
@@ -1055,6 +1136,7 @@ public class TabVistoriaController implements Initializable{
 			}
 
 		});
+		*/
 		
 		/*
 		dpDataFiscalizacao.setOnAction((ActionEvent event) -> {
@@ -1176,20 +1258,22 @@ public class TabVistoriaController implements Initializable{
 			main = mainController;
 	}
 	
+	ObservableList<VistoriaTabela> obsList;
+	
 	public void listarVistorias (String strPesquisa) {
  		
 	 	// --- conexão - listar endereços --- //
 		VistoriaDao visDao = new VistoriaDao();
 		List<Vistoria> visList = visDao.listarVistoria(strPesquisa);
-		ObservableList<VistoriaTabela> oListVis = FXCollections.observableArrayList();
+		obsList = FXCollections.observableArrayList();
 		
 		
-		if (!oListVis.isEmpty()) {
-			oListVis.clear();
+		if (!obsList.isEmpty()) {
+			obsList.clear();
 		}
-		
+			
 			for (Vistoria vis : visList) {
-				
+			
 			VistoriaTabela visTab = new VistoriaTabela(
 					
 				vis.getVisCodigo(),
@@ -1211,16 +1295,12 @@ public class TabVistoriaController implements Initializable{
 				);
 				
 				
-				oListVis.add(visTab);
-						
+				obsList.add(visTab);
+				
+					
 		}
-			
-			
-			tcNumero.setCellValueFactory(new PropertyValueFactory<VistoriaTabela, String>("visIdentificacao")); 
-			//tcEndRA.setCellValueFactory(new PropertyValueFactory<EnderecoTabela, String>("RA_Endereco")); 
-			//tcEndCid.setCellValueFactory(new PropertyValueFactory<EnderecoTabela, String>("CEP_Endereco")); 
-			
-			tvVistoria.setItems(oListVis);
+		
+			tvVistoria.setItems(obsList);
 			
 	 	}
 	
@@ -1232,6 +1312,7 @@ public class TabVistoriaController implements Initializable{
 	 	public void selecionarVistoria () {
 		
 			tvVistoria.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
+				
 				public void changed(ObservableValue<?> observable , Object oldValue, Object newValue) {
 				
 				VistoriaTabela visTab = (VistoriaTabela) newValue;
@@ -1248,21 +1329,21 @@ public class TabVistoriaController implements Initializable{
 				} else {
 
 					tfAto.setText(visTab.getVisIdentificacao());
-					tfAtoSEI.setText(visTab.getVisSei());
+					tfAtoSEI.setText(visTab.getVisSEI());
 					
 					if (visTab.getVisDataFiscalizacao() == null) {
 						dpDataFiscalizacao.getEditor().clear();
-	 				} else {
-	 					dpDataFiscalizacao.setValue(LocalDate.parse(visTab.getVisDataFiscalizacao(), formatter));
-	 				}
+		 				} else {
+		 					dpDataFiscalizacao.getEditor().setText(visTab.getVisDataFiscalizacao());
+		 				}
 	 				
 	 				if (visTab.getVisDataCriacao() == null) {
 	 					dpDataCriacaoAto.getEditor().clear();
-	 				} else {
-	 					dpDataCriacaoAto.setValue(LocalDate.parse(visTab.getVisDataCriacao(), formatter));
-	 				}
-						
-					
+		 				} else {
+		 					dpDataCriacaoAto.getEditor().setText(visTab.getVisDataCriacao());
+		 				}
+	 				
+	 				//dpDataFiscalizacao.setValue(LocalDate.parse(visTab.getVisDataFiscalizacao(), formatter));
 					
 					String infr =  visTab.getVisInfracoes();
 					String pena = visTab.getVisPenalidades();
@@ -1271,7 +1352,7 @@ public class TabVistoriaController implements Initializable{
 					
 					LimparCheckBox();
 					
-					System.out.println(htmlObjeto.getHtmlText());
+					//System.out.println(htmlObjeto.getHtmlText());
 					
 					//-- infrações --//
 					if (infr != null) {
@@ -1486,6 +1567,8 @@ public class TabVistoriaController implements Initializable{
 					
 					//-- pegar a vistoria selecionada --//
 					Vistoria visG = new Vistoria(visTab);
+					
+					
 					visGeral = visG;
 					main.pegarVistoria(visGeral);
 					
