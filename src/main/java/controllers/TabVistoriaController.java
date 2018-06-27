@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.exception.JDBCConnectionException;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -425,7 +426,8 @@ public class TabVistoriaController implements Initializable{
 			
 			if (dpDataFiscalizacao.getValue() == null  ||
 					dpDataCriacaoAto.getValue() == null  ||
-						tfAto.getText().isEmpty()
+						tfAto.getText().isEmpty()  ||
+						tfAtoSEI.getText().isEmpty()
 					
 					) {
 				
@@ -516,7 +518,7 @@ public class TabVistoriaController implements Initializable{
 						//-- Alerta de interferência editada --//
 						Alert a = new Alert (Alert.AlertType.INFORMATION);
 						a.setTitle("Parabéns!");
-						a.setContentText("Cadastro salvo!");
+						a.setContentText("Cadastro salvo com sucesso!!!");
 						a.setHeaderText(null);
 						a.show();
 						
@@ -649,8 +651,8 @@ public class TabVistoriaController implements Initializable{
 							//-- Alerta de interferência editada --//
 							Alert a = new Alert (Alert.AlertType.ERROR);
 							a.setTitle("Atenção!"); 
-							a.setContentText("Erro ao editar vistoria!" + "[ " + e + " ]");
-							a.setHeaderText(null);
+							a.setContentText(e.toString());
+							a.setHeaderText("Erro ao editar vistoria!");
 							a.show();
 							
 						}
@@ -666,42 +668,46 @@ public class TabVistoriaController implements Initializable{
 		try {
 		
 			VistoriaTabela visTab = tvVistoria.getSelectionModel().getSelectedItem();
-			
 			VistoriaDao visDao = new VistoriaDao();
 			
-			visDao.removerVistoria(visTab.getVisCodigo());
-			
-			obsList.remove(visTab);
-			tvVistoria.setItems(obsList);
-			
-			selecionarVistoria();
-			
-			modularBotoes();
-			fecharEditorHTML();
-			
-			
-			//-- Alerta de interferência editada --//
-			Alert a = new Alert (Alert.AlertType.INFORMATION);
-			a.setTitle("Parabéns!");
-			a.setContentText("Vistoria excluída!");
-			a.setHeaderText(null);
-			a.show();
-		
-				} catch (Exception e) {
+				try {
 					
-					System.out.println("Erro ao editar: " + e);
+					visDao.removerVistoria(visTab.getVisCodigo());
+					obsList.remove(visTab);
+					tvVistoria.setItems(obsList);
+					
+					selecionarVistoria();
+					
+					modularBotoes();
+					fecharEditorHTML();
 					
 					//-- Alerta de interferência editada --//
-					Alert vRemover = new Alert (Alert.AlertType.ERROR);
-					vRemover.setTitle("Atenção!");
-					vRemover.setContentText("erro ao excluir vistoria!"  + "[ " + e + " ]");
-					vRemover.setHeaderText(null);
-					vRemover.show();
-				}
-	
-		
-	
-	}
+					Alert a = new Alert (Alert.AlertType.INFORMATION);
+					a.setTitle("Parabéns!");
+					a.setContentText("Cadastro excluído!");
+					a.setHeaderText(null);
+					a.show();
+					
+					}	catch (JDBCConnectionException eJDBC) {
+							
+							Alert a = new Alert (Alert.AlertType.ERROR);
+							a.setTitle("Atenção!");
+							a.setContentText("erro ao excluir o cadastro!!!");
+							a.setHeaderText("jdbc" + eJDBC.toString());
+							a.show();
+					}
+				
+			}	catch (Exception e) {
+					
+				Alert a = new Alert (Alert.AlertType.ERROR);
+				a.setTitle("Atenção!");
+				a.setContentText("erro ao excluir o cadastro!!!");
+				a.setHeaderText(e.toString());
+				a.show();
+			}
+			
+}
+
 	
 	public void btnCancelarHab (ActionEvent event) {
 		
@@ -1064,6 +1070,7 @@ public class TabVistoriaController implements Initializable{
         stage.show();
         
         TabNavegadorController.html = html;
+        TabNavegadorController.numIframe = 1;
 		
 	}
 	

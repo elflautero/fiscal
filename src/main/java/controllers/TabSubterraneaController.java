@@ -7,6 +7,8 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.util.ResourceBundle;
 
 import entity.Subterranea;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -168,6 +170,74 @@ public class TabSubterraneaController implements Initializable {
 		});
 		
 		System.out.println("TabSubterranea inicializada!");
+		
+		tfVazao.lengthProperty().addListener(new ChangeListener<Number>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Number> observable,
+                    Number oldValue, Number newValue) {
+                if (newValue.intValue() > oldValue.intValue()) {
+                    // Check if the new character is greater than LIMIT
+                    if (tfVazao.getText().length() >= 5) {
+
+                        // if it's 11th character then just setText to previous
+                        // one
+                    	tfVazao.setText(tfVazao.getText().substring(0, 5));
+                    }
+                }
+            }
+        });
+		
+		tfEstatico.lengthProperty().addListener(new ChangeListener<Number>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Number> observable,
+                    Number oldValue, Number newValue) {
+                if (newValue.intValue() > oldValue.intValue()) {
+                    // Check if the new character is greater than LIMIT
+                    if (tfEstatico.getText().length() >= 5) {
+
+                        // if it's 11th character then just setText to previous
+                        // one
+                    	tfEstatico.setText(tfEstatico.getText().substring(0, 5));
+                    }
+                }
+            }
+        });
+		
+		tfDinamico.lengthProperty().addListener(new ChangeListener<Number>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Number> observable,
+                    Number oldValue, Number newValue) {
+                if (newValue.intValue() > oldValue.intValue()) {
+                    // Check if the new character is greater than LIMIT
+                    if (tfDinamico.getText().length() >= 5) {
+
+                        // if it's 11th character then just setText to previous
+                        // one
+                    	tfDinamico.setText(tfDinamico.getText().substring(0, 5));
+                    }
+                }
+            }
+        });
+		
+		tfProfundidade.lengthProperty().addListener(new ChangeListener<Number>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Number> observable,
+                    Number oldValue, Number newValue) {
+                if (newValue.intValue() > oldValue.intValue()) {
+                    // Check if the new character is greater than LIMIT
+                    if (tfProfundidade.getText().length() >= 5) {
+
+                        // if it's 11th character then just setText to previous
+                        // one
+                    	tfProfundidade.setText(tfProfundidade.getText().substring(0, 5));
+                    }
+                }
+            }
+        });
 		
 	}
 

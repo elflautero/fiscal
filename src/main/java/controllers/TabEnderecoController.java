@@ -100,6 +100,44 @@ public class TabEnderecoController implements Initializable {
 	@FXML Button btnCoord = new Button ();
 	@FXML Image imgMap = new Image(TabEnderecoController.class.getResourceAsStream("/images/map.png"));
 	
+	@FXML Button btnEndCoord;
+	@FXML Image imgEndCoord = new Image(TabVistoriaController.class.getResourceAsStream("/images/mapCoord.png"));
+
+	@FXML Button btnEndCoordMap = new Button();
+	@FXML Image imgEndCoordMap = new Image(TabVistoriaController.class.getResourceAsStream("/images/mapCoord.png"));
+	
+	GoogleMap google;
+	public void btnEndCoordHab (ActionEvent event) {
+	  adicMarcador();
+	  
+	}
+	
+	Double lat = -15.775073004902042;
+	Double lng = -47.940351677729836;
+	
+	// adicMarcador(); 
+	public void adicMarcador () {
+		
+		System.out.println("latitude endereço " + eGeral.getLat_Endereco() + " e " + eGeral.getLon_Endereco());
+		
+    	if (eGeral.getLat_Endereco() != null  && eGeral.getLon_Endereco() != null ) {
+        	lat = Double.parseDouble(eGeral.getLat_Endereco().toString());
+    		lng = Double.parseDouble(eGeral.getLon_Endereco().toString());
+    	}
+    		try {
+    		google.setMarkerPosition(lat, lng);
+    		google.setMapCenter(lat, lng);
+    		
+	    		}catch (Exception e) {
+		    		Alert a = new Alert (Alert.AlertType.ERROR);
+					a.setTitle("Alerta!!!");
+					a.setContentText("Mapa não inicializado!!! " + e);
+					a.setHeaderText(null);
+					a.show();
+	    		}
+	
+	}
+	
 	//-- coordenadas do mapa javascript --//
 	public static String latDec = "-15";
 	public static String lngDec = "-47";
@@ -243,7 +281,7 @@ public class TabEnderecoController implements Initializable {
 				btnEndExc.setDisable(false);
 				btnEndCan.setDisable(false);
 				
-				Endereco eGeral = new Endereco(endTab);
+				eGeral = new Endereco(endTab);
 				
 				main.pegarEnd(eGeral);
 				
@@ -633,7 +671,7 @@ public class TabEnderecoController implements Initializable {
 		
 	}
 	
-	GoogleMap google;
+	//GoogleMap google;
 	
 	//-- buscador de enderecos e coordenadas --//
 		public void btnEndMapsHab (ActionEvent event) throws IOException {
@@ -641,15 +679,17 @@ public class TabEnderecoController implements Initializable {
 			google = new GoogleMap();
 			
 			Group group = new Group();
-			group.getChildren().addAll(google, btnCoord);
+			group.getChildren().addAll(google, btnCoord, btnEndCoordMap);
 			
 			Scene scene = new Scene(group);
-			
-			
 			
 			btnCoord.setLayoutY(8);
 			btnCoord.setLayoutX(502);
 			btnCoord.setGraphic(new ImageView(imgGetCoord));
+			
+			btnEndCoordMap.setLayoutY(8.5);
+			btnEndCoordMap.setLayoutX(620);
+			btnEndCoordMap.setGraphic(new ImageView(imgEndCoordMap));
 			
 			btnCoord.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override public void handle(ActionEvent e) {
@@ -688,11 +728,17 @@ public class TabEnderecoController implements Initializable {
 	                             clip.setContent(conteudo);
 	                        }
 	                    });
-	    			    //-- fim - sugestão de endereço, cep etc --//
-	        		
-	            }
-	        });
+	    			  
+	            	}
+	        	});
 	
+			 btnEndCoordMap.setOnAction(new EventHandler<ActionEvent>() {
+		            @Override public void handle(ActionEvent e) {
+		            	adicMarcador();
+		            	
+		           }
+		     });
+			 
 			Stage stage = new Stage(); // StageStyle.UTILITY - tirei para ver como fica, se aparece o minimizar
 			stage.setWidth(1250);
 			stage.setHeight(750);
@@ -730,6 +776,8 @@ public class TabEnderecoController implements Initializable {
 		
 		btnEndMaps.setGraphic(new ImageView(imgMap));
 		//btnMapCoord.setGraphic(new ImageView(imgMapCoord));
+		
+		btnEndCoord.setGraphic(new ImageView(imgEndCoord));
 	}
 
 	//-- Modular os botoes na inicializacao do programa --//

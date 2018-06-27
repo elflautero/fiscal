@@ -1,15 +1,10 @@
 package dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.LogicalExpression;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.exception.JDBCConnectionException;
 
-import entity.Demanda;
 import entity.HibernateUtil;
 import entity.Vistoria;
 
@@ -63,7 +58,7 @@ public void salvarVistoria (Vistoria vis) {
 		return list;
 	}
 	
-	public void removerVistoria(Integer id) {
+	public void removerVistoria(Integer id) throws JDBCConnectionException {
 		Session s = HibernateUtil.getSessionFactory().openSession();
 		s.beginTransaction();
 		Vistoria vis = (Vistoria) s.load(Vistoria.class, id);

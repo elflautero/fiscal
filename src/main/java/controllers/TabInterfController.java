@@ -77,12 +77,12 @@ public class TabInterfController implements Initializable {
  	@FXML Button btnLatLng = new Button();
  	@FXML Button  btnAtualizar = new Button();
 	@FXML Button btnCapturar = new Button();
-	@FXML Button btnIntNovo = new Button();
-	@FXML Button btnIntSalvar = new Button();
-	@FXML Button btnIntEdit = new Button();
-	@FXML Button btnIntExc = new Button();
-	@FXML Button btnIntCan = new Button();
-	@FXML Button btnIntPesq = new Button();
+	@FXML Button btnNovo = new Button();
+	@FXML Button btnSalvar = new Button();
+	@FXML Button btnEditar = new Button();
+	@FXML Button btnExcluir = new Button();
+	@FXML Button btnCancelar = new Button();
+	@FXML Button btnPesquisar = new Button();
 	@FXML Button btnBuscarInt = new Button();
 	
 	//@FXML Label lblEnd = new  Label();
@@ -93,7 +93,7 @@ public class TabInterfController implements Initializable {
 	@FXML TextField tfIntLon = new TextField();
 	
 	@FXML TextField tfLinkInt = new TextField();
-	@FXML TextField tfIntPesq = new TextField();
+	@FXML TextField tfPesquisar = new TextField();
 	
 	@FXML TextField tfUH;
 	@FXML TextField tfCorpoHid;
@@ -102,9 +102,6 @@ public class TabInterfController implements Initializable {
 	
 	//-- chamar mapa --//
 	@FXML Button btnIntMaps;
-	
-	
-	
 	
 	// --- objeto para passar os valor pelo MainControoler para outro controller --- //
 	public Endereco eGeralInt;
@@ -115,8 +112,6 @@ public class TabInterfController implements Initializable {
 	@FXML Button btnEndCoordMap = new Button();
 	@FXML Image imgEndCoordMap = new Image(TabVistoriaController.class.getResourceAsStream("/images/mapCoord.png"));
 
-	
-	
 	//-- TableView Endereco --//
 		@FXML private TableView <InterferenciaTabela> tvListaInt;
 		
@@ -260,12 +255,12 @@ public class TabInterfController implements Initializable {
 			
 			if (intTab == null) {
 				
-				btnIntNovo.setDisable(true);
-				btnIntSalvar.setDisable(true);
+				btnNovo.setDisable(true);
+				btnSalvar.setDisable(true);
 				
-				btnIntEdit.setDisable(false);
-				btnIntExc.setDisable(false);
-				btnIntCan.setDisable(false);
+				btnEditar.setDisable(false);
+				btnExcluir.setDisable(false);
+				btnCancelar.setDisable(false);
 				
 			} else {
 
@@ -338,11 +333,11 @@ public class TabInterfController implements Initializable {
 					
 				}
 				
-				btnIntNovo.setDisable(true);
-				btnIntSalvar.setDisable(true);
-				btnIntEdit.setDisable(false);
-				btnIntExc.setDisable(false);
-				btnIntCan.setDisable(false);
+				btnNovo.setDisable(true);
+				btnSalvar.setDisable(true);
+				btnEditar.setDisable(false);
+				btnExcluir.setDisable(false);
+				btnCancelar.setDisable(false);
 				
 				}
 			}
@@ -353,7 +348,7 @@ public class TabInterfController implements Initializable {
 		
 	}
 	
-	public void btnIntNovoHab (ActionEvent event) {
+	public void btnNovoHab (ActionEvent event) {
 		
 		
 		cbTipoInt.setDisable(false);
@@ -382,15 +377,15 @@ public class TabInterfController implements Initializable {
 		btnLatLng.setDisable(false);
 		btnAtualizar.setDisable(false);
 		
-		btnIntNovo.setDisable(true);
-		btnIntSalvar.setDisable(false);
+		btnNovo.setDisable(true);
+		btnSalvar.setDisable(false);
 		
-		btnIntEdit.setDisable(true);
-		btnIntExc.setDisable(true);
+		btnEditar.setDisable(true);
+		btnExcluir.setDisable(true);
 		
-		tfIntPesq.setDisable(false);
+		tfPesquisar.setDisable(false);
 		
-		btnIntPesq.setDisable(false);
+		btnPesquisar.setDisable(false);
 		
 		//-- choice box --//
 		cbTipoInt.setItems(olTipoInt);
@@ -403,7 +398,7 @@ public class TabInterfController implements Initializable {
 	}
 	
 	//-- botao salvar --//
-	public void btnIntSalvarHab (ActionEvent event) {
+	public void btnSalvarHab (ActionEvent event) {
 		
 		obsList = FXCollections.observableArrayList();
 		
@@ -704,7 +699,7 @@ public class TabInterfController implements Initializable {
 		}
 	
 	//-- botao editar --//
-	public void btnIntEditHab (ActionEvent event) {
+	public void btnEditarHab (ActionEvent event) {
 		
 		// ver excecao de querer editar sem esconlher o endereco da interferencia...
 		
@@ -992,7 +987,9 @@ public class TabInterfController implements Initializable {
 	}
 	
 	//-- botao excluir --//
-	public void btnIntExcHab (ActionEvent event) {
+	public void btnExcluirHab (ActionEvent event) {
+		
+		try {
 		
 			InterferenciaTabela intTab = tvListaInt.getSelectionModel().getSelectedItem();
 			
@@ -1007,17 +1004,26 @@ public class TabInterfController implements Initializable {
 			
 			modularBotoes ();
 			
-			//-- Alerta de endereco salvo --//
-			Alert a = new Alert (Alert.AlertType.INFORMATION);
-			a.setTitle("Parabéns!");
-			a.setContentText("Interferência excluída!");
-			a.setHeaderText(null);
-			a.show();
+			
+				Alert a = new Alert (Alert.AlertType.INFORMATION);
+				a.setTitle("Parabéns!");
+				a.setContentText("Cadastro excluído!");
+				a.setHeaderText(null);
+				a.show();
+		}
+		catch (Exception e) {
+			
+				Alert a = new Alert (Alert.AlertType.ERROR);
+				a.setTitle("Atenção!!!");
+				a.setContentText("Erro ao excluir o cadastro!!!");
+				a.setHeaderText(e.toString());
+				a.show();
+		}
 		
 	}
 	
 	//-- botao cancelar --//
-	public void btnIntCanHab (ActionEvent event) {
+	public void btnCancelarHab (ActionEvent event) {
 		
 		modularBotoes ();
 		
@@ -1034,9 +1040,9 @@ public class TabInterfController implements Initializable {
 	
 	
 	//-- botao pesquisar interferÃªncia --//
-	public void btnIntPesqHab (ActionEvent event) {
+	public void btnPesquisarHab (ActionEvent event) {
 		
-		strPesquisa = tfIntPesq.getText();
+		strPesquisa = tfPesquisar.getText();
 		
 		listarInterferencias(strPesquisa);
 		
@@ -1151,6 +1157,7 @@ public class TabInterfController implements Initializable {
 				btnEndCoordMap.setOnAction(new EventHandler<ActionEvent>() {
 		            @Override public void handle(ActionEvent e) {
 		            	adicMarcador();
+		            	
 		            }
 		        });
 	    
@@ -1173,9 +1180,9 @@ public class TabInterfController implements Initializable {
 		tcIntCorpoHidrico.setCellValueFactory(new PropertyValueFactory<InterferenciaTabela, String>("inter_Corpo_Hidrico")); 
 		tcIntUH.setCellValueFactory(new PropertyValueFactory<InterferenciaTabela, String>("inter_UH"));
 		
-		tfIntPesq.setOnKeyReleased(event -> {
+		tfPesquisar.setOnKeyReleased(event -> {
 	  		  if (event.getCode() == KeyCode.ENTER){
-	  		     btnIntPesq.fire();
+	  		     btnPesquisar.fire();
 	  		  }
 	  		});
 	        
@@ -1236,15 +1243,15 @@ public class TabInterfController implements Initializable {
 		btnLatLng.setDisable(true);
 		btnAtualizar.setDisable(true);
 		
-		btnIntSalvar.setDisable(true);
-		btnIntEdit.setDisable(true);
-		btnIntExc.setDisable(true);
+		btnSalvar.setDisable(true);
+		btnEditar.setDisable(true);
+		btnExcluir.setDisable(true);
 		
 		//tfIntPesq.setDisable(true);
 		
 		//btnIntPesq.setDisable(true); // acho que nÃ£o precisa entrar desabilitado
 		
-		btnIntNovo.setDisable(false);
+		btnNovo.setDisable(false);
 	}
 
 	//-- MAIN CONTROLLER --//

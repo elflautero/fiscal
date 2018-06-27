@@ -79,7 +79,7 @@ public class TabNavegadorController implements Initializable{
 	WebView wv1;
 	
 	// numero do iframe para inserir o relatorio, TN ou AIA
-	int numIframe = 2;
+	static int numIframe;
 	
 	// table view de documentos capturados do sei
 	ObservableList<String []> numDosObservable;
@@ -253,6 +253,8 @@ public class TabNavegadorController implements Initializable{
 		            wv2.setLayoutY(35);
 		            
 		    		Button btnIframe = new Button ("Incluir");
+		    		
+		    		System.out.println("numero  iframe " + numIframe);
 		    	
 					btnIframe.setOnAction(new EventHandler<ActionEvent>() {
 			            @Override public void handle(ActionEvent e) {
@@ -287,7 +289,7 @@ public class TabNavegadorController implements Initializable{
 					    });
 					
 					cbNumIframe.setItems(olNumIframe);
-					cbNumIframe.setValue("2");
+					cbNumIframe.setValue(String.valueOf(numIframe));
 					
 					cbNumIframe.setLayoutX(460);
 					cbNumIframe.setLayoutY(8);

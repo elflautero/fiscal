@@ -1,17 +1,8 @@
 package dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-
-import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.LogicalExpression;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.jpa.criteria.CriteriaBuilderImpl;
 
 import entity.HibernateUtil;
 import entity.Usuario;

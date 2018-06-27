@@ -128,6 +128,8 @@ public class TabUsuarioController implements Initializable {
 	
 	public void btnUsSalvarHab (ActionEvent event) {
 		
+		obsList = FXCollections.observableArrayList();
+		
 		if (eGeralUs == null) {
 			
 			Alert aLat = new Alert (Alert.AlertType.ERROR);
@@ -179,8 +181,29 @@ public class TabUsuarioController implements Initializable {
 							usDao.salvaUsuario(usuario);
 							usDao.mergeUsuario(usuario);
 						
-						//-- listar --//
-						listarUsuarios(strPesquisa);
+						UsuarioTabela usTab = new UsuarioTabela(
+								
+								usuario.getUsCodigo(),
+								usuario.getUsTipo(),
+								usuario.getUsNome(),
+								usuario.getUsCPFCNPJ(),
+								usuario.getUsDescricaoEnd(),
+								usuario.getUsRA(),
+								usuario.getUsCidade(),
+								usuario.getUsEstado(),
+								usuario.getUsCEP(),
+								usuario.getUsTelefone(),
+								usuario.getUsCelular(),
+								usuario.getUsEmail(),
+								
+								usuario.getUsEndCodigoFK()
+								
+								);
+						
+						obsList.add(usTab);
+						
+						tvListaUs.setItems(obsList);
+						
 						//-- selecionar --//
 						selecionarUsuario();
 						
@@ -239,35 +262,58 @@ public class TabUsuarioController implements Initializable {
 			} else {
 	
 			//*  //eGeralUs
-			UsuarioTabela usTabEditar = tvListaUs.getSelectionModel().getSelectedItem(); 
+			UsuarioTabela usTab = tvListaUs.getSelectionModel().getSelectedItem(); 
 			
-			Usuario us = new Usuario(usTabEditar);
+			Usuario usuario = new Usuario(usTab);
 			
 			// -- preencher os campos -- //
-			us.setUsTipo(cbTipoPessoa.getValue()); 
-			us.setUsNome(tfUsNome.getText());
-			us.setUsCPFCNPJ(tfUsCPFCNPJ.getText());
-			us.setUsDescricaoEnd(tfUsEnd.getText()); 
+			usuario.setUsTipo(cbTipoPessoa.getValue()); 
+			usuario.setUsNome(tfUsNome.getText());
+			usuario.setUsCPFCNPJ(tfUsCPFCNPJ.getText());
+			usuario.setUsDescricaoEnd(tfUsEnd.getText()); 
 			
-			us.setUsRA(cbUsRA.getValue()); 
+			usuario.setUsRA(cbUsRA.getValue()); 
 			
-			us.setUsCEP(tfUsCEP.getText()); 
-			us.setUsCidade(tfUsCidade.getText()); 
+			usuario.setUsCEP(tfUsCEP.getText()); 
+			usuario.setUsCidade(tfUsCidade.getText()); 
 			
-			us.setUsEstado(cbUsUF.getValue()); 
+			usuario.setUsEstado(cbUsUF.getValue()); 
 			
-			us.setUsTelefone(tfUsTel.getText());
-			us.setUsCelular(tfUsCel.getText());
-			us.setUsEmail(tfUsEmail.getText());
+			usuario.setUsTelefone(tfUsTel.getText());
+			usuario.setUsCelular(tfUsCel.getText());
+			usuario.setUsEmail(tfUsEmail.getText());
 			
-			us.setUsEndCodigoFK(eGeralUs);
+			usuario.setUsEndCodigoFK(eGeralUs);
 			
 			UsuarioDao usDao = new UsuarioDao();
 			
-			usDao.mergeUsuario(us);
+			usDao.mergeUsuario(usuario);
 			
-			//-- listar --//
-			listarUsuarios(strPesquisa);
+			obsList.remove(usTab);
+			
+			usTab = new UsuarioTabela(
+					
+					usuario.getUsCodigo(),
+					usuario.getUsTipo(),
+					usuario.getUsNome(),
+					usuario.getUsCPFCNPJ(),
+					usuario.getUsDescricaoEnd(),
+					usuario.getUsRA(),
+					usuario.getUsCidade(),
+					usuario.getUsEstado(),
+					usuario.getUsCEP(),
+					usuario.getUsTelefone(),
+					usuario.getUsCelular(),
+					usuario.getUsEmail(),
+					
+					usuario.getUsEndCodigoFK()
+					
+					);
+			
+			obsList.add(usTab);
+			
+			tvListaUs.setItems(obsList);
+			
 			//-- selecionar --//
 			selecionarUsuario();
 			
@@ -288,19 +334,36 @@ public class TabUsuarioController implements Initializable {
 	
 	public void btnUsExcluirHab (ActionEvent event) {
 		
-		//-- capturar usuário selecionado --//
-		UsuarioTabela usExTab = tvListaUs.getSelectionModel().getSelectedItem(); 
-		//-- prencher tabela usuario --//
-		Usuario usEx = new Usuario(usExTab);
+		try {
+			//-- capturar usuário selecionado --//
+			UsuarioTabela usTab = tvListaUs.getSelectionModel().getSelectedItem(); 
+			//-- prencher tabela usuario --//
+			Usuario usEx = new Usuario(usTab);
+			
+			UsuarioDao usExDao = new UsuarioDao();
+			
+			usExDao.removeUsuario(usEx.getUsCodigo());
+			
+			obsList.remove(usTab);
+			
+			//-- selecionar --//
+			selecionarUsuario();
+			modularBotoesInicial();
 		
-		UsuarioDao usExDao = new UsuarioDao();
+				Alert a = new Alert (Alert.AlertType.INFORMATION);
+				a.setTitle("Parabéns!!!");
+				a.setContentText("Cadastro excluído com sucesso!!!");
+				a.setHeaderText(null);
+				a.show();
+	
+		}	catch (Exception e) {
 		
-		usExDao.removeUsuario(usEx.getUsCodigo());
-		
-		//-- listar --//
-		listarUsuarios(strPesquisa);
-		//-- selecionar --//
-		selecionarUsuario();
+				Alert a = new Alert (Alert.AlertType.ERROR);
+				a.setTitle("Alerta!!!");
+				a.setContentText(e.toString());
+				a.setHeaderText("Erro ao escluir o cadastro!!!");
+				a.show();
+				};
 		
 	}
 	
@@ -397,19 +460,17 @@ public class TabUsuarioController implements Initializable {
 		//-- receber o endereço --//
 	public Label lblEndUsuario;
 	
-	
+	ObservableList<UsuarioTabela> obsList;
 	//-- método listar usuários --//
 	public void listarUsuarios (String strPesquisa) {
 		
 		UsuarioDao usDao = new UsuarioDao();
 		List<Usuario> usuarioList = usDao.listUsuario(strPesquisa);
-		ObservableList<UsuarioTabela> olUsuarioTabela = FXCollections.observableArrayList();
+		obsList = FXCollections.observableArrayList();
 		
-		System.out.println(usuarioList.get(0).getUsNome());
-		System.out.println(usuarioList.get(0).getUsEndCodigoFK().getDesc_Endereco());
 		
-		if (!olUsuarioTabela.isEmpty()) {
-			olUsuarioTabela.clear();
+		if (!obsList.isEmpty()) {
+			obsList.clear();
 		}
 		
 			for (Usuario usuario : usuarioList) {
@@ -433,15 +494,11 @@ public class TabUsuarioController implements Initializable {
 						
 						);
 				
-				olUsuarioTabela.add(usTab);
+				obsList.add(usTab);
 					
 				}
 				
-				tcUsNome.setCellValueFactory(new PropertyValueFactory<InterferenciaTabela, String>("usNome"));
-				tcUsCPFCNPJ.setCellValueFactory(new PropertyValueFactory<InterferenciaTabela, String>("usCPFCNPJ"));
-				tcUsEndereco.setCellValueFactory(new PropertyValueFactory<InterferenciaTabela, String>("usDescricaoEnd"));
-				
-				tvListaUs.setItems(olUsuarioTabela);
+				tvListaUs.setItems(obsList);
 	}
 		
 		
@@ -518,6 +575,10 @@ public class TabUsuarioController implements Initializable {
 		
 	//-- INITIALIZE --//
 	public void initialize(URL url, ResourceBundle rb) {
+		
+		tcUsNome.setCellValueFactory(new PropertyValueFactory<InterferenciaTabela, String>("usNome"));
+		tcUsCPFCNPJ.setCellValueFactory(new PropertyValueFactory<InterferenciaTabela, String>("usCPFCNPJ"));
+		tcUsEndereco.setCellValueFactory(new PropertyValueFactory<InterferenciaTabela, String>("usDescricaoEnd"));
 		
 		tfUsPesquisar.setOnKeyReleased(event -> {
 	  		  if (event.getCode() == KeyCode.ENTER){

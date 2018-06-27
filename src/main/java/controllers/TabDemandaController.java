@@ -319,10 +319,7 @@ public class TabDemandaController implements Initializable {
 					obsList.add(denTab);
 					
 					tvLista.setItems(obsList);
-					
-					System.out.println("btnSalvar - Data da atualização " + denTab.getDemAtualizacao());
-					
-							
+						
 					selecionarDemanda();
 				
 					modularBotoesInicial ();
@@ -459,20 +456,41 @@ public class TabDemandaController implements Initializable {
 	// -- botão excluir -- //
 	public void btnExcluirHabilitar (ActionEvent event) {
 	
-		DemandaTabela denTab = tvLista.getSelectionModel().getSelectedItem();
+		try {
+			
+			DemandaTabela denTab = tvLista.getSelectionModel().getSelectedItem();
+			
+			int id = denTab.getDemID(); // buscar id para deletar
+			
+			DemandaDao dDao = new DemandaDao();
+			
+			dDao.removerDemanda(id);
+			
+			obsList.remove(denTab);
+			
+			selecionarDemanda();
+			
+			modularBotoesInicial (); 
+			
+				Alert a = new Alert (Alert.AlertType.INFORMATION);
+				a.setTitle("Parabéns!!!");
+				a.setContentText("Cadastro excluído com sucesso!!!");
+				a.setHeaderText(null);
+				a.show();
 		
-		int id = denTab.getDemID(); // buscar id para deletar
+			}
 		
-		DemandaDao dDao = new DemandaDao();
-		
-		dDao.removerDemanda(id);
-		
-		obsList.remove(denTab);
-		
-		selecionarDemanda();
-		
-		modularBotoesInicial (); 		
+			catch (Exception e) {
+				
+				Alert a = new Alert (Alert.AlertType.ERROR);
+				a.setTitle("Alerta!!!");
+				a.setContentText("Erro ao excluir o cadastro!!!");
+				a.setHeaderText(e.toString());
+				a.show();
+			}
+				
 	}
+
 			
 	// -- botão cancelar -- //
 	public void btnCancelarHabilitar (ActionEvent event) {

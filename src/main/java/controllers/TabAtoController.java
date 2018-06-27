@@ -184,7 +184,9 @@ public class TabAtoController implements Initializable{
 		} else {
 			
 				if (cbAtoTipo.getValue() == null  ||
-						tfAto.getText().isEmpty() ) 
+						tfAto.getText().isEmpty() ||
+						tfAtoSEI.getText().isEmpty() 
+						) 
 				{
 					
 					Alert a = new Alert (Alert.AlertType.ERROR);
@@ -346,21 +348,38 @@ public class TabAtoController implements Initializable{
 
 	public void btnExcluirHab (ActionEvent event) {
 		
-		// consegui deletar uma vistoria sem deletar auto de infração, dando problema na fk foreign key, que ficou no ato
+		try {
 	
-		AtoTabela atoTab = tvAto.getSelectionModel().getSelectedItem();
+			AtoTabela atoTab = tvAto.getSelectionModel().getSelectedItem();
+			
+			AtoDao atoDao = new AtoDao();
+			
+			atoDao.removerAto(atoTab.getAtoCodigo());
+			
+			obsList.remove(atoTab);
+			tvAto.setItems(obsList);
+			
+			selecionarAto();
+			
+			modularBotoes();
+			fecharEditorHTML();
+			
+				Alert a = new Alert (Alert.AlertType.INFORMATION);
+				a.setTitle("Parabéns!!!");
+				a.setContentText("Cadastro excluído com sucesso!!!");
+				a.setHeaderText(null);
+				a.show();
+			
+			}	catch (Exception e) {
+				
+					Alert a = new Alert (Alert.AlertType.ERROR);
+					a.setTitle("Alerta!!!");
+					a.setContentText(e.toString());
+					a.setHeaderText("Erro ao escluir o cadastro!!!");
+					a.show();
+				
+			};
 		
-		AtoDao atoDao = new AtoDao();
-		
-		atoDao.removerAto(atoTab.getAtoCodigo());
-		
-		obsList.remove(atoTab);
-		tvAto.setItems(obsList);
-		
-		selecionarAto();
-		
-		modularBotoes();
-		fecharEditorHTML();
 		
 	}
 	
@@ -549,11 +568,11 @@ public class TabAtoController implements Initializable{
 	 					dpDataCriacaoAto.getEditor().setText(atoTab.getAtoDataCriacao());
 	 				}
  				
- 				
  				htmlCaracterizar.setHtmlText(atoTab.getAtoCaracterizacao());
  					
  				//-- mudar a vistoria de acordo com a seleçao --//
 				visGeral = atoTab.getAtoVistoriaFK();
+				
 				lblVisAto.setText(visGeral.getVisIdentificacao() + " |  SEI: "  + visGeral.getVisSEI());
 				
 				//-- modular botoes --//
@@ -604,6 +623,7 @@ public class TabAtoController implements Initializable{
 	String htmlTermo = "";
 	String htmlAuto = "";
 	
+	
 	public void btnGerarAtoHab (ActionEvent event) {
 		
 		u = Integer.parseInt(cbUsuario.getValue());
@@ -639,7 +659,6 @@ public class TabAtoController implements Initializable{
 		infraIncisos [6] = "<p>VII - obstar ou dificultar a ação fiscalizadora das autoridades competentes, no exercício " + 
 				"de suas funções;</p>";
 	
-		
 		// inicializar o usuario //
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction tx = session.beginTransaction();
@@ -653,6 +672,7 @@ public class TabAtoController implements Initializable{
 		}
 		
 		session.close();
+		
 		
 		
 		if (cbAtoTipo.getValue().equals("Termo de Notificação")) {
@@ -785,6 +805,7 @@ public class TabAtoController implements Initializable{
 	        stage.show();
 	        
 	        TabNavegadorController.html = html;
+	        TabNavegadorController.numIframe = 0;
 			
 		}
 	      
@@ -801,13 +822,16 @@ public class TabAtoController implements Initializable{
 			docHtml.select("autoNum").prepend(atoGeral.getAtoIdentificacao());
 			docHtml.select("autoSEI").prepend(atoGeral.getAtoSEI());
 			
-			try {docHtml.select("autoUs").prepend(endereco.getListUsuarios().get(u).getUsNome());}
-				catch (Exception e) {
-					Alert a = new Alert (Alert.AlertType.ERROR);
-					a.setTitle("Alerta!!!");
-					a.setContentText("Não há usuário cadastrado!!!");
-					a.setHeaderText(null);
-					a.show();
+			try {
+				docHtml.select("autoUs").prepend(endereco.getListUsuarios().get(u).getUsNome());
+				
+				}	catch (Exception e) {
+					
+						Alert a = new Alert (Alert.AlertType.ERROR);
+						a.setTitle("Alerta!!!");
+						a.setContentText("Não há usuário cadastrado!!!");
+						a.setHeaderText(null);
+						a.show();
 					
 				};
 			
@@ -822,6 +846,8 @@ public class TabAtoController implements Initializable{
 			docHtml.select("autoUsCel").prepend(endereco.getListUsuarios().get(u).getUsCelular());
 			docHtml.select("autoUsEmail").prepend(endereco.getListUsuarios().get(u).getUsEmail());
 			
+			docHtml.select("dataFis").prepend(visGeral.getVisDataFiscalizacao());
+			docHtml.select("termoNot").prepend("");
 			//dataFis termoNot 
 			
 			docHtml.select("EndEmpDes").prepend(endereco.getDesc_Endereco());
@@ -1034,7 +1060,7 @@ public class TabAtoController implements Initializable{
 				docHtml.select("autoAdMul").prepend("ADVERT&Ecirc;NCIA");
 			}
 			if (cbAtoTipo.getValue().equals("Auto de Infração de Multa")) {
-				docHtml.select("autoAdMul").prepend("MULTA");
+				docHtml.select("autoAdMul").prepend("MULTA no valor de...");
 			}
 			
 			String html = new String ();
@@ -1064,6 +1090,7 @@ public class TabAtoController implements Initializable{
 	        stage.show();
 	        
 	        TabNavegadorController.html = html;
+	        TabNavegadorController.numIframe = 2;
 				
 		}
 		

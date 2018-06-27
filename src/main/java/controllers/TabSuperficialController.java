@@ -7,6 +7,8 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.util.ResourceBundle;
 
 import entity.Superficial;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -145,6 +147,58 @@ public class TabSuperficialController implements Initializable{
 		
 		System.out.println("TabSuperficial chamado!");
 		
+		
+		
+		tfPotenciaBomba.lengthProperty().addListener(new ChangeListener<Number>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Number> observable,
+                    Number oldValue, Number newValue) {
+                if (newValue.intValue() > oldValue.intValue()) {
+                    // Check if the new character is greater than LIMIT
+                    if (tfPotenciaBomba.getText().length() >= 5) {
+
+                        // if it's 11th character then just setText to previous
+                        // one
+                    	tfPotenciaBomba.setText(tfPotenciaBomba.getText().substring(0, 5));
+                    }
+                }
+            }
+        });
+		
+		tfTempoBomba.lengthProperty().addListener(new ChangeListener<Number>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Number> observable,
+                    Number oldValue, Number newValue) {
+                if (newValue.intValue() > oldValue.intValue()) {
+                    // Check if the new character is greater than LIMIT
+                    if (tfTempoBomba.getText().length() >= 5) {
+
+                        // if it's 11th character then just setText to previous
+                        // one
+                    	tfTempoBomba.setText(tfTempoBomba.getText().substring(0, 5));
+                    }
+                }
+            }
+        });
+		
+		tfArea.lengthProperty().addListener(new ChangeListener<Number>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Number> observable,
+                    Number oldValue, Number newValue) {
+                if (newValue.intValue() > oldValue.intValue()) {
+                    // Check if the new character is greater than LIMIT
+                    if (tfArea.getText().length() >= 5) {
+
+                        // if it's 11th character then just setText to previous
+                        // one
+                    	tfArea.setText(tfArea.getText().substring(0, 5));
+                    }
+                }
+            }
+        });
 		
 		
 	}
