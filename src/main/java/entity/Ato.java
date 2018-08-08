@@ -38,7 +38,7 @@ public class Ato implements Serializable{
 	@Column (name="ato_SEI", columnDefinition="varchar(20)") // 3561241
 	private String atoSEI;
 	
-	@Column (name="ato_caracaterizacao", columnDefinition="varchar(700)") // texto
+	@Column (name="ato_caracaterizacao", columnDefinition="varchar(2000)") // texto
 	private String atoCaracterizacao;
 	
 	@Column (name="ato_data_fiscalizacao", columnDefinition="varchar(20)")

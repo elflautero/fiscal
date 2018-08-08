@@ -22,12 +22,16 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import tabela.DemandaTabela;
 
@@ -37,7 +41,7 @@ public class TabDemandaController implements Initializable {
 	// --- Controller Principal - MainController --- //
 	@FXML private MainController main;
 	
-	@FXML AnchorPane tabDemanda = new AnchorPane();
+	@FXML AnchorPane apDemanda = new AnchorPane();
 	
 	@FXML TextField tfDocumento = new TextField();
 	@FXML TextField tfDocSei = new TextField();
@@ -199,6 +203,12 @@ public class TabDemandaController implements Initializable {
 				Demanda dGeral = new Demanda(denTab);
 
 				main.pegarDoc(dGeral);
+				
+				// copiar número sei da demanda ao selecionar //
+				Clipboard clip = Clipboard.getSystemClipboard();
+                ClipboardContent conteudo = new ClipboardContent();
+                conteudo.putString(denTab.getDemDocumentoSEI());
+                clip.setContent(conteudo);
 				
 				// habilitar e desabilitar botões //
 				btnNovo.setDisable(true);
@@ -513,6 +523,18 @@ public class TabDemandaController implements Initializable {
 		
 	}
 	
+	// métodos de remimensionar as tabs //
+	public void redimWei (Number newValue) {
+				apDemanda.setMinWidth((double) newValue);
+			}
+	public void redimHei (Number newValue) {
+				apDemanda.setMinHeight((double) newValue);;
+			}
+	
+	@FXML ScrollPane spDemanda;
+	@FXML Pane pCadasDema;
+	
+	
 	// -- INITIALIZE -- //
 	public void initialize(URL url, ResourceBundle rb) {
 		
@@ -530,7 +552,23 @@ public class TabDemandaController implements Initializable {
         // --- habilitar e desabilitar botões ---- //
 		modularBotoesInicial();
 		
+		AnchorPane.setTopAnchor(spDemanda, 0.0);
+	    AnchorPane.setRightAnchor(spDemanda, 0.0);
+	    AnchorPane.setLeftAnchor(spDemanda, 0.0);
+	    AnchorPane.setBottomAnchor(spDemanda, 0.0);
+	    
+	    
+	    //System.out.println("width demanda " + spDemanda.getWidth() * 0.50);
+	    
+	    spDemanda.widthProperty().addListener((obs, oldVal, newVal) -> {
+	    	
+	        //System.out.println("width adDemanda (achorpane demanda) " + newVal);
+	        Double widNewVal = (double) newVal * 0.20;
+	        AnchorPane.setLeftAnchor(pCadasDema, widNewVal);
+	        //System.out.println("----- widNewVal " + widNewVal);
+	    });
 	}
+
 		
 	// -- método habilitar e desabilitar botões -- //
 	private void modularBotoesInicial () {

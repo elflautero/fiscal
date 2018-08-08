@@ -28,6 +28,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -35,6 +36,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -45,8 +47,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.web.HTMLEditor;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -222,48 +226,51 @@ public class TabVistoriaController implements Initializable{
 		strInfracoes = strCheckInfra;
 		
 		System.out.println("contador de cliques infração " + count);
-		System.out.println("infrações " + strInfracoes);
+		System.out.println("infrações " + strInfracoes + "<<<<<<<<<<<<<");
 		
 	}
 	
 	public void checkPenaHab (ActionEvent event) {
+		
 		int count = 0;
-		String strCheckAten = "";
+		String strCheckPena = "";
 		
 		if (checkPena1.isSelected()) {
 			count ++;
-			strCheckAten += "1";
+			strCheckPena += "1";
 		}
 		if (checkPena2.isSelected()) {
 			count ++;
-			strCheckAten += "2";
+			strCheckPena += "2";
 		}
 		if (checkPena3.isSelected()) {
 			count ++;
-			strCheckAten += "3";
+			strCheckPena += "3";
 		}
 		if (checkPena4.isSelected()) {
 			count ++;
-			strCheckAten += "4";
+			strCheckPena += "4";
 		}
 		if (checkPena5.isSelected()) {
 			count ++;
-			strCheckAten += "5";
+			strCheckPena += "5";
 		
 		}
 		if (checkPena6.isSelected()) {
-			strCheckAten += "6";
+			strCheckPena += "6";
 			count ++;
 		}
 		if (checkPena7.isSelected()) {
-			strCheckAten += "7";
+			strCheckPena += "7";
 			count ++;
 		}
 		
-		strPenalidades = strCheckAten;
+		strPenalidades = strCheckPena;
+		
 		
 		System.out.println("contador de penalidades " + count);
-		System.out.println("penalidades " + strPenalidades);
+		System.out.println("checkbox / penalidades " + strPenalidades);
+		
 		
 	}
 	
@@ -470,6 +477,11 @@ public class TabVistoriaController implements Initializable{
 							vis.setVisDataCriacao(dpDataCriacaoAto.getEditor().getText());
 						}
 						
+						checkInfraHab(null);
+						checkPenaHab(null);
+						checkAtenHab(null);
+						checkAgraHab(null);
+						
 						vis.setVisInfracoes(strInfracoes);
 						vis.setVisPenalidades(strPenalidades);
 						vis.setVisAgravantes(strAgravantes);
@@ -490,23 +502,24 @@ public class TabVistoriaController implements Initializable{
 						
 						VistoriaTabela visTab = new VistoriaTabela(
 									
-									vis.getVisCodigo(),
-									vis.getVisEndCodigoFK(),
-									vis.getVisObjeto(),
-									vis.getVisApresentacao(),
-									vis.getVisRelato(),
-									vis.getVisRecomendacoes(),
-									vis.getVisInfracoes(),
-									vis.getVisPenalidades(),
-									vis.getVisAtenuantes(),
-									vis.getVisAgravantes(),
-									vis.getVisIdentificacao(),
-									vis.getVisSEI(),
-									vis.getVisDataFiscalizacao(),
-									vis.getVisDataCriacao(),
-									vis.getVisListAtos()
-									
-									);
+							vis.getVisCodigo(),
+							vis.getVisEndCodigoFK(),
+							vis.getVisObjeto(),
+							vis.getVisApresentacao(),
+							vis.getVisRelato(),
+							vis.getVisRecomendacoes(),
+							vis.getVisInfracoes(),
+							vis.getVisPenalidades(),
+							vis.getVisAtenuantes(),
+							vis.getVisAgravantes(),
+							vis.getVisIdentificacao(),
+							vis.getVisSEI(),
+							vis.getVisDataFiscalizacao(),
+							vis.getVisDataCriacao(),
+							vis.getVisListAtos()
+							
+							);
+						
 						obsList.add(visTab);
 						tvVistoria.setItems(obsList);
 						
@@ -589,6 +602,11 @@ public class TabVistoriaController implements Initializable{
 						vis.setVisDataCriacao(dpDataCriacaoAto.getEditor().getText());
 					}
 					
+					checkInfraHab(null);
+					checkPenaHab(null);
+					checkAtenHab(null);
+					checkAgraHab(null);
+					
 					vis.setVisInfracoes(strInfracoes);
 					vis.setVisPenalidades(strPenalidades);
 					vis.setVisAgravantes(strAgravantes);
@@ -607,23 +625,23 @@ public class TabVistoriaController implements Initializable{
 							
 							visTab = new VistoriaTabela(
 									
-									vis.getVisCodigo(),
-									vis.getVisEndCodigoFK(),
-									vis.getVisObjeto(),
-									vis.getVisApresentacao(),
-									vis.getVisRelato(),
-									vis.getVisRecomendacoes(),
-									vis.getVisInfracoes(),
-									vis.getVisPenalidades(),
-									vis.getVisAtenuantes(),
-									vis.getVisAgravantes(),
-									vis.getVisIdentificacao(),
-									vis.getVisSEI(),
-									vis.getVisDataFiscalizacao(),
-									vis.getVisDataCriacao(),
-									vis.getVisListAtos()
-									
-									);
+								vis.getVisCodigo(),
+								vis.getVisEndCodigoFK(),
+								vis.getVisObjeto(),
+								vis.getVisApresentacao(),
+								vis.getVisRelato(),
+								vis.getVisRecomendacoes(),
+								vis.getVisInfracoes(),
+								vis.getVisPenalidades(),
+								vis.getVisAtenuantes(),
+								vis.getVisAgravantes(),
+								vis.getVisIdentificacao(),
+								vis.getVisSEI(),
+								vis.getVisDataFiscalizacao(),
+								vis.getVisDataCriacao(),
+								vis.getVisListAtos()
+								
+								);
 									
 							obsList.add(visTab);
 							tvVistoria.setItems(obsList);
@@ -938,110 +956,122 @@ public class TabVistoriaController implements Initializable{
 			
 		}
 	
+		System.out.println("infra array [0] " + infrArray[0]);
 		//-- infrações --//
-		for (int i = 0; i<infrArray.length; i++) {
+		if (infrArray != null || infrArray[0].toString() != ""  ) {
 			
-			if (infrArray[i].equals("1") ) {
-				docHtml.select("infrRel").append("<p>" + infraIncisos[0]);
-			}
-			if (infrArray[i].equals("2") ) {
-				docHtml.select("infrRel").append("<p>" + infraIncisos[1]);
-			}
-			if (infrArray[i].equals("3")  ) {
-				docHtml.select("infrRel").append("<p>" + infraIncisos[2]);
-			}
-			if (infrArray[i].equals("4") ) {
-				docHtml.select("infrRel").append("<p>" + infraIncisos[3]);
-			}
-			if (infrArray[i].equals("5")  ) {
-				docHtml.select("infrRel").append("<p>" + infraIncisos[4]);
-			}
-			if (infrArray[i].equals("6") ) {
-				docHtml.select("infrRel").append("<p>" + infraIncisos[5]);
-			}
-			if (infrArray[i].equals("7")  ) {
-				docHtml.select("infrRel").append("<p>" + infraIncisos[6]);
-			}
-			
-		}
+			for (int i = 0; i<infrArray.length; i++) {
+				
+				if (infrArray[i].equals("1") ) {
+					docHtml.select("infrRel").append("<p>" + infraIncisos[0]);
+				}
+				if (infrArray[i].equals("2") ) {
+					docHtml.select("infrRel").append("<p>" + infraIncisos[1]);
+				}
+				if (infrArray[i].equals("3")  ) {
+					docHtml.select("infrRel").append("<p>" + infraIncisos[2]);
+				}
+				if (infrArray[i].equals("4") ) {
+					docHtml.select("infrRel").append("<p>" + infraIncisos[3]);
+				}
+				if (infrArray[i].equals("5")  ) {
+					docHtml.select("infrRel").append("<p>" + infraIncisos[4]);
+				}
+				if (infrArray[i].equals("6") ) {
+					docHtml.select("infrRel").append("<p>" + infraIncisos[5]);
+				}
+				if (infrArray[i].equals("7")  ) {
+					docHtml.select("infrRel").append("<p>" + infraIncisos[6]);
+				}
+				
+			}} else {
+					docHtml.select("infrRel").append("<p>" + "N/A");
+				}
 
 
-		
-		//-- atenuantes --//
-		for (int i = 0; i<atenArray.length; i++) {
+		// atenuantes //
+		if (atenArray != null || atenArray[0] != "") {
+			for (int i = 0; i<atenArray.length; i++) {
+				
+				if (atenArray[i].equals("1") ) {
+					docHtml.select("atenRel").append("<p>" + atenIncisos[0]);
+				}
+				if (atenArray[i].equals("2") ) {
+					docHtml.select("atenRel").append("<p>" + atenIncisos[1]);
+				}
+				if (atenArray[i].equals("3")  ) {
+					docHtml.select("atenRel").append("<p>" + atenIncisos[2]);
+				}
+				if (atenArray[i].equals("4") ) {
+					docHtml.select("atenRel").append("<p>" + atenIncisos[3]);
+				}
+				if (atenArray[i].equals("5")  ) {
+					docHtml.select("atenRel").append("<p>" + atenIncisos[4]);
+				}
+				if (atenArray[i].equals("6") ) {
+					docHtml.select("atenRel").append("<p>" + atenIncisos[5]);
+				}
+				if (atenArray[i].equals("7")  ) {
+					docHtml.select("atenRel").append("<p>" + atenIncisos[6]);
+				}
+				if (atenArray[i].equals("8")  ) {
+					docHtml.select("atenRel").append("<p>" + atenIncisos[7]);
+				}
+				if (atenArray[i].equals("9")  ) {
+					docHtml.select("atenRel").append("<p>" + atenIncisos[8]);
+				}
 			
-			if (atenArray[i].equals("1") ) {
-				docHtml.select("atenRel").append("<p>" + atenIncisos[0]);
-			}
-			if (atenArray[i].equals("2") ) {
-				docHtml.select("atenRel").append("<p>" + atenIncisos[1]);
-			}
-			if (atenArray[i].equals("3")  ) {
-				docHtml.select("atenRel").append("<p>" + atenIncisos[2]);
-			}
-			if (atenArray[i].equals("4") ) {
-				docHtml.select("atenRel").append("<p>" + atenIncisos[3]);
-			}
-			if (atenArray[i].equals("5")  ) {
-				docHtml.select("atenRel").append("<p>" + atenIncisos[4]);
-			}
-			if (atenArray[i].equals("6") ) {
-				docHtml.select("atenRel").append("<p>" + atenIncisos[5]);
-			}
-			if (atenArray[i].equals("7")  ) {
-				docHtml.select("atenRel").append("<p>" + atenIncisos[6]);
-			}
-			if (atenArray[i].equals("8")  ) {
-				docHtml.select("atenRel").append("<p>" + atenIncisos[7]);
-			}
-			if (atenArray[i].equals("9")  ) {
-				docHtml.select("atenRel").append("<p>" + atenIncisos[8]);
-			}
-			
-		}
+				}} else {
+					docHtml.select("atenRel").append("<p>" + "N/A");
+				}
 
 		
-		//tem que colocar um  if
-		for (int i = 0; i<agraArray.length; i++) {
-			if (agraArray[i].equals("a") ) {
-				docHtml.select("agraRel").append("<p>" + agraIncisos[0]);
-			}
-			if (agraArray[i].equals("b") ) {
-				docHtml.select("agraRel").append("<p>" + agraIncisos[1]);
-			}
-			if (agraArray[i].equals("c")  ) {
-				docHtml.select("agraRel").append("<p>" + agraIncisos[2]);
-			}
-			if (agraArray[i].equals("d") ) {
-				docHtml.select("agraRel").append("<p>" + agraIncisos[3]);
-			}
-			if (agraArray[i].equals("e")  ) {
-				docHtml.select("agraRel").append("<p>" + agraIncisos[4]);
-			}
-			if (agraArray[i].equals("f") ) {
-				docHtml.select("agraRel").append("<p>" + agraIncisos[5]);
-			}
-			if (agraArray[i].equals("g")  ) {
-				docHtml.select("agraRel").append("<p>" + agraIncisos[6]);
-			}
-			if (agraArray[i].equals("h")  ) {
-				docHtml.select("agraRel").append("<p>" + agraIncisos[7]);
-			}
-			if (agraArray[i].equals("i")  ) {
-				docHtml.select("agraRel").append("<p>" + agraIncisos[8]);
-			}
-			if (agraArray[i].equals("j")  ) {
-				docHtml.select("agraRel").append("<p>" + agraIncisos[9]);
-			}
-			if (agraArray[i].equals("k")  ) {
-				docHtml.select("agraRel").append("<p>" + agraIncisos[10]);
-			}
-			if (agraArray[i].equals("l")  ) {
-				docHtml.select("agraRel").append("<p>" + agraIncisos[11]);
-			}
-					
-		}	// com if, mais um }
+		// agravantes //
+		if (agraArray != null || agraArray[0] != "") { 
 		
+			for (int i = 0; i<agraArray.length; i++) {
+				if (agraArray[i].equals("a") ) {
+					docHtml.select("agraRel").append("<p>" + agraIncisos[0]);
+				}
+				if (agraArray[i].equals("b") ) {
+					docHtml.select("agraRel").append("<p>" + agraIncisos[1]);
+				}
+				if (agraArray[i].equals("c")  ) {
+					docHtml.select("agraRel").append("<p>" + agraIncisos[2]);
+				}
+				if (agraArray[i].equals("d") ) {
+					docHtml.select("agraRel").append("<p>" + agraIncisos[3]);
+				}
+				if (agraArray[i].equals("e")  ) {
+					docHtml.select("agraRel").append("<p>" + agraIncisos[4]);
+				}
+				if (agraArray[i].equals("f") ) {
+					docHtml.select("agraRel").append("<p>" + agraIncisos[5]);
+				}
+				if (agraArray[i].equals("g")  ) {
+					docHtml.select("agraRel").append("<p>" + agraIncisos[6]);
+				}
+				if (agraArray[i].equals("h")  ) {
+					docHtml.select("agraRel").append("<p>" + agraIncisos[7]);
+				}
+				if (agraArray[i].equals("i")  ) {
+					docHtml.select("agraRel").append("<p>" + agraIncisos[8]);
+				}
+				if (agraArray[i].equals("j")  ) {
+					docHtml.select("agraRel").append("<p>" + agraIncisos[9]);
+				}
+				if (agraArray[i].equals("k")  ) {
+					docHtml.select("agraRel").append("<p>" + agraIncisos[10]);
+				}
+				if (agraArray[i].equals("l")  ) {
+					docHtml.select("agraRel").append("<p>" + agraIncisos[11]);
+				}
+						
+			}} else {
+				docHtml.select("agraRel").append("<p>" + "N/A");
+			}
+		
+		System.out.println("agravantes " + agraArray);
 		
 		String html = new String ();
 		
@@ -1085,6 +1115,17 @@ public class TabVistoriaController implements Initializable{
 	
 	WebView webVistoria;
 	WebEngine engVistoria;
+	
+	// métodos de remimensionar as tabs //
+				public void redimWei (Number newValue) {
+					apVis.setMinWidth((double) newValue);
+				}
+				public void redimHei (Number newValue) {
+					apVis.setMinHeight((double) newValue);
+				}
+		
+		@FXML AnchorPane apVis;
+		@FXML ScrollPane spVis;
 		
 	//-- INITIALIZE --//
 	@Override
@@ -1172,6 +1213,11 @@ public class TabVistoriaController implements Initializable{
 			engVistoria.load(getClass().getResource("/html/relatorioVistoria.html").toExternalForm()); 
 		 
 		});
+		
+		AnchorPane.setTopAnchor(spVis, 0.0);
+	    AnchorPane.setRightAnchor(spVis, 0.0);
+	    AnchorPane.setLeftAnchor(spVis, 0.0);
+	    AnchorPane.setBottomAnchor(spVis, 0.0);
 		
 	}
 	
@@ -1359,9 +1405,11 @@ public class TabVistoriaController implements Initializable{
 					
 					LimparCheckBox();
 					
-					//System.out.println(htmlObjeto.getHtmlText());
 					
 					//-- infrações --//
+					
+					System.out.println("infracoes do infr para preencher ifraarray " + infr);
+					
 					if (infr != null) {
 						
 						infrArray = infr.split("");
@@ -1400,9 +1448,7 @@ public class TabVistoriaController implements Initializable{
 								
 							}
 							
-							
-							checkInfraHab(null);
-						}}
+						} checkInfraHab(null);}
 					
 
 									//-- penalidades --//
@@ -1429,12 +1475,7 @@ public class TabVistoriaController implements Initializable{
 											}
 											if (penaArray[i].equals("4") ) {
 												checkPena4.setSelected(true);
-												checkPena4.selectedProperty().addListener(new ChangeListener<Boolean>() {
-													public void changed (ObservableValue <? extends Boolean> ov, Boolean old_val, Boolean new_val)
-													{
-														checkPenaHab(null);
-													}
-												});
+												
 											}
 											if (penaArray[i].equals("5")  ) {
 												checkPena5.setSelected(true);
@@ -1450,8 +1491,8 @@ public class TabVistoriaController implements Initializable{
 											}
 											
 											//System.out.println(i + " veja as penalidades array selecionadas" + penaArray[i]);
-											checkPenaHab(null);
-										}}
+											
+										} checkPenaHab(null);}
 									
 							//-- atenuantes --//
 							if (aten != null) {
@@ -1499,8 +1540,8 @@ public class TabVistoriaController implements Initializable{
 										
 									}
 									
-									checkAtenHab(null);
-								}}
+									
+								} checkAtenHab(null);}
 							
 											//-- agravantes --//
 											if (agra != null) {
@@ -1561,8 +1602,8 @@ public class TabVistoriaController implements Initializable{
 														
 													}
 													
-													checkAgraHab(null);
-												}}
+													
+												}checkAgraHab(null);}
 							
 					
 					
@@ -1583,6 +1624,12 @@ public class TabVistoriaController implements Initializable{
 					eGeralVis = visTab.getVisEndCodigoFK();
 					lblVisEnd.setText(eGeralVis.getDesc_Endereco() + " |  RA: "  + eGeralVis.getRA_Endereco() );
 					
+					// copiar número da vistoria no sei ao selecionar //
+					Clipboard clip = Clipboard.getSystemClipboard();
+	                ClipboardContent conteudo = new ClipboardContent();
+	                conteudo.putString(visTab.getVisSEI());
+	                clip.setContent(conteudo);
+	                
 					//-- modular botões --//
 					btnNovo.setDisable(true);
 					btnSalvar.setDisable(true);
@@ -1752,17 +1799,73 @@ public class TabVistoriaController implements Initializable{
 		 checkAgra10.setSelected(false);
 		 checkAgra11.setSelected(false);
 		 checkAgra12.setSelected(false);
+		 
 	 }
 	 
+	
 	 public void btnInfracoesHab (ActionEvent event) {
 		 
-		 ObservableList<String> documentos = FXCollections.observableArrayList(infraIncisos);
-			ListView<String> listView = new ListView<String>(documentos);
+		 	CheckBox ci1 = new CheckBox();
+			CheckBox ci2 = new CheckBox();
+			CheckBox ci3 = new CheckBox();
+			CheckBox ci4 = new CheckBox();
+			CheckBox ci5 = new CheckBox();
+			CheckBox ci6 = new CheckBox();
+			CheckBox ci7 = new CheckBox();
 			
-				Scene scene = new Scene(listView);
+			ci1.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+		        checkInfra1.setSelected(newVal);
+		        checkPenaHab(null);
+		    });
+			ci2.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+		        checkInfra2.setSelected(newVal);
+		        checkPenaHab(null);
+		    });
+			ci3.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+		        checkInfra3.setSelected(newVal);
+		        checkPenaHab(null);
+		    });
+			ci4.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+		        checkInfra4.setSelected(newVal);
+		        checkPenaHab(null);
+		    });
+			ci5.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+		        checkInfra5.setSelected(newVal);
+		        checkPenaHab(null);
+		    });
+			ci6.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+		        checkInfra6.setSelected(newVal);
+		        checkPenaHab(null);
+		    });
+			ci7.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+		        checkInfra7.setSelected(newVal);
+		        checkPenaHab(null);
+		    });
+			
+			
+			VBox vBoxCheck = new VBox();
+			vBoxCheck.setSpacing(6);
+			vBoxCheck.setLayoutY(3);
+			vBoxCheck.setLayoutX(3);
+			
+			VBox vBoxInfra = new VBox();
+			vBoxInfra.setPrefWidth(915);
+			vBoxInfra.setPrefHeight(176);
+			vBoxInfra.setLayoutX(25);
+
+			vBoxCheck.getChildren().addAll(ci1, ci2,ci3,ci4,ci5,ci6,ci7);
+			
+			 ObservableList<String> obs = FXCollections.observableArrayList(infraIncisos);
+			 ListView<String> list = new ListView<String>(obs);
+			 
+			 vBoxInfra.getChildren().add(list);
+			
+				Group g = new Group(vBoxCheck,vBoxInfra);
+				
+				Scene scene = new Scene(g);
 				Stage stage = new Stage(); // StageStyle.UTILITY - tirei para ver como fica, se aparece o minimizar
 				stage.setWidth(964);
-				stage.setHeight(210);
+				stage.setHeight(215);
 			    stage.setScene(scene);
 			    stage.setMaximized(false);
 			    stage.setResizable(false);
@@ -1773,7 +1876,7 @@ public class TabVistoriaController implements Initializable{
 			    stage.show();
 			
 			  //--  https://docs.oracle.com/javafx/2/ui_controls/ListViewSample.java.html  --// 
-			 listView.getSelectionModel().selectedItemProperty().addListener(
+			    list.getSelectionModel().selectedItemProperty().addListener(
 	             new ChangeListener<String>() {
 	                 public void changed(ObservableValue<? extends String> 
 	                 ov, String old_val, String new_val) {
@@ -1785,17 +1888,71 @@ public class TabVistoriaController implements Initializable{
 	                      conteudo.putString(artigo);
 	                      clip.setContent(conteudo);
 	                      
+	                      
+	                      
 	                 }
              });
-             
-		 
+			
 	 }
+	 
 	 public void btnPenalidadesHab (ActionEvent event) {
 		 
-		 ObservableList<String> documentos = FXCollections.observableArrayList(penaIncisos);
-			ListView<String> listView = new ListView<String>(documentos);
+		 CheckBox cp1 = new CheckBox();
+			CheckBox cp2 = new CheckBox();
+			CheckBox cp3 = new CheckBox();
+			CheckBox cp4 = new CheckBox();
+			CheckBox cp5 = new CheckBox();
+			CheckBox cp6 = new CheckBox();
+			CheckBox cp7 = new CheckBox();
 			
-				Scene scene = new Scene(listView);
+			cp1.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+		        checkPena1.setSelected(newVal);
+		        checkPenaHab(null);
+		    });
+			cp2.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+				checkPena2.setSelected(newVal);
+		        checkPenaHab(null);
+		    });
+			cp3.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+				checkPena3.setSelected(newVal);
+		        checkPenaHab(null);
+		    });
+			cp4.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+				checkPena4.setSelected(newVal);
+		        checkPenaHab(null);
+		    });
+			cp5.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+				checkPena5.setSelected(newVal);
+		        checkPenaHab(null);
+		    });
+			cp6.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+				checkPena6.setSelected(newVal);
+		        checkPenaHab(null);
+		    });
+			cp7.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+				checkPena7.setSelected(newVal);
+		        checkPenaHab(null);
+		    });
+			
+			VBox vBoxCheck = new VBox();
+			vBoxCheck.setSpacing(6);
+			vBoxCheck.setLayoutY(3);
+			vBoxCheck.setLayoutX(3);
+			vBoxCheck.getChildren().addAll(cp1, cp2,cp3,cp4,cp5,cp6,cp7);
+			
+			VBox vBoxPena = new VBox();
+			vBoxPena.setPrefWidth(915);
+			vBoxPena.setPrefHeight(170);
+			vBoxPena.setLayoutX(25);
+
+			ObservableList<String> obs = FXCollections.observableArrayList(penaIncisos);
+			ListView<String> list = new ListView<String>(obs);
+			
+			vBoxPena.getChildren().add(list);
+			
+			Group g = new Group(vBoxCheck, vBoxPena);
+			
+				Scene scene = new Scene(g);
 				Stage stage = new Stage(); // StageStyle.UTILITY - tirei para ver como fica, se aparece o minimizar
 				stage.setWidth(964);
 				stage.setHeight(210);
@@ -1809,7 +1966,7 @@ public class TabVistoriaController implements Initializable{
 			    stage.show();
 			
 			    //--  https://docs.oracle.com/javafx/2/ui_controls/ListViewSample.java.html  --// 
-			    listView.getSelectionModel().selectedItemProperty().addListener(
+			    list.getSelectionModel().selectedItemProperty().addListener(
 			    		new ChangeListener<String>() {
 			    			public void changed(ObservableValue<? extends String> 
 			    				ov, String old_val, String new_val) {
@@ -1823,14 +1980,78 @@ public class TabVistoriaController implements Initializable{
                    
               }
           });
+			    
 	 }
 	 
 	 public void btnAtenuantesHab (ActionEvent event) {
 		 
-		 ObservableList<String> documentos = FXCollections.observableArrayList(atenIncisos);
-			ListView<String> listView = new ListView<String>(documentos);
+		 	CheckBox ca1 = new CheckBox();
+			CheckBox ca2 = new CheckBox();
+			CheckBox ca3 = new CheckBox();
+			CheckBox ca4 = new CheckBox();
+			CheckBox ca5 = new CheckBox();
+			CheckBox ca6 = new CheckBox();
+			CheckBox ca7 = new CheckBox();
+			CheckBox ca8 = new CheckBox();
+			CheckBox ca9 = new CheckBox();
 			
-				Scene scene = new Scene(listView);
+			ca1.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+		        checkAten1.setSelected(newVal);
+		        checkAtenHab(null);
+		    });
+			ca2.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+				checkAten2.setSelected(newVal);
+				checkAtenHab(null);
+		    });
+			ca3.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+				checkAten3.setSelected(newVal);
+				checkAtenHab(null);
+		    });
+			ca4.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+				checkAten4.setSelected(newVal);
+				checkAtenHab(null);
+		    });
+			ca5.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+				checkAten5.setSelected(newVal);
+				checkAtenHab(null);
+		    });
+			ca6.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+				checkAten6.setSelected(newVal);
+				checkAtenHab(null);
+		    });
+			ca7.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+				checkAten7.setSelected(newVal);
+				checkAtenHab(null);
+		    });
+			ca8.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+				checkAten8.setSelected(newVal);
+				checkAtenHab(null);
+		    });
+			ca9.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+				checkAten9.setSelected(newVal);
+				checkAtenHab(null);
+		    });
+			
+			VBox vBoxCheck = new VBox();
+			vBoxCheck.setSpacing(6);
+			vBoxCheck.setLayoutY(3);
+			vBoxCheck.setLayoutX(3);
+			vBoxCheck.getChildren().addAll(ca1, ca2,ca3,ca4,ca5,ca6,ca7,ca8,ca9);
+			
+			VBox vBoxPena = new VBox();
+			vBoxPena.setPrefWidth(915);
+			vBoxPena.setPrefHeight(210);
+			vBoxPena.setLayoutX(25);
+
+			ObservableList<String> obs = FXCollections.observableArrayList(atenIncisos);
+			ListView<String> list = new ListView<String>(obs);
+			
+			vBoxPena.getChildren().add(list);
+			
+			Group g = new Group(vBoxCheck, vBoxPena);
+		 
+		
+				Scene scene = new Scene(g);
 				Stage stage = new Stage(); // StageStyle.UTILITY - tirei para ver como fica, se aparece o minimizar
 				stage.setWidth(964);
 				stage.setHeight(250);
@@ -1844,7 +2065,7 @@ public class TabVistoriaController implements Initializable{
 			    stage.show();
 			
 			    //--  https://docs.oracle.com/javafx/2/ui_controls/ListViewSample.java.html  --// 
-			    listView.getSelectionModel().selectedItemProperty().addListener(
+			    list.getSelectionModel().selectedItemProperty().addListener(
 			    		new ChangeListener<String>() {
 			    			public void changed(ObservableValue<? extends String> 
 			    				ov, String old_val, String new_val) {
@@ -1857,22 +2078,98 @@ public class TabVistoriaController implements Initializable{
                   clip.setContent(conteudo);
               }
           });
-          
-         
-	 
-	 
+        
 	 }
+	 
 	 public void btnAgravantesHab (ActionEvent event) {
-		
 		 
-		 ObservableList<String> documentos = FXCollections.observableArrayList(agraIncisos);
-			ListView<String> listView = new ListView<String>(documentos);
+		 	CheckBox chA = new CheckBox();
+			CheckBox chB = new CheckBox();
+			CheckBox chC = new CheckBox();
+			CheckBox chD = new CheckBox();
+			CheckBox chE = new CheckBox();
+			CheckBox chF = new CheckBox();
+			CheckBox chG = new CheckBox();
+			CheckBox chH = new CheckBox();
+			CheckBox chI = new CheckBox();
+			CheckBox chJ = new CheckBox();
+			CheckBox chK = new CheckBox();
+			CheckBox chL = new CheckBox();
 			
+			chA.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+		        checkAgra1.setSelected(newVal);
+		        checkAgraHab(null);
+		    });
+			chB.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+				checkAgra2.setSelected(newVal);
+				checkAgraHab(null);
+		    });
+			chC.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+				checkAgra3.setSelected(newVal);
+				checkAgraHab(null);
+		    });
+			chD.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+				checkAgra4.setSelected(newVal);
+				checkAgraHab(null);
+		    });
+			chE.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+				checkAgra5.setSelected(newVal);
+				checkAgraHab(null);
+		    });
+			chF.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+				checkAgra6.setSelected(newVal);
+				checkAgraHab(null);
+		    });
+			chG.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+				checkAgra7.setSelected(newVal);
+				checkAgraHab(null);
+		    });
+			chH.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+				checkAgra8.setSelected(newVal);
+				checkAgraHab(null);
+		    });
+			chI.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+				checkAgra9.setSelected(newVal);
+				checkAgraHab(null);
+		    });
+			chJ.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+				checkAgra10.setSelected(newVal);
+				checkAgraHab(null);
+		    });
+			chK.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+				checkAgra11.setSelected(newVal);
+				checkAgraHab(null);
+		    });
+			chL.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) -> {
+				checkAgra12.setSelected(newVal);
+				checkAgraHab(null);
+		    });
+			
+			VBox vBoxCheck = new VBox();
+			vBoxCheck.setSpacing(6);
+			vBoxCheck.setLayoutY(3);
+			vBoxCheck.setLayoutX(3);
+			vBoxCheck.getChildren().addAll(
+					chA, chB, chC, chD, chE, chF,
+					chG, chH, chI, chJ, chK, chL);
+			
+			VBox vBoxPena = new VBox();
+			vBoxPena.setPrefWidth(915);
+			vBoxPena.setPrefHeight(278);
+			vBoxPena.setLayoutX(25);
+
+			ObservableList<String> obs = FXCollections.observableArrayList(agraIncisos);
+			ListView<String> list = new ListView<String>(obs);
+			
+			vBoxPena.getChildren().add(list);
+			
+			Group g = new Group(vBoxCheck, vBoxPena);
+		
 				
-				Scene scene = new Scene(listView);
+				Scene scene = new Scene(g);
 				Stage stage = new Stage(); // StageStyle.UTILITY - tirei para ver como fica, se aparece o minimizar
 				stage.setWidth(964);
-				stage.setHeight(310);
+				stage.setHeight(320);
 			    stage.setScene(scene);
 			    stage.setMaximized(false);
 			    stage.setResizable(false);
@@ -1883,7 +2180,7 @@ public class TabVistoriaController implements Initializable{
 			    stage.show();
 			
 			    //--  https://docs.oracle.com/javafx/2/ui_controls/ListViewSample.java.html  --// 
-			    listView.getSelectionModel().selectedItemProperty().addListener(
+			    list.getSelectionModel().selectedItemProperty().addListener(
 			    		new ChangeListener<String>() {
 			    			public void changed(ObservableValue<? extends String> 
 			    				ov, String old_val, String new_val) {
@@ -2009,6 +2306,7 @@ public class TabVistoriaController implements Initializable{
 		 
 		 
 	 }
+	 
 	
 }
 

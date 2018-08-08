@@ -16,6 +16,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -26,9 +27,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -38,6 +41,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
@@ -81,7 +85,7 @@ public class TabEnderecoController implements Initializable {
 	
 	@FXML Button btnEndLatLon = new Button();
 	
-	@FXML AnchorPane aPaneEnd = new AnchorPane();
+	@FXML Pane pEndCoord;
 	
 	//-- TableView endereco --//
 	@FXML private TableView <EnderecoTabela> tvLista;
@@ -93,7 +97,7 @@ public class TabEnderecoController implements Initializable {
 	
 	
 	// capturar enderereco para a TabInterfController
-	private static Endereco eGeral;
+	private static Endereco eGeral = new Endereco();
 	
 	//-- botao para chamar o mapa javascript --//
 	@FXML Image imgGetCoord = new Image(TabEnderecoController.class.getResourceAsStream("/images/getCoord.png")); 
@@ -118,7 +122,7 @@ public class TabEnderecoController implements Initializable {
 	// adicMarcador(); 
 	public void adicMarcador () {
 		
-		System.out.println("latitude endereço " + eGeral.getLat_Endereco() + " e " + eGeral.getLon_Endereco());
+		//System.out.println("latitude endereço " + eGeral.getLat_Endereco() + " e " + eGeral.getLon_Endereco());
 		
     	if (eGeral.getLat_Endereco() != null  && eGeral.getLon_Endereco() != null ) {
         	lat = Double.parseDouble(eGeral.getLat_Endereco().toString());
@@ -731,6 +735,22 @@ public class TabEnderecoController implements Initializable {
 	    			  
 	            	}
 	        	});
+			
+			Tooltip ttbtnCoord  = new Tooltip("Capturar a coordenada do mapa e enviar para o cadastro. "
+		    		+ "\n * Também abrirá uma janela com o endereço sugerido pelo GoogleMaps "
+		    		+ "\n         para a coordenada selecionada.");
+			ttbtnCoord.setFont(new Font("Arial", 13));;
+			
+			btnCoord.setOnMouseEntered(new EventHandler<Event>() {
+				
+				@Override
+				public void handle(Event event) {
+					
+					btnCoord.setTooltip(
+							ttbtnCoord
+						);
+					}
+				});
 	
 			 btnEndCoordMap.setOnAction(new EventHandler<ActionEvent>() {
 		            @Override public void handle(ActionEvent e) {
@@ -739,6 +759,27 @@ public class TabEnderecoController implements Initializable {
 		           }
 		     });
 			 
+			 Tooltip ttbtnEndMapCoord = new Tooltip("Localizar o endereço cadastrado no mapa"
+			    		+ "\n * Se ainda não houver endereço cadastrado, o ponto será as coordenadas da Adasa.");
+			 ttbtnEndMapCoord.setFont(new Font("Arial", 13));
+			 
+			 btnEndCoordMap.setOnMouseEntered(new EventHandler<Event>() {
+
+				@Override
+				public void handle(Event event) {
+					
+					btnEndCoordMap.setTooltip(
+							ttbtnEndMapCoord
+						);
+					
+				}
+			});
+			 
+			 
+			 /*
+			  * new Tooltip("Localizar no mapa as coordenadas do endereço cadastrado"
+						    		+ "\n * Se ainda não houver endereço cadastrado, o ponto será as coordenadas da Adasa.")
+			  */
 			Stage stage = new Stage(); // StageStyle.UTILITY - tirei para ver como fica, se aparece o minimizar
 			stage.setWidth(1250);
 			stage.setHeight(750);
@@ -748,8 +789,19 @@ public class TabEnderecoController implements Initializable {
 	        stage.show();
 	        
 		}
+
+	// métodos de remimensionar as tabs //
+	public void redimWei (Number newValue) {
+		apEnd.setMinWidth((double) newValue);
+	}
+	public void redimHei (Number newValue) {
+		apEnd.setMinHeight((double) newValue);
+	}
 		
-		
+	@FXML AnchorPane apEnd;
+	@FXML ScrollPane spEnd;
+	
+	
 	//-- INITIALIZE --//
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -778,6 +830,11 @@ public class TabEnderecoController implements Initializable {
 		//btnMapCoord.setGraphic(new ImageView(imgMapCoord));
 		
 		btnEndCoord.setGraphic(new ImageView(imgEndCoord));
+		
+		AnchorPane.setTopAnchor(spEnd, 0.0);
+	    AnchorPane.setRightAnchor(spEnd, 0.0);
+	    AnchorPane.setLeftAnchor(spEnd, 0.0);
+	    AnchorPane.setBottomAnchor(spEnd, 0.0);
 	}
 
 	//-- Modular os botoes na inicializacao do programa --//
@@ -802,29 +859,10 @@ public class TabEnderecoController implements Initializable {
 	
 	WebView wv1;
 	WebEngine webEng;
-	
+	@FXML Pane pEnd;
 	
 	public void abrirMapa (String strMarcador) {
 		
-		/*
-		File file = null;
-		file = new File (TabEnderecoController.class.getResource("/html/enderecoMap.html").getFile());
-		
-		Document docHtml = null;
-		
-		try {
-			docHtml = Jsoup.parse(file, "UTF-8");  // retirei o  .clone()
-	
-		} catch (IOException e1) {
-			System.out.println("Erro na leitura no parse Jsoup!!!");
-			e1.printStackTrace();
-		}
-			
-		//docHtml.select("script").prepend("var uluru = {lat: " + latMap + ", lng: " + lonMap + "};");
-	
-		strHTMLMap = docHtml.toString();
-		*/
-
 		wv1 = new WebView();
 		webEng = wv1.getEngine();
 		webEng.load(getClass().getResource("/html/enderecoMap.html").toExternalForm());
@@ -835,10 +873,10 @@ public class TabEnderecoController implements Initializable {
 		BorderPane root = new BorderPane();
 		root.setCenter(wv1);
 		root.setPrefSize(887, 420);
-		root.setLayoutY(410);
-		root.setLayoutX(127);
+		//root.setLayoutY(410);
+		//root.setLayoutX(127);
 		
-		aPaneEnd.getChildren().add(root);
+		pEnd.getChildren().add(root);
 	
 		webEng.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
             if (Worker.State.SUCCEEDED.equals(newValue)) {
@@ -864,7 +902,7 @@ public class TabEnderecoController implements Initializable {
 		root.setLayoutY(395);
 		root.setLayoutX(220);
 		
-		aPaneEnd.getChildren().add(root);
+		pEndCoord.getChildren().add(root);
 	
 		webEng.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
             if (Worker.State.SUCCEEDED.equals(newValue)) {
@@ -940,5 +978,26 @@ public class TabEnderecoController implements Initializable {
 		//getWvEndMap ();
 		
 	}
+	
+	
  */
+
+/*
+File file = null;
+file = new File (TabEnderecoController.class.getResource("/html/enderecoMap.html").getFile());
+
+Document docHtml = null;
+
+try {
+	docHtml = Jsoup.parse(file, "UTF-8");  // retirei o  .clone()
+
+} catch (IOException e1) {
+	System.out.println("Erro na leitura no parse Jsoup!!!");
+	e1.printStackTrace();
+}
+	
+//docHtml.select("script").prepend("var uluru = {lat: " + latMap + ", lng: " + lonMap + "};");
+
+strHTMLMap = docHtml.toString();
+*/
 

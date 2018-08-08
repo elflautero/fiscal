@@ -2,8 +2,10 @@ package fiscalizacao;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -27,8 +29,16 @@ public class Main extends Application {
     	
         stage.setScene(new Scene(rootNode));
         
-        stage.setMaximized(false);
-        stage.setResizable(false);
+        //stage.setMaximized(false);
+        //stage.setResizable(false);
+        
+        // para o programa já  abrir de acordo com a dimensão da tela do computador
+        Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+        
+        stage.setX(primaryScreenBounds.getMinX());
+        stage.setY(primaryScreenBounds.getMinY());
+        stage.setWidth(primaryScreenBounds.getWidth());
+        stage.setHeight(primaryScreenBounds.getHeight());
         
         stage.show();
     }

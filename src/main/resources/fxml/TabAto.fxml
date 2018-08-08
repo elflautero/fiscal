@@ -12,11 +12,11 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="tabAto" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="1140.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabAtoController">
+<AnchorPane fx:id="apAto" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="801.0" prefWidth="1189.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabAtoController">
    <children>
-      <ScrollPane prefHeight="680.0" prefWidth="1140.0">
-        <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="800.0" prefWidth="1140.0">
+      <ScrollPane fx:id="spAto" prefHeight="801.0" prefWidth="1189.0">
+         <content>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="800.0" prefWidth="1175.0">
                <children>
                   <Pane prefHeight="680.0" prefWidth="1140.0">
                      <children>
@@ -71,7 +71,7 @@
                   </Pane>
                </children>
             </AnchorPane>
-        </content>
+         </content>
       </ScrollPane>
    </children>
-</Pane>
+</AnchorPane>

@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import dao.InterferenciaDao;
-import dao.SubterraneaDao;
-import dao.SuperficialDao;
 import entity.Endereco;
 import entity.Interferencia;
 import entity.Subterranea;
@@ -19,6 +17,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,9 +29,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -40,6 +41,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
@@ -447,18 +449,7 @@ public class TabInterfController implements Initializable {
 										interferencia.setInter_Lat(Double.parseDouble(tfIntLat.getText()));
 										interferencia.setInter_Lng(Double.parseDouble(tfIntLon.getText()));
 									
-									Endereco endereco = new Endereco(); // ?
-										
-										endereco = eGeralInt;// ??
-										
-										endereco.getListInterferencias().add(interferencia);  // precisa disso?
-										
-										interferencia.setInter_End_CodigoFK(endereco);
-										
-									InterferenciaDao interferenciaDao = new InterferenciaDao ();
-										
-										interferenciaDao.salvaInterferencia(interferencia);
-										interferenciaDao.mergeInterferencia(interferencia);
+										interferencia.setInter_End_CodigoFK(eGeralInt);
 										
 									Subterranea sub = new Subterranea ();
 									
@@ -473,11 +464,12 @@ public class TabInterfController implements Initializable {
 										sub.setSub_Profundidade(tabSubCon.obterSubterranea().getSub_Profundidade());
 										sub.setSub_Data(tabSubCon.obterSubterranea().getSub_Data());
 										
+										interferencia.setSub_Interferencia_Codigo(sub);
 										
-									SubterraneaDao sDao = new SubterraneaDao();
-									sDao.mergeSubterranea(sub);
+										InterferenciaDao interferenciaDao = new InterferenciaDao ();
+										interferenciaDao.salvaInterferencia(interferencia);	
+							
 									
-									interferencia.setSub_Interferencia_Codigo(sub);
 									
 									// mostrar a interferencia na tvList
 									InterferenciaTabela intTab = new InterferenciaTabela(
@@ -540,8 +532,6 @@ public class TabInterfController implements Initializable {
 									
 								} else {
 							
-							
-							
 										Interferencia interferencia = new Interferencia();
 										
 											interferencia.setInter_Tipo(cbTipoInt.getValue());
@@ -553,16 +543,7 @@ public class TabInterfController implements Initializable {
 											interferencia.setInter_Lat(Double.parseDouble(tfIntLat.getText()));
 											interferencia.setInter_Lng(Double.parseDouble(tfIntLon.getText()));
 										
-										Endereco endereco = new Endereco();
-											
-											endereco = eGeralInt;
-											endereco.getListInterferencias().add(interferencia);
-											interferencia.setInter_End_CodigoFK(endereco);
-											InterferenciaDao interferenciaDao = new InterferenciaDao ();
-											
-											interferenciaDao.salvaInterferencia(interferencia);
-											interferenciaDao.mergeInterferencia(interferencia);
-											
+											interferencia.setInter_End_CodigoFK(eGeralInt);
 											
 										Superficial sup = new Superficial ();
 										
@@ -577,9 +558,10 @@ public class TabInterfController implements Initializable {
 											sup.setSup_Caesb(tabSupCon.obterSuperficial().getSup_Caesb());
 											sup.setSup_Data(tabSupCon.obterSuperficial().getSup_Data());
 											
-										SuperficialDao supDao = new SuperficialDao();
-										
-										supDao.mergeSuperficial(sup);
+											interferencia.setSuper_Interferencia_Codigo(sup);
+											
+										InterferenciaDao interferenciaDao = new InterferenciaDao ();
+										interferenciaDao.salvaInterferencia(interferencia);
 										
 										interferencia.setSuper_Interferencia_Codigo(sup);
 										
@@ -641,15 +623,13 @@ public class TabInterfController implements Initializable {
 											interferencia.setInter_Lat(Double.parseDouble(tfIntLat.getText()));
 											interferencia.setInter_Lng(Double.parseDouble(tfIntLon.getText()));
 										
-										Endereco endereco = new Endereco();
+										
+											interferencia.setInter_End_CodigoFK(eGeralInt);
 											
-											endereco = eGeralInt;
-											endereco.getListInterferencias().add(interferencia);
-											interferencia.setInter_End_CodigoFK(endereco);
 											InterferenciaDao interferenciaDao = new InterferenciaDao ();
 											
 											interferenciaDao.salvaInterferencia(interferencia);
-											interferenciaDao.mergeInterferencia(interferencia);
+											
 											
 										// mostrar a interferencia na tvList
 										InterferenciaTabela intTab = new InterferenciaTabela(
@@ -1138,6 +1118,16 @@ public class TabInterfController implements Initializable {
 		
 		Scene scene = new Scene(group);
 		
+		Tooltip ttbtnCoord  = new Tooltip("Capturar a coordenada do mapa e enviar para o cadastro. "
+	    		+ "\n * Também abrirá uma janela com o endereço sugerido pelo GoogleMaps "
+	    		+ "\n         para a coordenada selecionada.");
+		ttbtnCoord.setFont(new Font("Arial", 13));;
+		
+		 Tooltip ttbtnEndMapCoord = new Tooltip("Localizar o endereço cadastrado no mapa"
+		    		+ "\n * Se ainda não houver endereço cadastrado, o ponto será as coordenadas da Adasa.");
+		 ttbtnEndMapCoord.setFont(new Font("Arial", 13));
+		
+		 
 		btnCoord.setLayoutY(8);
 		btnCoord.setLayoutX(502);
 		btnCoord.setGraphic(new ImageView(imgGetCoord));
@@ -1153,13 +1143,34 @@ public class TabInterfController implements Initializable {
 	        		
 	            }
 	        });
+				btnCoord.setOnMouseEntered(new EventHandler<Event>() {
+					
+					@Override
+					public void handle(Event event) {
+						
+						btnCoord.setTooltip(
+								ttbtnCoord
+							);
+						}
+					});
 		
-				btnEndCoordMap.setOnAction(new EventHandler<ActionEvent>() {
-		            @Override public void handle(ActionEvent e) {
-		            	adicMarcador();
-		            	
-		            }
-		        });
+						btnEndCoordMap.setOnAction(new EventHandler<ActionEvent>() {
+				            @Override public void handle(ActionEvent e) {
+				            	adicMarcador();
+				            	
+				            }
+				        });
+								btnEndCoordMap.setOnMouseEntered(new EventHandler<Event>() {
+				
+									@Override
+									public void handle(Event event) {
+										
+										btnEndCoordMap.setTooltip(
+												ttbtnEndMapCoord
+											);
+										
+									}
+								});
 	    
 		Stage stage = new Stage(StageStyle.UTILITY);
 		stage.setWidth(1250);
@@ -1172,7 +1183,17 @@ public class TabInterfController implements Initializable {
        
 	}
 	
+	// métodos de remimensionar as tabs //
+		public void redimWei (Number newValue) {
+			apInter.setMinWidth((double) newValue);
+		}
+		public void redimHei (Number newValue) {
+			apInter.setMinHeight((double) newValue);
+		}
 
+		@FXML AnchorPane apInter;
+		@FXML ScrollPane spInter;
+		
 	//-- INITIALIZE --//
 	public void initialize(URL url, ResourceBundle rb) {
 		
@@ -1223,6 +1244,11 @@ public class TabInterfController implements Initializable {
 		
 		
 		modularBotoes ();
+		
+		AnchorPane.setTopAnchor(spInter, 0.0);
+	    AnchorPane.setRightAnchor(spInter, 0.0);
+	    AnchorPane.setLeftAnchor(spInter, 0.0);
+	    AnchorPane.setBottomAnchor(spInter, 0.0);
 		
 	}
 	

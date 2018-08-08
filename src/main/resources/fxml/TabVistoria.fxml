@@ -12,11 +12,11 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="tabVistoria" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="677.0" prefWidth="1140.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabVistoriaController">
+<AnchorPane fx:id="apVis" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="784.0" prefWidth="1154.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabVistoriaController">
    <children>
-      <ScrollPane prefHeight="677.0" prefWidth="1140.0">
+      <ScrollPane fx:id="spVis" prefHeight="677.0" prefWidth="1140.0">
          <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1906.0" prefWidth="1139.0">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1906.0" prefWidth="1139.0">
                <children>
                   <Pane layoutX="116.0" layoutY="125.0" prefHeight="171.0" prefWidth="918.0">
                      <children>
@@ -139,4 +139,4 @@
          </content>
       </ScrollPane>
    </children>
-</Pane>
+</AnchorPane>

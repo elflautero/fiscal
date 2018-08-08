@@ -21,6 +21,36 @@ html, body {
   margin: 0;
   padding: 0;
 }
+
+/* para exibir mensagem da funcionalidade dos botões */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px black;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 250px;
+    background-color: #373737;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    /* posição para a esquerda do botão */
+    margin-left: -270px;
+	top: 20px;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    font-family: Arial, sans-serif;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+/* até aqui, para exibir mensagem da funcionalidade dos botões */
+
 .controls {
   margin-top: 10px;
   border: 1px solid transparent;
@@ -440,9 +470,13 @@ function initAutocomplete() {
 		
 		<label class="controlsLabel" for="adasa" id="labelBuscar">
 		Buscar: 
-		<input onClick="aoClicarSelecionar()" class="controlsInput" id="latlng" type="text" value="-15.775073004902042, -47.940351677729836" name="adasa"></label>
+		<input  class="controlsInput" id="latlng" type="text" value="-15.775073004902042, -47.940351677729836" name="adasa"></label>
 		
-		<button id="submit" class="btnSearchCoord"><span class="icon"></span></button>
+		<button id="submit" class="btnSearchCoord"><span class="icon tooltip">
+			<!-- para exibir mensagem da funcionalidade do  botão -->
+			<span class="tooltiptext">Mostrar no mapa as coordenadas</span>
+			</span>
+			</button>
 </div>
 
 <input id="pac-input" class="controls" type="text" placeholder="Buscar endereço...">
@@ -479,7 +513,12 @@ function initAutocomplete() {
   		<option value="e">E</option>
 		</select>
 		
-	<button onClick="converterCoord()" class="btnConverterCoord"><span class="icon"></span></button>
+	<button onClick="converterCoord()" class="btnConverterCoord" >
+		<span class="icon tooltip">
+			<!-- para exibir mensagem da funcionalidade do  botão -->
+			<span class="tooltiptext">Converter as coordenadas de<br> DMS para DD</span>
+		</span> 
+		</button>
  
 <div id="map"></div>
 
@@ -496,17 +535,19 @@ function get_Coord (){
     
     }
     
-    //-- ao clicar, selecionar--//
-
-    	function aoClicarSelecionar () {
-			
-			document.getElementById("latlng").select();
-			
-    }
+	document.getElementById("latlng")
+	.addEventListener("keyup", function(event) {
+	event.preventDefault();
+	if (event.keyCode === 13) {
+	    document.getElementById("submit").click();
+	}
+	});
+        
 
     //-- converter coordenadas DMS para DD --//
 
     function converterCoord () {
+        
       var norteSul = document.getElementById("norteSul").value;
       var latD = parseFloat(document.getElementById("grauLat").value);
       var latM = parseFloat(document.getElementById("minLat").value);

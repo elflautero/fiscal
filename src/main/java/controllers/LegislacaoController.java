@@ -21,6 +21,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.KeyCode;
 import javafx.scene.web.HTMLEditor;
 import tabela.LegislacaoTabela;
 
@@ -160,6 +161,11 @@ public class LegislacaoController implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		
+		tfPesquisar.setOnKeyReleased(event -> {
+	  		  if (event.getCode() == KeyCode.ENTER){
+	  		     btnPesquisar.fire();
+	  		  }
+	  		});
 	
 	}
 	

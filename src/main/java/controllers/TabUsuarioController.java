@@ -19,10 +19,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import tabela.InterferenciaTabela;
 import tabela.UsuarioTabela;
@@ -559,7 +563,12 @@ public class TabUsuarioController implements Initializable {
 					eGeralUs = usTab.getEnderecoUsObjetoTabelaFK();
 					lblEndUsuario.setText(eGeralUs.getDesc_Endereco()  + " |  RA: "  +  eGeralUs.getRA_Endereco());
 					
-					
+					// copiar cpf do usuario ao selecionar //
+					Clipboard clip = Clipboard.getSystemClipboard();
+	                ClipboardContent conteudo = new ClipboardContent();
+	                conteudo.putString(usTab.getUsCPFCNPJ());
+	                clip.setContent(conteudo);
+	                
 					// -- habilitar e desabilitar botões -- //
 					btnUsNovo.setDisable(true);
 					btnUsSalvar.setDisable(true);
@@ -572,7 +581,18 @@ public class TabUsuarioController implements Initializable {
 				}
 			});
 	}
-		
+	
+	// métodos de remimensionar as tabs //
+			public void redimWei (Number newValue) {
+				apUsuario.setMinWidth((double) newValue);
+			}
+			public void redimHei (Number newValue) {
+				apUsuario.setMinHeight((double) newValue);
+			}
+	
+	@FXML AnchorPane apUsuario;
+	@FXML ScrollPane spUsuario;
+	
 	//-- INITIALIZE --//
 	public void initialize(URL url, ResourceBundle rb) {
 		
@@ -597,6 +617,11 @@ public class TabUsuarioController implements Initializable {
 		cbUsUF.setItems(olUsDF);
 		
 		modularBotoesInicial ();
+		
+		AnchorPane.setTopAnchor(spUsuario, 0.0);
+	    AnchorPane.setRightAnchor(spUsuario, 0.0);
+	    AnchorPane.setLeftAnchor(spUsuario, 0.0);
+	    AnchorPane.setBottomAnchor(spUsuario, 0.0);
 		
 	}
 	

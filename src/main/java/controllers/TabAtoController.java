@@ -25,6 +25,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -33,15 +35,21 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
 import javafx.scene.web.HTMLEditor;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -423,6 +431,16 @@ public class TabAtoController implements Initializable{
 	WebView webAuto;
 	WebEngine engAuto;
 	
+	@FXML AnchorPane apAto;
+	@FXML ScrollPane spAto;
+	// métodos de remimensionar as tabs //
+	public void redimWei (Number newValue) {
+		apAto.setMinWidth((double) newValue);
+	}
+	public void redimHei (Number newValue) {
+		apAto.setMinHeight((double) newValue);
+	}
+	
 	// INITIALIZE //
 	public void initialize(URL url, ResourceBundle rb) {
 		
@@ -492,6 +510,27 @@ public class TabAtoController implements Initializable{
 		cbUsuario.setValue("0");
 		cbUsuario.setItems(olUsuario);
 		
+		Tooltip ttcbUsuario  = new Tooltip("Selecionar usuário para criar o ato."
+				+ "\n * Isso no caso de haver vários usuários cadastrados no mesmo endereço.");
+		ttcbUsuario.setFont(new Font("Arial", 13));;
+		
+		cbUsuario.setOnMouseEntered(new EventHandler<Event>() {
+			
+			@Override
+			public void handle(Event event) {
+				
+				cbUsuario.setTooltip(
+						ttcbUsuario
+					);
+				
+			}
+		});
+		
+		
+		AnchorPane.setTopAnchor(spAto, 0.0);
+	    AnchorPane.setRightAnchor(spAto, 0.0);
+	    AnchorPane.setLeftAnchor(spAto, 0.0);
+	    AnchorPane.setBottomAnchor(spAto, 0.0);
 	}
 	
 	ObservableList<AtoTabela> obsList;
@@ -575,6 +614,12 @@ public class TabAtoController implements Initializable{
 				
 				lblVisAto.setText(visGeral.getVisIdentificacao() + " |  SEI: "  + visGeral.getVisSEI());
 				
+				// copiar número do ato  sei ao selecionar //
+				Clipboard clip = Clipboard.getSystemClipboard();
+                ClipboardContent conteudo = new ClipboardContent();
+                conteudo.putString(atoTab.getAtoSEI());
+                clip.setContent(conteudo);
+                
 				//-- modular botoes --//
 				btnNovo.setDisable(true);
 				btnSalvar.setDisable(true);
@@ -718,6 +763,10 @@ public class TabAtoController implements Initializable{
 			docHtml.select("EndEmpCid").prepend(endereco.getCid_Endereco());
 			try{docHtml.select("EndEmpUF").prepend(endereco.getUF_Endereco());} catch (Exception e) {docHtml.select("EndEmpUF").prepend("");};
 			
+			// latitude e longitude //
+			docHtml.select("EndLat").prepend(endereco.getLat_Endereco().toString());
+			docHtml.select("EndLng").prepend(endereco.getLon_Endereco().toString());
+			
 			try {docHtml.select("terDataFis").prepend(atoGeral.getAtoDataFiscalizacao());} catch (Exception e) {docHtml.select("terDataFis").prepend("");};
 			
 			docHtml.select("terCarac").prepend(atoGeral.getAtoCaracterizacao());
@@ -846,7 +895,7 @@ public class TabAtoController implements Initializable{
 			docHtml.select("autoUsCel").prepend(endereco.getListUsuarios().get(u).getUsCelular());
 			docHtml.select("autoUsEmail").prepend(endereco.getListUsuarios().get(u).getUsEmail());
 			
-			docHtml.select("dataFis").prepend(visGeral.getVisDataFiscalizacao());
+			try {docHtml.select("dataFis").prepend(visGeral.getVisDataFiscalizacao());} catch (Exception e) {docHtml.select("dataFis").prepend("");};
 			docHtml.select("termoNot").prepend("");
 			//dataFis termoNot 
 			
@@ -856,6 +905,10 @@ public class TabAtoController implements Initializable{
 			docHtml.select("EndEmpCid").prepend(endereco.getCid_Endereco());
 			try {docHtml.select("EndEmpUF").prepend(endereco.getUF_Endereco());} catch (Exception e) {docHtml.select("EndEmpUF").prepend("");};
 			
+			// latitude e longitude //
+			docHtml.select("EndLat").prepend(endereco.getLat_Endereco().toString());
+			docHtml.select("EndLng").prepend(endereco.getLon_Endereco().toString());
+						
 			// caracterização //
 			docHtml.select("autoCarac").prepend(atoGeral.getAtoCaracterizacao());
 			
@@ -1067,10 +1120,17 @@ public class TabAtoController implements Initializable{
 			
 			html = docHtml.toString();
 			
+			
 			html = html.replace("\"", "'");
 			html = html.replace("\n", "");
 			
 			html =  "\"" + html + "\"";
+			
+			// copiar o auto de infração //
+						Clipboard clip = Clipboard.getSystemClipboard();
+			            ClipboardContent conteudo = new ClipboardContent();
+			            conteudo.putString(html);
+			            clip.setContent(conteudo);
 			
 			//-- webview do relatório --//
 			
@@ -1102,6 +1162,9 @@ public class TabAtoController implements Initializable{
 	public void abrirEditorHTML (){
 		htmlCaracterizar.setDisable(false);
 	}
+
+	
+
 }
 
 

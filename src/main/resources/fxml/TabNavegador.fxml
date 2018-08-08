@@ -5,23 +5,27 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane fx:id="tabNavegador" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="1140.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabNavegadorController">
+<AnchorPane fx:id="apNavegador" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="1140.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabNavegadorController">
    <children>
-      <ScrollPane prefHeight="680.0" prefWidth="1140.0">
+      <ScrollPane fx:id="spNavegador" prefHeight="680.0" prefWidth="1140.0">
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="701.0" prefWidth="1139.0">
                <children>
-                  <Pane fx:id="pBrowserBotoes" layoutY="14.0" prefHeight="40.0" prefWidth="1123.0">
+                  <Pane fx:id="pNavBotoes1" layoutY="14.0" prefHeight="40.0" prefWidth="655.0">
                      <children>
                         <Button fx:id="btnGoogle" layoutX="11.0" layoutY="3.0" mnemonicParsing="false" onAction="#btnGoogleHab" prefHeight="34.0" prefWidth="34.0" />
                         <Button fx:id="btnSei" layoutX="54.0" layoutY="3.0" mnemonicParsing="false" onAction="#btnSeiHab" prefHeight="34.0" prefWidth="34.0" />
                         <Button fx:id="btnCapturarDocs" layoutX="160.0" layoutY="3.0" mnemonicParsing="false" onAction="#btnCapturarDocsHab" prefHeight="33.0" prefWidth="34.0" />
                         <Button fx:id="btnMostrarDocs" layoutX="200.0" layoutY="2.0" mnemonicParsing="false" onAction="#btnMostrarDocsHab" prefHeight="34.0" prefWidth="34.0" />
-                        <Button fx:id="btnSeiTrein" layoutX="1075.0" layoutY="2.0" mnemonicParsing="false" onAction="#btnSeiTreinHab" prefHeight="34.0" prefWidth="34.0" />
-                        <Button fx:id="btnWebBrowser" layoutX="1030.0" layoutY="2.0" mnemonicParsing="false" onAction="#btnWebBrowserHab" prefHeight="34.0" prefWidth="34.0" />
                      </children>
                   </Pane>
                   <Pane fx:id="pBrowser" layoutY="53.0" prefHeight="571.0" prefWidth="1117.0" />
+                  <Pane fx:id="pNavBotoes2" layoutX="809.0" layoutY="14.0" prefHeight="39.0" prefWidth="106.0">
+                     <children>
+                        <Button fx:id="btnSeiTrein" layoutX="59.0" layoutY="3.0" mnemonicParsing="false" onAction="#btnSeiTreinHab" prefHeight="34.0" prefWidth="34.0" />
+                        <Button fx:id="btnWebBrowser" layoutX="14.0" layoutY="3.0" mnemonicParsing="false" onAction="#btnWebBrowserHab" prefHeight="34.0" prefWidth="34.0" />
+                     </children>
+                  </Pane>
                </children>
             </AnchorPane>
         </content>

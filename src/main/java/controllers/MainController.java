@@ -5,13 +5,18 @@ import java.io.IOException;
 import entity.Demanda;
 import entity.Endereco;
 import entity.Vistoria;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -66,7 +71,10 @@ public class MainController {
 	    	
 	    }
 	    
-
+	    @FXML TabPane tpMain;
+	    @FXML MenuBar menuBar;
+	    @FXML Pane paneButtons;
+	    
 	    @FXML 
 	    private void initialize() {
 	    	
@@ -80,6 +88,50 @@ public class MainController {
 	       
 	       btnLegislacao.setGraphic(new ImageView(imgGetLaw));
 	       btnHome.setGraphic(new ImageView(imgGetHome));
+	       
+	       // 2 padronizar a apresentação  dos objetos de acordo com a tela do computador
+	       AnchorPane.setTopAnchor(menuBar, 0.0);
+	       AnchorPane.setLeftAnchor(menuBar, 0.0);
+	       AnchorPane.setRightAnchor(menuBar, 0.0);
+	       
+	       AnchorPane.setTopAnchor(tpMain, 20.0);
+	       AnchorPane.setLeftAnchor(tpMain, 0.0);
+	       AnchorPane.setRightAnchor(tpMain, 160.0);
+	       
+	       AnchorPane.setTopAnchor(paneButtons, 50.0);
+	       AnchorPane.setRightAnchor(paneButtons, 5.0);
+	       AnchorPane.setBottomAnchor(paneButtons, 50.0);
+	       
+	       tpMain.widthProperty().addListener(new ChangeListener<Number>() {
+	    	   
+			    @Override 
+			    public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
+			    	
+			    	System.out.println("tpMain, valor width " + newValue);
+			    	// navegador
+			    	tabNavegadorController.redimWei(newValue);
+			    	tabNavegadorController.redimHei(newValue);
+				    // denuncia
+			    	tabDemandaController.redimWei(newValue);
+			    	tabDemandaController.redimHei(newValue);
+			    	// endereco
+			    	tabEnderecoController.redimWei(newValue);
+			    	tabEnderecoController.redimHei(newValue);
+			    	// interferencia
+			    	tabInterferenciaController.redimWei(newValue);
+			    	tabInterferenciaController.redimHei(newValue);
+			    	// usuario
+			    	tabUsuarioController.redimWei(newValue);
+			    	tabUsuarioController.redimHei(newValue);
+			    	// vistoria
+			    	tabVistoriaController.redimWei(newValue);
+			    	tabVistoriaController.redimHei(newValue);
+			    	//ato
+			    	tabAtoController.redimWei(newValue);
+			    	tabAtoController.redimHei(newValue);
+			    	
+			    }
+			});
 	        
 	    }
 

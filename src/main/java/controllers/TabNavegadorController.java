@@ -23,6 +23,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.image.Image;
@@ -55,9 +56,10 @@ public class TabNavegadorController implements Initializable{
 	ArrayList<String> docsList = new ArrayList<String>();
 		
 	@FXML Pane pBrowser;
-	@FXML Pane pBrowserBotoes;
+	@FXML Pane pNavBotoes1;
+	@FXML Pane pNavBotoes2;
 	
-	@FXML AnchorPane tabNavegador = new AnchorPane();
+	@FXML AnchorPane apNavegador = new AnchorPane();
 	
 	@FXML Button btnSei = new Button();
 	
@@ -238,7 +240,12 @@ public class TabNavegadorController implements Initializable{
 	public void navegarWeb() {
 		
 		wv1 = new WebView();
-		wv1.setPrefSize(1117.0,627.0);
+		//wv1.setPrefSize(1117.0,627.0);
+		
+		// redimensionar navegador de acordo com a tela
+		wv1.minWidthProperty().bind(apNavegador.widthProperty().subtract(10));
+		wv1.minHeightProperty().bind(apNavegador.heightProperty().subtract(800));
+		 
 		//wv1.setLayoutY(78);
 		pBrowser.getChildren().add(wv1);
 		
@@ -342,7 +349,17 @@ public class TabNavegadorController implements Initializable{
 		    pBrowser.getChildren().add(wv1);
 	}
 	
+	
+	// métodos de remimensionar as tabs //
+		public void redimWei (Number newValue) {
+			apNavegador.setMinWidth((double) newValue);
+		}
+		public void redimHei (Number newValue) {
+			apNavegador.setMinHeight((double) newValue);;
+		}
 
+	@FXML ScrollPane spNavegador;
+	
 	//-- INITIALIZE --//
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -352,6 +369,14 @@ public class TabNavegadorController implements Initializable{
 		navegarWeb();  
 		});
 		
+		AnchorPane.setTopAnchor(spNavegador, 0.0);
+	    AnchorPane.setRightAnchor(spNavegador, 0.0);
+	    AnchorPane.setLeftAnchor(spNavegador, 4.5);
+	    AnchorPane.setBottomAnchor(spNavegador, 0.0);
+	    
+	    AnchorPane.setLeftAnchor(pNavBotoes1, 11.0);
+	    AnchorPane.setRightAnchor(pNavBotoes2, 0.0);
+	    
 		btnGoogle.setGraphic(new ImageView(imgGoogle));
 		btnCapturarDocs.setGraphic(new ImageView(imgCapturar));
 		btnMostrarDocs.setGraphic(new ImageView(imgMostrar));

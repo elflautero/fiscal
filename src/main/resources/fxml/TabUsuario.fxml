@@ -12,45 +12,38 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="tabUsuario" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="681.0" prefWidth="1140.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabUsuarioController">
+<AnchorPane fx:id="apUsuario" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="790.0" prefWidth="1143.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabUsuarioController">
    <children>
-      <ScrollPane prefHeight="681.0" prefWidth="1140.0">
+      <ScrollPane fx:id="spUsuario" prefHeight="787.0" prefWidth="1140.0">
          <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="789.0" prefWidth="1140.0">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="789.0" prefWidth="1140.0">
                <children>
                   <Pane layoutX="99.0" layoutY="63.0" prefHeight="193.0" prefWidth="902.0">
                      <children>
-                        
                         <Label layoutX="53.0" prefHeight="18.0" prefWidth="42.0" text="Tipo: " />
                         <Label layoutX="171.0" text="Nome/Razão Social:" />
                         <Label layoutX="704.0" text="CPF/CNPJ:" />
                         <Label layoutX="55.0" layoutY="83.0" text="Endereço:" />
                         <Label layoutX="466.0" layoutY="83.0" text="RA:" />
                         <Label layoutX="617.0" layoutY="83.0" text="CEP:" />
-                        
                         <Label layoutX="712.0" layoutY="83.0" text="Cidade:" />
                         <Label layoutX="54.0" layoutY="132.0" text="Telefone:" />
                         <Label layoutX="205.0" layoutY="131.0" text="Celular:" />
                         <Label layoutX="356.0" layoutY="132.0" text="Email:" />
                         <Label layoutX="836.0" layoutY="83.0" text="UF:" />
-                        
                         <ChoiceBox fx:id="cbTipoPessoa" layoutX="52.0" layoutY="21.0" prefHeight="25.0" prefWidth="106.0" />
-                       	<TextField fx:id="tfUsNome" layoutX="170.0" layoutY="20.0" prefHeight="26.0" prefWidth="521.0" />
+                        <TextField fx:id="tfUsNome" layoutX="170.0" layoutY="20.0" prefHeight="26.0" prefWidth="521.0" />
                         <TextField fx:id="tfUsCPFCNPJ" layoutX="703.0" layoutY="20.0" prefHeight="26.0" prefWidth="187.0" />
-                        
                         <CheckBox fx:id="cbEndEmp" layoutX="52.0" layoutY="55.0" mnemonicParsing="false" onAction="#cbEndEmpHab" text="importar endereço do empreendimento." />
-                        
                         <TextField fx:id="tfUsEnd" layoutX="54.0" layoutY="102.0" prefHeight="26.0" prefWidth="400.0" />
                         <ChoiceBox fx:id="cbUsRA" layoutX="465.0" layoutY="101.0" prefHeight="28.0" prefWidth="140.0" />
                         <TextField fx:id="tfUsCEP" layoutX="616.0" layoutY="102.0" prefHeight="26.0" prefWidth="83.0" />
                         <TextField fx:id="tfUsCidade" layoutX="711.0" layoutY="102.0" prefHeight="26.0" prefWidth="112.0" />
                         <ChoiceBox fx:id="cbUsUF" layoutX="835.0" layoutY="102.0" prefHeight="25.0" prefWidth="55.0" />
-                        
                         <TextField fx:id="tfUsTel" layoutX="53.0" layoutY="150.0" prefHeight="26.0" prefWidth="140.0" />
                         <TextField fx:id="tfUsCel" layoutX="204.0" layoutY="150.0" prefHeight="26.0" prefWidth="140.0" />
                         <TextField fx:id="tfUsEmail" layoutX="355.0" layoutY="150.0" prefHeight="26.0" prefWidth="535.0" />
-                       
-                       	</children>
+                     </children>
                   </Pane>
                   <Pane layoutX="163.0" layoutY="244.0" prefHeight="47.0" prefWidth="819.0">
                      <children>
@@ -85,4 +78,4 @@
          </content>
       </ScrollPane>
    </children>
-</Pane>
+</AnchorPane>

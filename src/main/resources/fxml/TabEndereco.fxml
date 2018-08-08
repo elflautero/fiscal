@@ -11,34 +11,29 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="tabEndereco" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1140.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabEnderecoController">
+<AnchorPane fx:id="apEnd" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="676.0" prefWidth="1066.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabEnderecoController">
    <children>
-      <ScrollPane layoutY="1.0" prefHeight="680.0" prefWidth="1140.0">
+      <ScrollPane fx:id="spEnd" prefHeight="682.0" prefWidth="1066.0">
         <content>
-          <AnchorPane fx:id="aPaneEnd" minHeight="0.0" minWidth="0.0" prefHeight="900.0" prefWidth="1140.0">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="684.0" prefWidth="1067.0">
                <children>
-                  <Pane layoutX="106.0" layoutY="7.0" prefHeight="386.0" prefWidth="944.0">
+                  <Pane layoutX="72.0" layoutY="20.0" prefHeight="386.0" prefWidth="944.0">
                      <children>
                         <TextField fx:id="tfEnd" layoutX="23.0" layoutY="83.0" prefHeight="25.0" prefWidth="446.0" />
                         <ChoiceBox fx:id="cbEndRA" layoutX="481.0" layoutY="83.0" prefHeight="25.0" prefWidth="140.0" />
                         <TextField fx:id="tfEndCep" layoutX="633.0" layoutY="82.0" prefHeight="25.0" prefWidth="100.0" />
                         <TextField fx:id="tfEndCid" layoutX="745.0" layoutY="82.0" prefHeight="25.0" prefWidth="100.0" />
-                         <ChoiceBox fx:id="cbEndUF" layoutX="857.0" layoutY="81.0" prefHeight="25.0" prefWidth="55.0" />
-                         
+                        <ChoiceBox fx:id="cbEndUF" layoutX="857.0" layoutY="81.0" prefHeight="25.0" prefWidth="55.0" />
                         <Label layoutX="25.0" layoutY="63.0" text="Endereço do  Empreendimento:" />
                         <Label layoutX="482.0" layoutY="65.0" text="RA:" />
                         <Label layoutX="634.0" layoutY="65.0" text="Cep:" />
-                        
                         <Label layoutX="746.0" layoutY="65.0" text="Cidade:" />
                         <Label layoutX="858.0" layoutY="63.0" text="UF:" />
-                        
                         <TextField fx:id="tfLinkEnd" layoutX="94.0" layoutY="121.0" prefHeight="25.0" prefWidth="668.0" promptText="Inserir link do GoogleMaps..." />
                         <TextField fx:id="tfEndLat" layoutX="288.0" layoutY="162.0" prefHeight="25.0" prefWidth="140.0" promptText="-15.7754084" />
                         <TextField fx:id="tfEndLon" layoutX="533.0" layoutY="162.0" prefHeight="25.0" prefWidth="140.0" promptText="-47.9411395" />
-                        
                         <Label layoutX="194.0" layoutY="166.0" text="Coordenadas X:" />
                         <Label layoutX="439.0" layoutY="166.0" text="Coordenadas Y:" />
-                        
                         <Pane layoutX="58.0" layoutY="189.0" prefHeight="47.0" prefWidth="819.0">
                            <children>
                               <Button fx:id="btnEndNovo" layoutX="8.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnEndNovoHab" prefHeight="22.0" prefWidth="76.0" text="Novo" />
@@ -71,12 +66,12 @@
                               <Button fx:id="btnEndCoord" layoutX="842.0" layoutY="3.0" mnemonicParsing="false" onAction="#btnEndCoordHab" prefHeight="27.0" prefWidth="32.0" />
                            </children>
                         </Pane>
-                        
-                       
                      </children>
                   </Pane>
-               </children></AnchorPane>
+                  <Pane fx:id="pEnd" layoutX="95.0" layoutY="412.0" prefHeight="386.0" prefWidth="886.0" />
+               </children>
+            </AnchorPane>
         </content>
       </ScrollPane>
    </children>
-</Pane>
+</AnchorPane>
