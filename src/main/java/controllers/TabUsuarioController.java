@@ -592,6 +592,7 @@ public class TabUsuarioController implements Initializable {
 	
 	@FXML AnchorPane apUsuario;
 	@FXML ScrollPane spUsuario;
+	@FXML Pane pInterGeral;
 	
 	//-- INITIALIZE --//
 	public void initialize(URL url, ResourceBundle rb) {
@@ -618,10 +619,20 @@ public class TabUsuarioController implements Initializable {
 		
 		modularBotoesInicial ();
 		
+
+		spUsuario.widthProperty().addListener((obs, oldVal, newVal) -> {
+	    	
+	        Double widNewVal = (double) newVal * 0.15;
+	        AnchorPane.setLeftAnchor(pInterGeral, widNewVal);
+	        
+	    });
+		
 		AnchorPane.setTopAnchor(spUsuario, 0.0);
 	    AnchorPane.setRightAnchor(spUsuario, 0.0);
 	    AnchorPane.setLeftAnchor(spUsuario, 0.0);
 	    AnchorPane.setBottomAnchor(spUsuario, 0.0);
+	    
+	    
 		
 	}
 	

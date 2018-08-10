@@ -523,6 +523,7 @@ public class TabDemandaController implements Initializable {
 		
 	}
 	
+	
 	// métodos de remimensionar as tabs //
 	public void redimWei (Number newValue) {
 				apDemanda.setMinWidth((double) newValue);
@@ -530,9 +531,10 @@ public class TabDemandaController implements Initializable {
 	public void redimHei (Number newValue) {
 				apDemanda.setMinHeight((double) newValue);;
 			}
+			
 	
 	@FXML ScrollPane spDemanda;
-	@FXML Pane pCadasDema;
+	@FXML Pane pDemanda;
 	
 	
 	// -- INITIALIZE -- //
@@ -552,21 +554,19 @@ public class TabDemandaController implements Initializable {
         // --- habilitar e desabilitar botões ---- //
 		modularBotoesInicial();
 		
+		spDemanda.widthProperty().addListener((obs, oldVal, newVal) -> {
+	    	
+	        Double widNewVal = (double) newVal * 0.15;
+	        AnchorPane.setLeftAnchor(pDemanda, widNewVal);
+	        
+	    });
+		
 		AnchorPane.setTopAnchor(spDemanda, 0.0);
 	    AnchorPane.setRightAnchor(spDemanda, 0.0);
 	    AnchorPane.setLeftAnchor(spDemanda, 0.0);
 	    AnchorPane.setBottomAnchor(spDemanda, 0.0);
 	    
-	    
-	    //System.out.println("width demanda " + spDemanda.getWidth() * 0.50);
-	    
-	    spDemanda.widthProperty().addListener((obs, oldVal, newVal) -> {
-	    	
-	        //System.out.println("width adDemanda (achorpane demanda) " + newVal);
-	        Double widNewVal = (double) newVal * 0.20;
-	        AnchorPane.setLeftAnchor(pCadasDema, widNewVal);
-	        //System.out.println("----- widNewVal " + widNewVal);
-	    });
+	   
 	}
 
 		

@@ -1214,6 +1214,15 @@ public class TabVistoriaController implements Initializable{
 		 
 		});
 		
+		/*
+		spDemanda.widthProperty().addListener((obs, oldVal, newVal) -> {
+	    	
+	        Double widNewVal = (double) newVal * 0.15;
+	        AnchorPane.setLeftAnchor(pDemanda, widNewVal);
+	        
+	    });
+	    */
+		
 		AnchorPane.setTopAnchor(spVis, 0.0);
 	    AnchorPane.setRightAnchor(spVis, 0.0);
 	    AnchorPane.setLeftAnchor(spVis, 0.0);

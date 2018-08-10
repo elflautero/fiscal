@@ -12,13 +12,13 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="apInter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="824.0" prefWidth="1190.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabInterfController">
+<AnchorPane fx:id="apInter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="824.0" prefWidth="1190.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabInterfController">
    <children>
       <ScrollPane fx:id="spInter" layoutX="25.0" layoutY="22.0" prefHeight="671.0" prefWidth="1148.0">
          <content>
             <AnchorPane fx:id="aPaneInt" minHeight="0.0" minWidth="0.0" prefHeight="892.0" prefWidth="1137.0">
                <children>
-                  <Pane layoutX="70.0" layoutY="3.0" prefHeight="415.0" prefWidth="1016.0">
+                  <Pane fx:id="pInterForm" layoutX="70.0" layoutY="3.0" prefHeight="415.0" prefWidth="1016.0">
                      <children>
                         <Pane layoutX="78.0" layoutY="217.0" prefHeight="47.0" prefWidth="839.0">
                            <children>
@@ -78,7 +78,7 @@
                         <CheckBox fx:id="checkMap" layoutX="952.0" layoutY="331.0" mnemonicParsing="false" onAction="#checkMapHab" text="Mapa" />
                      </children>
                   </Pane>
-                  <Pane fx:id="paneTipoInterferencia" layoutX="70.0" layoutY="425.0" prefHeight="255.0" prefWidth="998.0" />
+                  <Pane fx:id="pInterTipo" layoutX="70.0" layoutY="425.0" prefHeight="255.0" prefWidth="998.0" />
                </children>
             </AnchorPane>
          </content>

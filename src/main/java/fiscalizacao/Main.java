@@ -29,9 +29,6 @@ public class Main extends Application {
     	
         stage.setScene(new Scene(rootNode));
         
-        //stage.setMaximized(false);
-        //stage.setResizable(false);
-        
         // para o programa já  abrir de acordo com a dimensão da tela do computador
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         
@@ -39,6 +36,17 @@ public class Main extends Application {
         stage.setY(primaryScreenBounds.getMinY());
         stage.setWidth(primaryScreenBounds.getWidth());
         stage.setHeight(primaryScreenBounds.getHeight());
+        
+        
+        // teste no notebook
+        //stage.setWidth(1366);
+        //stage.setHeight(768);
+        
+        // limites de tamanho do stage
+        stage.setMinHeight(768);
+        stage.setMinWidth(1366);
+        stage.setMaxHeight(1080);
+        stage.setMaxWidth(1920);
         
         stage.show();
     }

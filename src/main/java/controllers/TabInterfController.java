@@ -69,7 +69,7 @@ public class TabInterfController implements Initializable {
 	// --- Controller Principal - MainController --- //
 	@FXML private MainController main;
 	
-	@FXML Pane paneTipoInterferencia = new Pane();
+	@FXML Pane pInterTipo = new Pane();
 
     @FXML private Pane tabInterferencia;
     
@@ -1194,6 +1194,9 @@ public class TabInterfController implements Initializable {
 		@FXML AnchorPane apInter;
 		@FXML ScrollPane spInter;
 		
+		@FXML Pane pInterForm;
+		
+		
 	//-- INITIALIZE --//
 	public void initialize(URL url, ResourceBundle rb) {
 		
@@ -1249,6 +1252,14 @@ public class TabInterfController implements Initializable {
 	    AnchorPane.setRightAnchor(spInter, 0.0);
 	    AnchorPane.setLeftAnchor(spInter, 0.0);
 	    AnchorPane.setBottomAnchor(spInter, 0.0);
+	    
+	    spInter.widthProperty().addListener((obs, oldVal, newVal) -> {
+	    	
+	        Double widNewVal = (double) newVal * 0.15;
+	        AnchorPane.setLeftAnchor(pInterForm, widNewVal);
+	        AnchorPane.setLeftAnchor(pInterTipo, widNewVal);
+	        
+	    });
 		
 	}
 	
@@ -1289,7 +1300,7 @@ public class TabInterfController implements Initializable {
 		
 		if (newString == "Superficial") {
 			
-			paneTipoInterferencia.getChildren().clear();
+			pInterTipo.getChildren().clear();
 			
 			Pane tabSupPane = new Pane();
 			
@@ -1300,7 +1311,7 @@ public class TabInterfController implements Initializable {
 			loader.setController(tabSupCon);
 			loader.load();
 			
-			paneTipoInterferencia.getChildren().add(tabSupPane);
+			pInterTipo.getChildren().add(tabSupPane);
 			
 			// -- escolher tipo de captacao --//
 			tipoCaptacao = 2;
@@ -1311,7 +1322,7 @@ public class TabInterfController implements Initializable {
 
 		if (newString == "Canal") {
 			
-			paneTipoInterferencia.getChildren().clear();
+			pInterTipo.getChildren().clear();
 			
 			Pane tabSupPane = new Pane();
 			
@@ -1323,7 +1334,7 @@ public class TabInterfController implements Initializable {
 			loader.setController(tabSupCon);
 			loader.load();
 			
-			paneTipoInterferencia.getChildren().add(tabSupPane);
+			pInterTipo.getChildren().add(tabSupPane);
 			
 			// -- escolher tipo de captação --//
 			tipoCaptacao = 2;
@@ -1333,7 +1344,7 @@ public class TabInterfController implements Initializable {
 		
 		if (newString == "Subterrânea") {
 			
-			paneTipoInterferencia.getChildren().clear();
+			pInterTipo.getChildren().clear();
 			
 			Pane tabSubPane = new Pane();
 			
@@ -1344,7 +1355,7 @@ public class TabInterfController implements Initializable {
 			loader.setRoot(tabSubPane);
 			loader.setController(tabSubCon);
 			loader.load();
-			paneTipoInterferencia.getChildren().add(tabSubPane);
+			pInterTipo.getChildren().add(tabSubPane);
 			// -- escolher tipo de captação --//
 			tipoCaptacao = 1;
 			
@@ -1359,7 +1370,7 @@ public class TabInterfController implements Initializable {
 								newString.equals("") 	)	// or null para nao dar null  point ...
 		{
 			
-			paneTipoInterferencia.getChildren().clear();
+			pInterTipo.getChildren().clear();
 			// -- escolher tipo de captação --//
 			tipoCaptacao = 3;
 		}

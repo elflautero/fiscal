@@ -793,13 +793,17 @@ public class TabEnderecoController implements Initializable {
 	// métodos de remimensionar as tabs //
 	public void redimWei (Number newValue) {
 		apEnd.setMinWidth((double) newValue);
+		
 	}
 	public void redimHei (Number newValue) {
 		apEnd.setMinHeight((double) newValue);
-	}
 		
-	@FXML AnchorPane apEnd;
+	}
+	
 	@FXML ScrollPane spEnd;
+	
+	@FXML AnchorPane apEnd;
+	@FXML Pane pEndForm;
 	
 	
 	//-- INITIALIZE --//
@@ -835,6 +839,17 @@ public class TabEnderecoController implements Initializable {
 	    AnchorPane.setRightAnchor(spEnd, 0.0);
 	    AnchorPane.setLeftAnchor(spEnd, 0.0);
 	    AnchorPane.setBottomAnchor(spEnd, 0.0);
+	    
+	    spEnd.widthProperty().addListener((obs, oldVal, newVal) -> {
+	    	
+	        Double widNewVal = (double) newVal * 0.15;
+	  
+	        AnchorPane.setLeftAnchor(pEndForm, widNewVal);
+	        AnchorPane.setLeftAnchor(pEndMap, widNewVal);
+	        System.out.println(widNewVal + "valor do endereço scrool pane");
+	        
+	    });
+	    
 	}
 
 	//-- Modular os botoes na inicializacao do programa --//
@@ -859,7 +874,7 @@ public class TabEnderecoController implements Initializable {
 	
 	WebView wv1;
 	WebEngine webEng;
-	@FXML Pane pEnd;
+	@FXML Pane pEndMap;
 	
 	public void abrirMapa (String strMarcador) {
 		
@@ -876,7 +891,7 @@ public class TabEnderecoController implements Initializable {
 		//root.setLayoutY(410);
 		//root.setLayoutX(127);
 		
-		pEnd.getChildren().add(root);
+		pEndMap.getChildren().add(root);
 	
 		webEng.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
             if (Worker.State.SUCCEEDED.equals(newValue)) {

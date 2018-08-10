@@ -56,8 +56,8 @@ public class TabNavegadorController implements Initializable{
 	ArrayList<String> docsList = new ArrayList<String>();
 		
 	@FXML Pane pBrowser;
-	@FXML Pane pNavBotoes1;
-	@FXML Pane pNavBotoes2;
+	@FXML Pane pBtnLef;
+	@FXML Pane pBtnRig;
 	
 	@FXML AnchorPane apNavegador = new AnchorPane();
 	
@@ -243,12 +243,18 @@ public class TabNavegadorController implements Initializable{
 		//wv1.setPrefSize(1117.0,627.0);
 		
 		// redimensionar navegador de acordo com a tela
-		wv1.minWidthProperty().bind(apNavegador.widthProperty().subtract(10));
-		wv1.minHeightProperty().bind(apNavegador.heightProperty().subtract(800));
-		 
+		wv1.minWidthProperty().bind(apNavegador.widthProperty().subtract(35));
+		wv1.minHeightProperty().bind(apNavegador.heightProperty().subtract(850));
+		
+
+		AnchorPane.setTopAnchor(spNavegador, 0.0);
+	    AnchorPane.setRightAnchor(spNavegador, 0.0);
+	    AnchorPane.setLeftAnchor(spNavegador, 0.0);
+	    AnchorPane.setBottomAnchor(spNavegador, 0.0);
+		
+	    
 		//wv1.setLayoutY(78);
 		pBrowser.getChildren().add(wv1);
-		
 		
 		wv1.getEngine().setCreatePopupHandler(new Callback<PopupFeatures, WebEngine>() {
 
@@ -286,6 +292,7 @@ public class TabNavegadorController implements Initializable{
 								"3"
 								
 								);
+					
 					// evento captura numero do choice box
 					cbNumIframe.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 					      @Override
@@ -359,6 +366,7 @@ public class TabNavegadorController implements Initializable{
 		}
 
 	@FXML ScrollPane spNavegador;
+	@FXML AnchorPane apBrowser;
 	
 	//-- INITIALIZE --//
 	@Override
@@ -369,14 +377,29 @@ public class TabNavegadorController implements Initializable{
 		navegarWeb();  
 		});
 		
-		AnchorPane.setTopAnchor(spNavegador, 0.0);
-	    AnchorPane.setRightAnchor(spNavegador, 0.0);
-	    AnchorPane.setLeftAnchor(spNavegador, 4.5);
-	    AnchorPane.setBottomAnchor(spNavegador, 0.0);
+		
+	    apBrowser.widthProperty().addListener((obs, oldVal, newVal) -> {
+	    	
+	        Double widNewVal = (double) newVal * -0.2;
+	       
+	        System.out.println("spNavegador " + spNavegador.getWidth());
+	        System.out.println(" ancho pane apBrowser " + apBrowser.getWidth());
+	       
+	       
+	    });
 	    
-	    AnchorPane.setLeftAnchor(pNavBotoes1, 11.0);
-	    AnchorPane.setRightAnchor(pNavBotoes2, 0.0);
+	    // ouvinte para spNavegador
+	    spNavegador.widthProperty().addListener((obs, oldVal, newVal) -> {
+	    	
+	        Double widNewVal = (double) newVal * -0.2;
+	       
+	        //AnchorPane.setRightAnchor(pBtnRig, widNewVal);
+	        //System.out.println("ouvinte dos botoes esquerda " + widNewVal);
+	       
+	    });
 	    
+	    
+	   
 		btnGoogle.setGraphic(new ImageView(imgGoogle));
 		btnCapturarDocs.setGraphic(new ImageView(imgCapturar));
 		btnMostrarDocs.setGraphic(new ImageView(imgMostrar));

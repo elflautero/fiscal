@@ -132,6 +132,8 @@ public class MainController {
 			    	
 			    }
 			});
+	       
+	       //tpMain.setTabMinWidth(1366);
 	        
 	    }
 

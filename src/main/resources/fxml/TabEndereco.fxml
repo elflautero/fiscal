@@ -11,13 +11,13 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="apEnd" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="676.0" prefWidth="1066.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabEnderecoController">
+<AnchorPane fx:id="apEnd" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="676.0" prefWidth="1066.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabEnderecoController">
    <children>
       <ScrollPane fx:id="spEnd" prefHeight="682.0" prefWidth="1066.0">
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="684.0" prefWidth="1067.0">
                <children>
-                  <Pane layoutX="72.0" layoutY="20.0" prefHeight="386.0" prefWidth="944.0">
+                  <Pane fx:id="pEndForm" layoutX="72.0" layoutY="20.0" prefHeight="386.0" prefWidth="944.0">
                      <children>
                         <TextField fx:id="tfEnd" layoutX="23.0" layoutY="83.0" prefHeight="25.0" prefWidth="446.0" />
                         <ChoiceBox fx:id="cbEndRA" layoutX="481.0" layoutY="83.0" prefHeight="25.0" prefWidth="140.0" />
@@ -68,7 +68,7 @@
                         </Pane>
                      </children>
                   </Pane>
-                  <Pane fx:id="pEnd" layoutX="95.0" layoutY="412.0" prefHeight="386.0" prefWidth="886.0" />
+                  <Pane fx:id="pEndMap" layoutX="95.0" layoutY="412.0" prefHeight="386.0" prefWidth="886.0" />
                </children>
             </AnchorPane>
         </content>
