@@ -9,9 +9,9 @@
 
 <!-- fx:controller="controllers.TabInterfController" -->
 
-<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="215.0" prefWidth="998.0" type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="998.0" type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Pane layoutX="212.0" layoutY="28.0" prefHeight="159.0" prefWidth="731.0">
+      <Pane layoutX="211.0" layoutY="21.0" prefHeight="159.0" prefWidth="731.0">
          <children>
             <Label layoutX="125.0" layoutY="25.0" text="Local de Captação: " />
             <ChoiceBox fx:id="cbCaptacao" layoutX="238.0" layoutY="21.0" prefHeight="25.0" prefWidth="124.0" />
@@ -31,6 +31,6 @@
             <DatePicker fx:id="dpDataOperacao" layoutX="593.0" layoutY="113.0" prefHeight="25.0" prefWidth="124.0" />
          </children>
       </Pane>
-      <ImageView fx:id="iVewSuper" fitHeight="150.0" fitWidth="141.0" layoutX="56.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="iVewSuper" fitHeight="150.0" fitWidth="141.0" layoutX="50.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true" />
    </children>
 </fx:root>

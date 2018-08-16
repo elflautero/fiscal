@@ -12,22 +12,22 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="apAto" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="801.0" prefWidth="1189.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabAtoController">
+<AnchorPane fx:id="apAto" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="1140.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabAtoController">
    <children>
-      <ScrollPane fx:id="spAto" prefHeight="801.0" prefWidth="1189.0">
+      <ScrollPane fx:id="spAto" prefHeight="680.0" prefWidth="1140.0">
          <content>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="800.0" prefWidth="1175.0">
+            <AnchorPane fx:id="apAtoInt" minHeight="0.0" minWidth="0.0" prefHeight="768.0" prefWidth="1127.0">
                <children>
-                  <Pane prefHeight="680.0" prefWidth="1140.0">
+                  <Pane fx:id="pAto" prefHeight="680.0" prefWidth="1140.0">
                      <children>
-                        <TableView fx:id="tvAto" layoutX="132.0" layoutY="176.0" prefHeight="113.0" prefWidth="889.0">
+                        <TableView fx:id="tvAto" layoutX="132.0" layoutY="212.0" prefHeight="113.0" prefWidth="889.0">
                            <columns>
                               <TableColumn fx:id="tcTipo" prefWidth="409.0" text="Tipo" />
                               <TableColumn fx:id="tcNumero" minWidth="0.0" prefWidth="232.0" text="Número" />
                               <TableColumn fx:id="tcSEI" prefWidth="232.0" text="SEI" />
                            </columns>
                         </TableView>
-                        <Pane layoutX="145.0" layoutY="125.0" prefHeight="47.0" prefWidth="839.0">
+                        <Pane layoutX="145.0" layoutY="161.0" prefHeight="47.0" prefWidth="839.0">
                            <children>
                               <Button fx:id="btnNovo" layoutX="10.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnNovoHab" prefHeight="22.0" prefWidth="76.0" text="Novo" />
                               <Button fx:id="btnSalvar" layoutX="97.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnSalvarHab" prefHeight="22.0" prefWidth="76.0" text="Salvar" />
@@ -38,7 +38,7 @@
                               <TextField fx:id="tfPesquisar" layoutX="445.0" layoutY="11.0" prefHeight="23.0" prefWidth="295.0" />
                            </children>
                         </Pane>
-                        <Pane layoutX="116.0" layoutY="54.0" prefHeight="64.0" prefWidth="921.0">
+                        <Pane layoutX="116.0" layoutY="90.0" prefHeight="64.0" prefWidth="921.0">
                            <children>
                               <Label layoutX="7.0" layoutY="7.0" text="Tipo de Ato:" />
                               <ChoiceBox fx:id="cbAtoTipo" layoutX="82.0" layoutY="3.0" prefHeight="25.0" prefWidth="223.0" />
@@ -52,11 +52,11 @@
                               <Label layoutX="291.0" layoutY="41.0" text="Data de Criação do Ato: " />
                            </children>
                         </Pane>
-                        <Label layoutX="132.0" layoutY="303.0" text="CARACTERIZAÇÃO: " />
-                        <Button fx:id="bntCaracterizacao" layoutX="993.0" layoutY="404.0" mnemonicParsing="false" onAction="#bntCaracterizacaoHab" text="?" />
-                        <Pane fx:id="paneCaracterizar" layoutX="171.0" layoutY="329.0" prefHeight="200.0" prefWidth="800.0" />
-                        <Button fx:id="btnGerarAto" layoutX="1068.0" layoutY="209.0" mnemonicParsing="false" onAction="#btnGerarAtoHab" prefHeight="32.0" prefWidth="32.0" />
-                        <Pane layoutX="129.0" layoutY="5.0" prefHeight="40.0" prefWidth="886.0" style="-fx-background-color: #E9E9E9;">
+                        <Label layoutX="132.0" layoutY="339.0" text="CARACTERIZAÇÃO: " />
+                        <Button fx:id="bntCaracterizacao" layoutX="993.0" layoutY="440.0" mnemonicParsing="false" onAction="#bntCaracterizacaoHab" text="?" />
+                        <Pane fx:id="paneCaracterizar" layoutX="171.0" layoutY="365.0" prefHeight="200.0" prefWidth="800.0" />
+                        <Button fx:id="btnGerarAto" layoutX="1068.0" layoutY="245.0" mnemonicParsing="false" onAction="#btnGerarAtoHab" prefHeight="32.0" prefWidth="32.0" />
+                        <Pane layoutX="129.0" layoutY="41.0" prefHeight="40.0" prefWidth="886.0" style="-fx-background-color: #E9E9E9;">
                            <children>
                               <Label fx:id="lblVisAto" layoutX="117.0" layoutY="8.0" prefHeight="25.0" prefWidth="712.0">
                                  <font>
@@ -66,7 +66,7 @@
                               <Label layoutX="57.0" layoutY="12.0" text="Vistoria: " />
                            </children>
                         </Pane>
-                        <ChoiceBox fx:id="cbUsuario" layoutX="1068.0" layoutY="172.0" prefHeight="25.0" prefWidth="49.0" />
+                        <ChoiceBox fx:id="cbUsuario" layoutX="1068.0" layoutY="208.0" prefHeight="25.0" prefWidth="49.0" />
                      </children>
                   </Pane>
                </children>

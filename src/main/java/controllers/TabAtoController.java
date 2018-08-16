@@ -433,13 +433,19 @@ public class TabAtoController implements Initializable{
 	
 	@FXML AnchorPane apAto;
 	@FXML ScrollPane spAto;
+	
 	// métodos de remimensionar as tabs //
-	public void redimWei (Number newValue) {
+	public void redimWid (Number newValue) {
 		apAto.setMinWidth((double) newValue);
 	}
 	public void redimHei (Number newValue) {
 		apAto.setMinHeight((double) newValue);
 	}
+	
+	
+	@FXML Pane pAto;
+	@FXML AnchorPane apAtoInt;
+	
 	
 	// INITIALIZE //
 	public void initialize(URL url, ResourceBundle rb) {
@@ -526,11 +532,28 @@ public class TabAtoController implements Initializable{
 			}
 		});
 		
+		apAto.widthProperty().addListener((obs, oldVal, newVal) -> {
+	    	
+			// cálculo do layout para redimensionamento
+			Double widNewVal = Math.pow((Double) newVal/70, (Double) newVal/1000);
+			// posicionamento dos panes redimensionando a tela
+			AnchorPane.setLeftAnchor(pAto, widNewVal);
+	      
+			// redimensionamento scroolPane
+			spAto.setMinWidth((Double)newVal);
+			spAto.setMaxWidth((Double)newVal);
+	        // valor mínimo de altura scroolPane
+			apAtoInt.setMinHeight(1200.0);  // spDemanda.getHeight() * 1.2
+	       
+	    });
 		
-		AnchorPane.setTopAnchor(spAto, 0.0);
-	    AnchorPane.setRightAnchor(spAto, 0.0);
-	    AnchorPane.setLeftAnchor(spAto, 0.0);
-	    AnchorPane.setBottomAnchor(spAto, 0.0);
+		apAto.heightProperty().addListener((obs, oldVal, newVal) -> {
+	    	
+	       spAto.setMinHeight((Double)newVal - 30);
+	       spAto.setMaxHeight((Double)newVal - 30);
+	       
+	       
+	    });
 	}
 	
 	ObservableList<AtoTabela> obsList;

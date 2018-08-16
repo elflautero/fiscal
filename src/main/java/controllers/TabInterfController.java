@@ -69,11 +69,11 @@ public class TabInterfController implements Initializable {
 	// --- Controller Principal - MainController --- //
 	@FXML private MainController main;
 	
-	@FXML Pane pInterTipo = new Pane();
+	
 
     @FXML private Pane tabInterferencia;
     
-    @FXML AnchorPane aPaneInt = new AnchorPane();
+    @FXML AnchorPane apIntInt = new AnchorPane();
     
    
  	@FXML Button btnLatLng = new Button();
@@ -1184,17 +1184,22 @@ public class TabInterfController implements Initializable {
 	}
 	
 	// métodos de remimensionar as tabs //
-		public void redimWei (Number newValue) {
+		public void redimWid (Number newValue) {
 			apInter.setMinWidth((double) newValue);
 		}
 		public void redimHei (Number newValue) {
 			apInter.setMinHeight((double) newValue);
 		}
 
-		@FXML AnchorPane apInter;
+		
 		@FXML ScrollPane spInter;
+		@FXML AnchorPane apInter;
 		
 		@FXML Pane pInterForm;
+		@FXML Pane pInterTipo;
+		@FXML Pane pInterMap;
+		@FXML Pane pInterferencia;
+		
 		
 		
 	//-- INITIALIZE --//
@@ -1224,23 +1229,23 @@ public class TabInterfController implements Initializable {
 		cbTipoInt.getSelectionModel().selectedItemProperty().addListener( 
 				(ObservableValue<? extends String> observable, String oldString, String newString) -> 
 				
-				{
-					try {
-						
-						//System.out.println("nova string selecionada no  initialize " + newString);
-						if (newString == null)
-							abrirTabs("");
-						else {
-							abrirTabs(newString); 
-						}
-						
-					} catch (IOException e) {
-						
-						e.printStackTrace();
+			{
+				try {
+					
+					//System.out.println("nova string selecionada no  initialize " + newString);
+					if (newString == null)
+						abrirTabs("");
+					else {
+						abrirTabs(newString); 
 					}
-				} 
+					
+				} catch (IOException e) {
+					
+					e.printStackTrace();
+				}
+			} 
 				
-				);
+		);
 		
 		btnIntMaps.setGraphic(new ImageView(imgMap));
 		btnEndCoord.setGraphic(new ImageView(imgEndCoord));
@@ -1248,19 +1253,77 @@ public class TabInterfController implements Initializable {
 		
 		modularBotoes ();
 		
+		/*
 		AnchorPane.setTopAnchor(spInter, 0.0);
 	    AnchorPane.setRightAnchor(spInter, 0.0);
 	    AnchorPane.setLeftAnchor(spInter, 0.0);
-	    AnchorPane.setBottomAnchor(spInter, 0.0);
-	    
-	    spInter.widthProperty().addListener((obs, oldVal, newVal) -> {
+	    AnchorPane.setBottomAnchor(spInter, 30.0);
+	   */
+	   
+	    apInter.widthProperty().addListener((obs, oldVal, newVal) -> {
 	    	
-	        Double widNewVal = (double) newVal * 0.15;
-	        AnchorPane.setLeftAnchor(pInterForm, widNewVal);
-	        AnchorPane.setLeftAnchor(pInterTipo, widNewVal);
+	    	
+	    	Double widNewVal = Math.pow((Double) newVal/70, (Double) newVal/1000);
+	    	// panes com os formulários e mapas
+	        AnchorPane.setLeftAnchor(pInterferencia, widNewVal);
+	     // redimensionamento scroolPane
+	     	spInter.setMinWidth((Double)newVal);
+	     	spInter.setMaxWidth((Double)newVal);
+	        
+	        // para o scrool pane funcionar com a tela pequena e assim poder rolar...
+		    apIntInt.setMinHeight(1200.0);
+		    
+		    apIntInt.setMinWidth(spInter.getWidth());
+		    
 	        
 	    });
-		
+	    
+	    apInter.heightProperty().addListener((obs, oldVal, newVal) -> {
+	    	
+		       spInter.setMinHeight((Double)newVal - 30);
+		       spInter.setMaxHeight((Double)newVal - 30);
+		       
+		    });
+	    
+	    
+	    /*
+	    apInter.widthProperty().addListener((obs, oldVal, newVal) -> {
+	    	
+	    	spInter.setMinWidth((Double) newVal);
+	    	spInter.setMaxWidth((Double) newVal);
+	    	
+	    	apIntInt.setMinWidth((Double) newVal);
+	    	apIntInt.setMaxWidth((Double) newVal);
+	    	
+	    	
+	    	System.out.println("anchor pane inter  width " + newVal);
+	    });
+	    
+	    apInter.heightProperty().addListener((obs, oldVal, newVal) -> {
+	    	
+	    	Double altura = (Double) newVal - 28;
+	    	
+	    	spInter.setMinHeight((Double) altura);
+	    	spInter.setMaxHeight((Double) altura);
+	    	
+	    	apIntInt.setMinHeight((Double) newVal);
+	    	apIntInt.setMaxHeight((Double) newVal);
+	    	
+	    	System.out.println("anchor pane inter  heigth " + newVal);
+	    	System.out.println("valor da altura " + altura);
+	    	
+	    });
+	    */
+	    
+	    
+	    
+	    
+	   
+	    
+	   
+	    
+	    //apIntInt.setMinHeight(spInter.getPrefHeight() + 300);
+	   
 	}
 	
 	public void modularBotoes () {
@@ -1389,18 +1452,18 @@ public class TabInterfController implements Initializable {
 			abrirMapa("");
 		}
 		else {
-			 aPaneInt.getChildren().remove(root);
+			pInterMap.getChildren().clear();
 		}
 		
 		System.out.println("checkbox" + count);
 	}
 	
 	
-WebView wv1;
-WebEngine webEng;
-BorderPane root;
+	WebView wv1;
+	WebEngine webEng;
+	BorderPane root;
 
-public void abrirMapa (String strMarcador) {
+	 public void abrirMapa (String strMarcador) {
 		
 	/*
 		File file = null;
@@ -1423,16 +1486,18 @@ public void abrirMapa (String strMarcador) {
 		webEng = wv1.getEngine();
 		webEng.load(getClass().getResource("/html/enderecoMap.html").toExternalForm());
 		
-		wv1.setPrefSize(887,400);
+		wv1.setPrefSize(887,485);
 		wv1.getEngine();
 	
-		root = new BorderPane();
-		root.setCenter(wv1);
-		root.setPrefSize(887, 418);
-		root.setLayoutY(425);
-		root.setLayoutX(125);
+		//root = new BorderPane();
+		//root.setCenter(wv1);
+		//root.setPrefSize(887, 418);
+		//root.setLayoutY(425);
+		//root.setLayoutX(125);
 		
-        aPaneInt.getChildren().add(root);
+		//apIntInt.getChildren().add(root);
+		
+		pInterMap.getChildren().add(wv1);
 	
 		webEng.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
             if (Worker.State.SUCCEEDED.equals(newValue)) {

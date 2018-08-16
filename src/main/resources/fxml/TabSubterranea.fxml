@@ -9,9 +9,9 @@
 
 <!-- fx:controller="controllers.TabSubterraneaController" -->
 
-<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="215.0" prefWidth="998.0" type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="998.0" type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Pane layoutX="229.0" layoutY="28.0" prefHeight="159.0" prefWidth="720.0">
+      <Pane layoutX="230.0" layoutY="21.0" prefHeight="159.0" prefWidth="720.0">
          <children>
             <Label layoutX="151.0" layoutY="25.0" text="Tipo de Captação: " />
             <ChoiceBox fx:id="cbTipoCaptacao" layoutX="261.0" layoutY="21.0" prefHeight="25.0" prefWidth="110.0" />
@@ -32,6 +32,6 @@
             
          </children>
       </Pane>
-      <ImageView fx:id="iVewSubt" fitHeight="150.0" fitWidth="163.0" layoutX="54.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="iVewSubt" fitHeight="150.0" fitWidth="163.0" layoutX="54.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true" />
    </children>
 </fx:root>

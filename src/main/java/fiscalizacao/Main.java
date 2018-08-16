@@ -34,13 +34,13 @@ public class Main extends Application {
         
         stage.setX(primaryScreenBounds.getMinX());
         stage.setY(primaryScreenBounds.getMinY());
-        stage.setWidth(primaryScreenBounds.getWidth());
-        stage.setHeight(primaryScreenBounds.getHeight());
+       // stage.setWidth(primaryScreenBounds.getWidth());
+        //stage.setHeight(primaryScreenBounds.getHeight());
         
         
         // teste no notebook
-        //stage.setWidth(1366);
-        //stage.setHeight(768);
+        stage.setWidth(1366);
+        stage.setHeight(768);
         
         // limites de tamanho do stage
         stage.setMinHeight(768);

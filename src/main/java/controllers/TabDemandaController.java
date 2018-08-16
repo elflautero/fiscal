@@ -18,6 +18,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
@@ -31,7 +32,9 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import tabela.DemandaTabela;
 
@@ -525,7 +528,7 @@ public class TabDemandaController implements Initializable {
 	
 	
 	// métodos de remimensionar as tabs //
-	public void redimWei (Number newValue) {
+	public void redimWid (Number newValue) {
 				apDemanda.setMinWidth((double) newValue);
 			}
 	public void redimHei (Number newValue) {
@@ -534,6 +537,7 @@ public class TabDemandaController implements Initializable {
 			
 	
 	@FXML ScrollPane spDemanda;
+	@FXML AnchorPane apDemInt;
 	@FXML Pane pDemanda;
 	
 	
@@ -554,21 +558,41 @@ public class TabDemandaController implements Initializable {
         // --- habilitar e desabilitar botões ---- //
 		modularBotoesInicial();
 		
-		spDemanda.widthProperty().addListener((obs, oldVal, newVal) -> {
+		apDemanda.widthProperty().addListener((obs, oldVal, newVal) -> {
 	    	
-	        Double widNewVal = (double) newVal * 0.15;
-	        AnchorPane.setLeftAnchor(pDemanda, widNewVal);
-	        
+			// cálculo do layout para redimensionamento
+			Double widNewVal = Math.pow((Double) newVal/70, (Double) newVal/1000);
+			// posicionamento dos panes redimensionando a tela
+			AnchorPane.setLeftAnchor(pDemanda, widNewVal);
+	      
+			// redimensionamento scroolPane
+			spDemanda.setMinWidth((Double)newVal);
+			spDemanda.setMaxWidth((Double)newVal);
+	        // valor mínimo de altura scroolPane
+			apDemInt.setMinHeight(1200.0);  // spDemanda.getHeight() * 1.2
+	       
+	       
 	    });
 		
-		// teste
+		apDemanda.heightProperty().addListener((obs, oldVal, newVal) -> {
+	    	
+	       spDemanda.setMinHeight((Double)newVal - 30);
+	       spDemanda.setMaxHeight((Double)newVal - 30);
+	       
+	       
+	    });
 		
+		
+		/*
 		AnchorPane.setTopAnchor(spDemanda, 0.0);
 	    AnchorPane.setRightAnchor(spDemanda, 0.0);
 	    AnchorPane.setLeftAnchor(spDemanda, 0.0);
-	    AnchorPane.setBottomAnchor(spDemanda, 0.0);
+	    AnchorPane.setBottomAnchor(spDemanda, 30.0);
 	    
-	   
+	    */
+		
+		
+		
 	}
 
 		

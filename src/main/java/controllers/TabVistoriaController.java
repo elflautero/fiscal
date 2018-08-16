@@ -1117,7 +1117,7 @@ public class TabVistoriaController implements Initializable{
 	WebEngine engVistoria;
 	
 	// métodos de remimensionar as tabs //
-				public void redimWei (Number newValue) {
+				public void redimWid (Number newValue) {
 					apVis.setMinWidth((double) newValue);
 				}
 				public void redimHei (Number newValue) {
@@ -1125,7 +1125,9 @@ public class TabVistoriaController implements Initializable{
 				}
 		
 		@FXML AnchorPane apVis;
+		@FXML AnchorPane apVisInt;
 		@FXML ScrollPane spVis;
+		@FXML Pane pVistoria;
 		
 	//-- INITIALIZE --//
 	@Override
@@ -1143,6 +1145,32 @@ public class TabVistoriaController implements Initializable{
 	        
 		
 		modularBotoes();
+		
+		apVis.widthProperty().addListener((obs, oldVal, newVal) -> {
+	    	
+			// cálculo do layout para redimensionamento
+			Double widNewVal = Math.pow((Double) newVal/70, (Double) newVal/1000);
+			// posicionamento dos panes redimensionando a tela
+			AnchorPane.setLeftAnchor(pVistoria, widNewVal);
+	      
+			// redimensionamento scroolPane
+			spVis.setMinWidth((Double)newVal);
+			spVis.setMaxWidth((Double)newVal);
+	        // valor mínimo de altura scroolPane
+			apVisInt.setMinHeight(2200.0);  // spDemanda.getHeight() * 1.2
+	       
+	       
+	       
+	       
+	    });
+		
+		apVis.heightProperty().addListener((obs, oldVal, newVal) -> {
+	    	
+	       spVis.setMinHeight((Double)newVal - 30);
+	       spVis.setMaxHeight((Double)newVal - 30);
+	       
+	       
+	    });
 		
 		/*
 		dpDataFiscalizacao.setConverter(new StringConverter<LocalDate>() {
@@ -1223,11 +1251,12 @@ public class TabVistoriaController implements Initializable{
 	    });
 	    */
 		
+		/*
 		AnchorPane.setTopAnchor(spVis, 0.0);
 	    AnchorPane.setRightAnchor(spVis, 0.0);
 	    AnchorPane.setLeftAnchor(spVis, 0.0);
 	    AnchorPane.setBottomAnchor(spVis, 0.0);
-		
+		*/
 	}
 	
 	public void relatarHTML () {

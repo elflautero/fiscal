@@ -240,20 +240,11 @@ public class TabNavegadorController implements Initializable{
 	public void navegarWeb() {
 		
 		wv1 = new WebView();
-		//wv1.setPrefSize(1117.0,627.0);
 		
 		// redimensionar navegador de acordo com a tela
 		wv1.minWidthProperty().bind(apNavegador.widthProperty().subtract(35));
-		wv1.minHeightProperty().bind(apNavegador.heightProperty().subtract(850));
+		wv1.minHeightProperty().bind(apNavegador.heightProperty().subtract(150));
 		
-
-		AnchorPane.setTopAnchor(spNavegador, 0.0);
-	    AnchorPane.setRightAnchor(spNavegador, 0.0);
-	    AnchorPane.setLeftAnchor(spNavegador, 0.0);
-	    AnchorPane.setBottomAnchor(spNavegador, 0.0);
-		
-	    
-		//wv1.setLayoutY(78);
 		pBrowser.getChildren().add(wv1);
 		
 		wv1.getEngine().setCreatePopupHandler(new Callback<PopupFeatures, WebEngine>() {
@@ -358,12 +349,12 @@ public class TabNavegadorController implements Initializable{
 	
 	
 	// métodos de remimensionar as tabs //
-		public void redimWei (Number newValue) {
-			apNavegador.setMinWidth((double) newValue);
-		}
+		public void redimWid (Number newValue) {
+					apNavegador.setMinWidth((double) newValue);
+				}
 		public void redimHei (Number newValue) {
-			apNavegador.setMinHeight((double) newValue);;
-		}
+					apNavegador.setMinHeight((double) newValue);;
+				}
 
 	@FXML ScrollPane spNavegador;
 	@FXML AnchorPane apBrowser;
@@ -374,30 +365,27 @@ public class TabNavegadorController implements Initializable{
 		
 		// -- inicitalizar o mapa -- //
 		Platform.runLater(() ->{
-		navegarWeb();  
+			navegarWeb(); 
 		});
 		
+		AnchorPane.setTopAnchor(spNavegador, 0.0);
+	    AnchorPane.setRightAnchor(spNavegador, 0.0);
+	    AnchorPane.setLeftAnchor(spNavegador, 0.0);
+	    AnchorPane.setBottomAnchor(spNavegador, 30.0);
+	    
+	    spNavegador.heightProperty().addListener((observable, oldValue, newValue) -> {
+           //System.out.println("altura do spNavegador " + newValue);
+           
+           apBrowser.setMinHeight((Double)newValue -1);
+           apBrowser.setMaxHeight((Double)newValue -1);
+        });
+	    
+	    /*
+	    spNavegador.widthProperty().addListener((observable, oldValue, newValue) -> {
+	           System.out.println("largura do spNavegador " + newValue);
+	        });
+	        */
 		
-	    apBrowser.widthProperty().addListener((obs, oldVal, newVal) -> {
-	    	
-	        Double widNewVal = (double) newVal * -0.2;
-	       
-	        System.out.println("spNavegador " + spNavegador.getWidth());
-	        System.out.println(" ancho pane apBrowser " + apBrowser.getWidth());
-	       
-	       
-	    });
-	    
-	    // ouvinte para spNavegador
-	    spNavegador.widthProperty().addListener((obs, oldVal, newVal) -> {
-	    	
-	        Double widNewVal = (double) newVal * -0.2;
-	       
-	        //AnchorPane.setRightAnchor(pBtnRig, widNewVal);
-	        //System.out.println("ouvinte dos botoes esquerda " + widNewVal);
-	       
-	    });
-	    
 	    
 	   
 		btnGoogle.setGraphic(new ImageView(imgGoogle));
@@ -409,3 +397,28 @@ public class TabNavegadorController implements Initializable{
 	}
 
 }
+
+
+/*
+apBrowser.widthProperty().addListener((obs, oldVal, newVal) -> {
+	
+    Double widNewVal = (double) newVal * -0.2;
+   
+    //System.out.println("spNavegador " + spNavegador.getWidth());
+    //System.out.println(" ancho pane apBrowser " + apBrowser.getWidth());
+   
+   
+});
+
+// ouvinte para spNavegador
+spNavegador.widthProperty().addListener((obs, oldVal, newVal) -> {
+	
+    Double widNewVal = (double) newVal * -0.2;
+   
+    //AnchorPane.setRightAnchor(pBtnRig, widNewVal);
+    //System.out.println("ouvinte dos botoes esquerda " + widNewVal);
+   
+});
+*/
+
+

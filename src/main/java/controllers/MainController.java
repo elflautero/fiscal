@@ -107,33 +107,64 @@ public class MainController {
 			    @Override 
 			    public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
 			    	
-			    	System.out.println("tpMain, valor width " + newValue);
+			    	
 			    	// navegador
-			    	tabNavegadorController.redimWei(newValue);
-			    	tabNavegadorController.redimHei(newValue);
+			    	tabNavegadorController.redimWid(newValue);
+			    	
 				    // denuncia
-			    	tabDemandaController.redimWei(newValue);
+			    	tabDemandaController.redimWid(newValue);
+			    	
+			    	// endereco
+			    	tabEnderecoController.redimWid(newValue);
+			    	
+			    	// interferencia
+			    	tabInterferenciaController.redimWid(newValue);
+			    	
+			    	// usuario
+			    	tabUsuarioController.redimWid(newValue);
+			    	
+			    	// vistoria
+			    	tabVistoriaController.redimWid(newValue);
+			    	
+			    	//ato
+			    	tabAtoController.redimWid(newValue);
+			    	
+			    	
+			    }
+			});
+	       
+	       tpMain.heightProperty().addListener(new ChangeListener<Number>() {
+	    	   
+			    @Override 
+			    public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
+			    	
+			    	
+			    	// navegador
+			    	tabNavegadorController.redimHei(newValue);
+			    	
+				    // denuncia
+			    	
 			    	tabDemandaController.redimHei(newValue);
 			    	// endereco
-			    	tabEnderecoController.redimWei(newValue);
+			    	
 			    	tabEnderecoController.redimHei(newValue);
 			    	// interferencia
-			    	tabInterferenciaController.redimWei(newValue);
+			    	
 			    	tabInterferenciaController.redimHei(newValue);
 			    	// usuario
-			    	tabUsuarioController.redimWei(newValue);
+			    	
 			    	tabUsuarioController.redimHei(newValue);
 			    	// vistoria
-			    	tabVistoriaController.redimWei(newValue);
+			    	
 			    	tabVistoriaController.redimHei(newValue);
 			    	//ato
-			    	tabAtoController.redimWei(newValue);
+			    	
 			    	tabAtoController.redimHei(newValue);
 			    	
 			    }
 			});
 	       
-	       //tpMain.setTabMinWidth(1366);
+	     
 	        
 	    }
 

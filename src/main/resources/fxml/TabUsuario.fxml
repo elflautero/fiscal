@@ -12,15 +12,15 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="apUsuario" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="790.0" prefWidth="1143.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabUsuarioController">
+<AnchorPane fx:id="apUsuario" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="1140.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabUsuarioController">
    <children>
-      <ScrollPane fx:id="spUsuario" prefHeight="787.0" prefWidth="1140.0">
+      <ScrollPane fx:id="spUsuario" prefHeight="680.0" prefWidth="1140.0">
          <content>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="789.0" prefWidth="1140.0">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="768.0" prefWidth="1127.0">
                <children>
-                  <Pane fx:id="pInterGeral" layoutX="44.0" layoutY="20.0" prefHeight="735.0" prefWidth="1053.0">
+                  <Pane fx:id="pUsuario" layoutX="-6.0" layoutY="-5.0" prefHeight="680.0" prefWidth="1140.0">
                      <children>
-                        <Pane layoutX="73.0" layoutY="14.0" prefHeight="41.0" prefWidth="886.0" style="-fx-background-color: #E9E9E9;">
+                        <Pane layoutX="127.0" layoutY="43.0" prefHeight="41.0" prefWidth="886.0" style="-fx-background-color: #E9E9E9;">
                            <children>
                               <Label layoutX="27.0" layoutY="12.0" text="Endereço do Empreendimento: " />
                               <Label fx:id="lblEndUsuario" layoutX="199.0" layoutY="8.0" prefHeight="25.0" prefWidth="660.0">
@@ -30,34 +30,34 @@
                               </Label>
                            </children>
                         </Pane>
-                        <Pane layoutX="85.0" layoutY="71.0" prefHeight="193.0" prefWidth="862.0">
+                        <Pane layoutX="136.0" layoutY="102.0" prefHeight="193.0" prefWidth="869.0">
                            <children>
                               <Label layoutX="15.0" layoutY="4.0" prefHeight="18.0" prefWidth="42.0" text="Tipo: " />
                               <Label layoutX="133.0" layoutY="4.0" text="Nome/Razão Social:" />
                               <Label layoutX="666.0" layoutY="4.0" text="CPF/CNPJ:" />
                               <Label layoutX="55.0" layoutY="83.0" text="Endereço:" />
                               <Label layoutX="428.0" layoutY="87.0" text="RA:" />
-                              <Label layoutX="579.0" layoutY="87.0" text="CEP:" />
-                              <Label layoutX="674.0" layoutY="87.0" text="Cidade:" />
+                              <Label layoutX="580.0" layoutY="87.0" text="CEP:" />
+                              <Label layoutX="675.0" layoutY="87.0" text="Cidade:" />
                               <Label layoutX="16.0" layoutY="136.0" text="Telefone:" />
                               <Label layoutX="167.0" layoutY="135.0" text="Celular:" />
                               <Label layoutX="318.0" layoutY="136.0" text="Email:" />
-                              <Label layoutX="798.0" layoutY="87.0" text="UF:" />
+                              <Label layoutX="799.0" layoutY="87.0" text="UF:" />
                               <ChoiceBox fx:id="cbTipoPessoa" layoutX="14.0" layoutY="25.0" prefHeight="25.0" prefWidth="106.0" />
                               <TextField fx:id="tfUsNome" layoutX="132.0" layoutY="24.0" prefHeight="26.0" prefWidth="521.0" />
                               <TextField fx:id="tfUsCPFCNPJ" layoutX="665.0" layoutY="24.0" prefHeight="26.0" prefWidth="187.0" />
                               <CheckBox fx:id="cbEndEmp" layoutX="14.0" layoutY="59.0" mnemonicParsing="false" onAction="#cbEndEmpHab" text="importar endereço do empreendimento." />
                               <TextField fx:id="tfUsEnd" layoutX="16.0" layoutY="106.0" prefHeight="26.0" prefWidth="400.0" />
-                              <ChoiceBox fx:id="cbUsRA" layoutX="465.0" layoutY="101.0" prefHeight="28.0" prefWidth="140.0" />
-                              <TextField fx:id="tfUsCEP" layoutX="578.0" layoutY="106.0" prefHeight="26.0" prefWidth="83.0" />
-                              <TextField fx:id="tfUsCidade" layoutX="673.0" layoutY="106.0" prefHeight="26.0" prefWidth="112.0" />
-                              <ChoiceBox fx:id="cbUsUF" layoutX="797.0" layoutY="106.0" prefHeight="25.0" prefWidth="55.0" />
+                              <ChoiceBox fx:id="cbUsRA" layoutX="428.0" layoutY="105.0" prefHeight="28.0" prefWidth="140.0" />
+                              <TextField fx:id="tfUsCEP" layoutX="579.0" layoutY="106.0" prefHeight="26.0" prefWidth="83.0" />
+                              <TextField fx:id="tfUsCidade" layoutX="674.0" layoutY="106.0" prefHeight="26.0" prefWidth="112.0" />
+                              <ChoiceBox fx:id="cbUsUF" layoutX="798.0" layoutY="106.0" prefHeight="25.0" prefWidth="55.0" />
                               <TextField fx:id="tfUsTel" layoutX="15.0" layoutY="154.0" prefHeight="26.0" prefWidth="140.0" />
                               <TextField fx:id="tfUsCel" layoutX="166.0" layoutY="154.0" prefHeight="26.0" prefWidth="140.0" />
                               <TextField fx:id="tfUsEmail" layoutX="317.0" layoutY="154.0" prefHeight="26.0" prefWidth="535.0" />
                            </children>
                         </Pane>
-                        <Pane layoutX="111.0" layoutY="274.0" prefHeight="47.0" prefWidth="811.0">
+                        <Pane layoutX="165.0" layoutY="295.0" prefHeight="47.0" prefWidth="811.0">
                            <children>
                               <Button fx:id="btnUsNovo" layoutX="8.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnUsNovoHab" prefHeight="22.0" prefWidth="76.0" text="Novo" />
                               <Button fx:id="btnUsSalvar" layoutX="93.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnUsSalvarHab" prefHeight="22.0" prefWidth="76.0" text="Salvar" />
@@ -68,7 +68,7 @@
                               <TextField fx:id="tfUsPesquisar" layoutX="426.0" layoutY="11.0" prefHeight="23.0" prefWidth="295.0" />
                            </children>
                         </Pane>
-                        <TableView fx:id="tvListaUs" layoutX="82.0" layoutY="339.0" prefHeight="140.0" prefWidth="889.0">
+                        <TableView fx:id="tvListaUs" layoutX="116.0" layoutY="361.0" prefHeight="140.0" prefWidth="889.0">
                            <columns>
                               <TableColumn fx:id="tcUsNome" prefWidth="409.0" text="Nome" />
                               <TableColumn fx:id="tcUsCPFCNPJ" minWidth="0.0" prefWidth="232.0" text="CPF/CNPJ" />

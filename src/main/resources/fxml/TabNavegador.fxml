@@ -7,9 +7,9 @@
 
 <AnchorPane fx:id="apNavegador" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="1140.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabNavegadorController">
    <children>
-      <ScrollPane fx:id="spNavegador" prefHeight="680.0" prefWidth="1140.0" style="-fx-background-color: red;">
+      <ScrollPane fx:id="spNavegador" prefHeight="680.0" prefWidth="1140.0">
         <content>
-          <AnchorPane fx:id="apBrowser" minHeight="0.0" minWidth="0.0" prefHeight="701.0" prefWidth="1139.0">
+          <AnchorPane fx:id="apBrowser" minHeight="0.0" minWidth="0.0" prefHeight="678.0" prefWidth="1139.0">
                <children>
                   <Pane fx:id="pBtnLef" layoutX="4.0" layoutY="14.0" prefHeight="40.0" prefWidth="892.0">
                      <children>

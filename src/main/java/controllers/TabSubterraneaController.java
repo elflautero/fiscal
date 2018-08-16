@@ -171,6 +171,7 @@ public class TabSubterraneaController implements Initializable {
 		
 		System.out.println("TabSubterranea inicializada!");
 		
+		// listeners para envitar valor maior que cinco caracteres
 		tfVazao.lengthProperty().addListener(new ChangeListener<Number>() {
 
             @Override

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
+import javax.print.attribute.standard.PDLOverrideSupported;
+
 import dao.EnderecoDao;
 import entity.Demanda;
 import entity.Endereco;
@@ -791,7 +793,7 @@ public class TabEnderecoController implements Initializable {
 		}
 
 	// métodos de remimensionar as tabs //
-	public void redimWei (Number newValue) {
+	public void redimWid (Number newValue) {
 		apEnd.setMinWidth((double) newValue);
 		
 	}
@@ -800,10 +802,13 @@ public class TabEnderecoController implements Initializable {
 		
 	}
 	
-	@FXML ScrollPane spEnd;
-	
 	@FXML AnchorPane apEnd;
+	
+	
+	@FXML ScrollPane spEnd;
+	@FXML AnchorPane apEndInt;
 	@FXML Pane pEndForm;
+	@FXML Pane pEndereco;
 	
 	
 	//-- INITIALIZE --//
@@ -815,10 +820,11 @@ public class TabEnderecoController implements Initializable {
 		tcEndCid.setCellValueFactory(new PropertyValueFactory<EnderecoTabela, String>("CEP_Endereco")); 
 		
 		tfEndPesq.setOnKeyReleased(event -> {
-	  		  if (event.getCode() == KeyCode.ENTER){
+			
+			if (event.getCode() == KeyCode.ENTER){
 	  		     btnEndPesq.fire();
-	  		  }
-	  		});
+	  		}
+	  	});
 	        
 		//-- Modular a forma de abrir dos botÃµes --//
 		modularBotoesInicial ();
@@ -835,20 +841,36 @@ public class TabEnderecoController implements Initializable {
 		
 		btnEndCoord.setGraphic(new ImageView(imgEndCoord));
 		
+		/*
 		AnchorPane.setTopAnchor(spEnd, 0.0);
 	    AnchorPane.setRightAnchor(spEnd, 0.0);
 	    AnchorPane.setLeftAnchor(spEnd, 0.0);
-	    AnchorPane.setBottomAnchor(spEnd, 0.0);
+	    AnchorPane.setBottomAnchor(spEnd, 30.0);
 	    
-	    spEnd.widthProperty().addListener((obs, oldVal, newVal) -> {
+	    */
+		
+	    apEnd.widthProperty().addListener((obs, oldVal, newVal) -> {
 	    	
-	        Double widNewVal = (double) newVal * 0.15;
+	        Double widNewVal = Math.pow((Double) newVal/70, (Double) newVal/1000);
 	  
-	        AnchorPane.setLeftAnchor(pEndForm, widNewVal);
-	        AnchorPane.setLeftAnchor(pEndMap, widNewVal);
-	        System.out.println(widNewVal + "valor do endereço scrool pane");
+	        AnchorPane.setLeftAnchor(pEndereco, widNewVal);
+	        //AnchorPane.setLeftAnchor(pEndMap, widNewVal + 13);
+	        
+	        spEnd.setMinWidth((Double)newVal);
+		    spEnd.setMaxWidth((Double)newVal);
+	        
+	        apEndInt.setMinHeight(1200.0);
 	        
 	    });
+	    
+	    apEnd.heightProperty().addListener((obs, oldVal, newVal) -> {
+	    	
+		       spEnd.setMinHeight((Double)newVal - 30);
+		       spEnd.setMaxHeight((Double)newVal - 30);
+		       
+		    });
+	    
+	    
 	    
 	}
 
@@ -882,22 +904,26 @@ public class TabEnderecoController implements Initializable {
 		webEng = wv1.getEngine();
 		webEng.load(getClass().getResource("/html/enderecoMap.html").toExternalForm());
 			
-		wv1.setPrefSize(700,500);
+		wv1.setPrefSize(902,485);
 		wv1.getEngine();
 	
-		BorderPane root = new BorderPane();
-		root.setCenter(wv1);
-		root.setPrefSize(887, 420);
+		//BorderPane root = new BorderPane();
+		//root.setCenter(wv1);
+		//root.setPrefSize(934, 500);
 		//root.setLayoutY(410);
 		//root.setLayoutX(127);
 		
-		pEndMap.getChildren().add(root);
-	
+		pEndMap.getChildren().add(wv1);
+		
+		
 		webEng.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
             if (Worker.State.SUCCEEDED.equals(newValue)) {
             	webEng.executeScript(strMarcador);
             }
         });
+		
+		System.out.println("pane layout x " + pEndMap.getLayoutX());
+		System.out.println("tabela layout x " + pEndForm.getLayoutX());
 		
 	}
 	
