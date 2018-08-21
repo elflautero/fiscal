@@ -48,6 +48,7 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -955,8 +956,8 @@ public class TabVistoriaController implements Initializable{
 			
 			
 		}
-	
-		System.out.println("infra array [0] " + infrArray[0]);
+
+		//System.out.println("infra array [0] " + infrArray[0]);
 		//-- infrações --//
 		if (infrArray != null || infrArray[0].toString() != ""  ) {
 			
@@ -1116,6 +1117,8 @@ public class TabVistoriaController implements Initializable{
 	WebView webVistoria;
 	WebEngine engVistoria;
 	
+	
+	
 	// métodos de remimensionar as tabs //
 				public void redimWid (Number newValue) {
 					apVis.setMinWidth((double) newValue);
@@ -1128,6 +1131,9 @@ public class TabVistoriaController implements Initializable{
 		@FXML AnchorPane apVisInt;
 		@FXML ScrollPane spVis;
 		@FXML Pane pVistoria;
+		
+		@FXML BorderPane bpVistoria;
+		
 		
 	//-- INITIALIZE --//
 	@Override
@@ -1146,81 +1152,23 @@ public class TabVistoriaController implements Initializable{
 		
 		modularBotoes();
 		
+		
+		AnchorPane.setTopAnchor(spVis, 0.0);
+	    AnchorPane.setLeftAnchor(spVis, 0.0);
+		AnchorPane.setRightAnchor(spVis, 0.0);
+	    AnchorPane.setBottomAnchor(spVis, 35.0);
+	    
+	    apVisInt.setMaxHeight(2100);
+	    apVisInt.setMinHeight(2100);
+	    
+	
 		apVis.widthProperty().addListener((obs, oldVal, newVal) -> {
 	    	
-			// cálculo do layout para redimensionamento
-			Double widNewVal = Math.pow((Double) newVal/70, (Double) newVal/1000);
-			// posicionamento dos panes redimensionando a tela
-			AnchorPane.setLeftAnchor(pVistoria, widNewVal);
-	      
-			// redimensionamento scroolPane
-			spVis.setMinWidth((Double)newVal);
-			spVis.setMaxWidth((Double)newVal);
-	        // valor mínimo de altura scroolPane
-			apVisInt.setMinHeight(2200.0);  // spDemanda.getHeight() * 1.2
-	       
-	       
-	       
-	       
+			bpVistoria.setMaxWidth((Double) newVal);
+			bpVistoria.setMinWidth((Double) newVal);
+			
+			
 	    });
-		
-		apVis.heightProperty().addListener((obs, oldVal, newVal) -> {
-	    	
-	       spVis.setMinHeight((Double)newVal - 30);
-	       spVis.setMaxHeight((Double)newVal - 30);
-	       
-	       
-	    });
-		
-		/*
-		dpDataFiscalizacao.setConverter(new StringConverter<LocalDate>() {
-			
-			@Override
-			public String toString(LocalDate t) {
-				if (t != null) {
-					return formatter.format(t);
-				}
-				return "";
-			}
-			
-			@Override
-			public LocalDate fromString(String string) {
-				if (string != null && !string.trim().isEmpty()) {
-					return LocalDate.parse(string, formatter);
-				}
-				return null;
-			}
-
-		});
-		
-		dpDataCriacaoAto.setConverter(new StringConverter<LocalDate>() {
-			
-			@Override
-			public String toString(LocalDate t) {
-				if (t != null) {
-					return formatter.format(t);
-				}
-				return "";
-			}
-			
-			@Override
-			public LocalDate fromString(String string) {
-				if (string != null && !string.trim().isEmpty()) {
-					return LocalDate.parse(string, formatter);
-				}
-				return null;
-			}
-
-		});
-		*/
-		
-		/*
-		dpDataFiscalizacao.setOnAction((ActionEvent event) -> {
-			
-		}
-				
-		);
-		*/
 		
 		
 		ObterArtigos ();
@@ -1236,31 +1184,19 @@ public class TabVistoriaController implements Initializable{
 		
 		// -- inicitalizar o mapa -- //
 		Platform.runLater(() ->{
+			
 			webVistoria = new WebView();
 			engVistoria = webVistoria.getEngine();
 			engVistoria.load(getClass().getResource("/html/relatorioVistoria.html").toExternalForm()); 
-		 
+			
 		});
 		
-		/*
-		spDemanda.widthProperty().addListener((obs, oldVal, newVal) -> {
-	    	
-	        Double widNewVal = (double) newVal * 0.15;
-	        AnchorPane.setLeftAnchor(pDemanda, widNewVal);
-	        
-	    });
-	    */
 		
-		/*
-		AnchorPane.setTopAnchor(spVis, 0.0);
-	    AnchorPane.setRightAnchor(spVis, 0.0);
-	    AnchorPane.setLeftAnchor(spVis, 0.0);
-	    AnchorPane.setBottomAnchor(spVis, 0.0);
-		*/
 	}
 	
 	public void relatarHTML () {
 	
+		
 		htmlObjeto = new HTMLEditor();
 		
 			htmlObjeto.setPrefSize(800, 200);
@@ -1272,6 +1208,7 @@ public class TabVistoriaController implements Initializable{
 			        event.consume();
 			    }
 			});
+			
 			htmlObjeto.setHtmlText("<p><font face='Times New Roman'> </font></p>");
 			
 			StackPane root = new StackPane();
@@ -2376,4 +2313,55 @@ public class TabVistoriaController implements Initializable{
              } 
       }); 
       */
+
+
+/*
+dpDataFiscalizacao.setConverter(new StringConverter<LocalDate>() {
+	
+	@Override
+	public String toString(LocalDate t) {
+		if (t != null) {
+			return formatter.format(t);
+		}
+		return "";
+	}
+	
+	@Override
+	public LocalDate fromString(String string) {
+		if (string != null && !string.trim().isEmpty()) {
+			return LocalDate.parse(string, formatter);
+		}
+		return null;
+	}
+
+});
+
+dpDataCriacaoAto.setConverter(new StringConverter<LocalDate>() {
+	
+	@Override
+	public String toString(LocalDate t) {
+		if (t != null) {
+			return formatter.format(t);
+		}
+		return "";
+	}
+	
+	@Override
+	public LocalDate fromString(String string) {
+		if (string != null && !string.trim().isEmpty()) {
+			return LocalDate.parse(string, formatter);
+		}
+		return null;
+	}
+
+});
+*/
+
+/*
+dpDataFiscalizacao.setOnAction((ActionEvent event) -> {
+	
+}
+		
+);
+*/
 		

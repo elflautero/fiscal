@@ -8,62 +8,67 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane fx:id="apDemanda" minHeight="0.0" minWidth="0.0" prefHeight="679.0" prefWidth="1140.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabDemandaController">
+<AnchorPane fx:id="apDemanda" minHeight="0.0" minWidth="0.0" prefHeight="679.0" prefWidth="1140.0" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabDemandaController">
    <children>
       <ScrollPane fx:id="spDemanda" prefHeight="680.0" prefWidth="1140.0">
         <content>
           <AnchorPane fx:id="apDemInt" minHeight="0.0" minWidth="0.0" prefHeight="768.0" prefWidth="1127.0">
                <children>
-                  <Pane fx:id="pDemanda" prefHeight="680.0" prefWidth="1140.0">
-                     <children>
-                        <Pane layoutX="108.0" layoutY="35.0" prefHeight="160.0" prefWidth="924.0">
+                  <BorderPane fx:id="bpDemanda" prefHeight="775.0" prefWidth="1133.0">
+                     <top>
+                        <Pane fx:id="pDemanda" maxHeight="680.0" maxWidth="1140.0" minHeight="680.0" minWidth="1140.0" prefHeight="680.0" prefWidth="1140.0" styleClass="classFontSize" stylesheets="@../css/application.css" BorderPane.alignment="CENTER">
                            <children>
-                              <TextField fx:id="tfDocumento" layoutX="35.0" layoutY="29.0" prefHeight="25.0" prefWidth="520.0" />
-                              <TextField fx:id="tfDocSei" layoutX="569.0" layoutY="29.0" prefHeight="25.0" prefWidth="160.0" />
-                              <TextField fx:id="tfProcSei" layoutX="742.0" layoutY="29.0" prefHeight="25.0" prefWidth="160.0" />
-                              
-                                                <DatePicker fx:id="dpDataDistribuicao" layoutX="345.0" layoutY="85.0" prefHeight="25.0" prefWidth="125.0" promptText="01/01/0000" />
-                               <DatePicker fx:id="dpDataRecebimento" layoutX="481.0" layoutY="85.0" prefHeight="25.0" prefWidth="125.0" promptText="01/01/0000" />
-                              
-                                                <TextField fx:id="tfResDen" layoutX="19.0" layoutY="121.0" prefHeight="25.0" prefWidth="889.0" />
-                              <Label layoutX="35.0" layoutY="8.0" prefHeight="17.0" prefWidth="77.0" text="Documento:" />
-                              <Label layoutX="570.0" layoutY="6.0" prefHeight="17.0" prefWidth="71.0" text="Número SEI:" />
-                              <Label layoutX="743.0" layoutY="6.0" prefHeight="17.0" prefWidth="80.0" text="Processo SEI:" />
-                              
-                                                
-                              <Label layoutX="345.0" layoutY="62.0" text="Data de Distruibuição:" />
-                             
-                                                <Label layoutX="480.0" layoutY="62.0" text="Data de Recebimento: " />
-                              
-                                                <Label layoutX="19.0" layoutY="101.0" prefHeight="17.0" prefWidth="120.0" text="Resumo da Denúncia:" />
-                              
-                                             </children>
-                        </Pane>
-                        <Pane layoutX="128.0" layoutY="195.0" prefHeight="47.0" prefWidth="884.0">
-                           <children>
-                              <Button fx:id="btnNovo" layoutX="46.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnNovoHabilitar" prefHeight="22.0" prefWidth="76.0" text="Novo" />
-                              <Button fx:id="btnSalvar" layoutX="131.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnSalvarSalvar" prefHeight="22.0" prefWidth="76.0" text="Salvar" />
-                              <Button fx:id="btnEditar" layoutX="214.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnEditarHabilitar" prefHeight="22.0" prefWidth="76.0" text="Editar" />
-                              <Button fx:id="btnExcluir" layoutX="298.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnExcluirHabilitar" prefHeight="22.0" prefWidth="76.0" text="Excluir" />
-                              <Button fx:id="btnCancelar" layoutX="382.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnCancelarHabilitar" prefHeight="22.0" prefWidth="76.0" text="Cancelar" />
-                              <Button fx:id="btnPesquisar" layoutX="762.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnPesquisarHabilitar" prefHeight="22.0" prefWidth="76.0" text="Pesquisar" />
-                              <TextField fx:id="tfPesquisar" layoutX="464.0" layoutY="11.0" prefHeight="23.0" prefWidth="295.0" />
+                              <Pane layoutX="108.0" layoutY="35.0" prefHeight="160.0" prefWidth="924.0">
+                                 <children>
+                                    <TextField fx:id="tfDocumento" layoutX="35.0" layoutY="29.0" prefHeight="25.0" prefWidth="520.0" />
+                                    <TextField fx:id="tfDocSei" layoutX="569.0" layoutY="29.0" prefHeight="26.0" prefWidth="128.0" />
+                                    <TextField fx:id="tfProcSei" layoutX="709.0" layoutY="29.0" prefHeight="26.0" prefWidth="197.0" />
+                                    
+                                                      <DatePicker fx:id="dpDataDistribuicao" layoutX="325.0" layoutY="85.0" prefHeight="25.0" prefWidth="125.0" promptText="01/01/0000" />
+                                     <DatePicker fx:id="dpDataRecebimento" layoutX="486.0" layoutY="85.0" prefHeight="25.0" prefWidth="125.0" promptText="01/01/0000" />
+                                    
+                                                      <TextField fx:id="tfResDen" layoutX="19.0" layoutY="127.0" prefHeight="25.0" prefWidth="889.0" />
+                                    <Label layoutX="35.0" layoutY="6.0" prefHeight="17.0" prefWidth="106.0" text="Documento:" />
+                                    <Label layoutX="570.0" layoutY="6.0" prefHeight="17.0" prefWidth="132.0" text="Número SEI:" />
+                                    <Label layoutX="710.0" layoutY="6.0" prefHeight="17.0" prefWidth="158.0" text="Processo SEI:" />
+                                    
+                                                      
+                                    <Label layoutX="325.0" layoutY="62.0" prefHeight="17.0" prefWidth="140.0" text="Data de Distruibuição:" />
+                                   
+                                                      <Label layoutX="486.0" layoutY="62.0" prefHeight="17.0" prefWidth="150.0" text="Data de Recebimento: " />
+                                    
+                                                      <Label layoutX="19.0" layoutY="103.0" prefHeight="17.0" prefWidth="272.0" text="Resumo da Denúncia:" />
+                                    
+                                                   </children>
+                              </Pane>
+                              <Pane layoutX="145.0" layoutY="201.0" prefHeight="47.0" prefWidth="850.0">
+                                 <children>
+                                    <Button fx:id="btnNovo" layoutX="14.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnNovoHabilitar" prefHeight="22.0" prefWidth="76.0" text="Novo" />
+                                    <Button fx:id="btnSalvar" layoutX="101.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnSalvarSalvar" prefHeight="22.0" prefWidth="76.0" text="Salvar" />
+                                    <Button fx:id="btnEditar" layoutX="188.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnEditarHabilitar" prefHeight="22.0" prefWidth="76.0" text="Editar" />
+                                    <Button fx:id="btnExcluir" layoutX="276.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnExcluirHabilitar" prefHeight="22.0" prefWidth="76.0" text="Excluir" />
+                                    <Button fx:id="btnCancelar" layoutX="364.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnCancelarHabilitar" prefHeight="22.0" prefWidth="76.0" text="Cancelar" />
+                                    <Button fx:id="btnPesquisar" layoutX="758.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnPesquisarHabilitar" prefHeight="22.0" prefWidth="76.0" text="Pesquisar" />
+                                    <TextField fx:id="tfPesquisar" layoutX="451.0" layoutY="11.0" prefHeight="23.0" prefWidth="295.0" />
+                                 </children>
+                              </Pane>
+                              <TableView fx:id="tvLista" layoutX="126.0" layoutY="260.0" prefHeight="185.0" prefWidth="889.0">
+                                <columns>
+                                  <TableColumn fx:id="tcDocumento" prefWidth="409.0" text="Documento" />
+                                  <TableColumn fx:id="tcDocSEI" minWidth="0.0" prefWidth="232.0" text="Doc SEI" />
+                                    <TableColumn fx:id="tcProcSEI" prefWidth="232.0" text="Proc SEI" />
+                                </columns>
+                              </TableView>
+                              <Label fx:id="lblDenEnd" layoutX="198.0" layoutY="476.0" prefHeight="23.0" prefWidth="500.0" />
+                              <Label layoutX="126.0" layoutY="479.0" text="Endereço:" />
+                              <Label fx:id="lblDataAtualizacao" layoutX="781.0" layoutY="453.0" prefHeight="22.0" prefWidth="234.0" />
                            </children>
                         </Pane>
-                        <TableView fx:id="tvLista" layoutX="126.0" layoutY="248.0" prefHeight="185.0" prefWidth="889.0">
-                          <columns>
-                            <TableColumn fx:id="tcDocumento" prefWidth="409.0" text="Documento" />
-                            <TableColumn fx:id="tcDocSEI" minWidth="0.0" prefWidth="232.0" text="Doc SEI" />
-                              <TableColumn fx:id="tcProcSEI" prefWidth="232.0" text="Proc SEI" />
-                          </columns>
-                        </TableView>
-                        <Label fx:id="lblDenEnd" layoutX="189.0" layoutY="464.0" prefHeight="23.0" prefWidth="500.0" />
-                        <Label layoutX="126.0" layoutY="467.0" text="Endereço:" />
-                        <Label fx:id="lblDataAtualizacao" layoutX="781.0" layoutY="441.0" prefHeight="22.0" prefWidth="234.0" />
-                     </children>
-                  </Pane>
+                     </top>
+                  </BorderPane>
                </children>
             </AnchorPane>
         </content>

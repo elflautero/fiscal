@@ -9,135 +9,140 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="apVis" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="2000.0" prefWidth="1138.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabVistoriaController">
+<AnchorPane fx:id="apVis" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="2000.0" prefWidth="1140.0" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabVistoriaController">
    <children>
       <ScrollPane fx:id="spVis" prefHeight="2000.0" prefWidth="1140.0">
          <content>
-            <AnchorPane fx:id="apVisInt" minHeight="0.0" minWidth="0.0" prefHeight="1925.0" prefWidth="1140.0">
+            <AnchorPane fx:id="apVisInt" minHeight="0.0" minWidth="0.0" prefHeight="1982.0" prefWidth="1140.0">
                <children>
-                  <Pane fx:id="pVistoria" prefHeight="2084.0" prefWidth="1140.0">
-                     <children>
-                        <Pane layoutX="143.0" layoutY="41.0" prefHeight="40.0" prefWidth="886.0" style="-fx-background-color: #E9E9E9;">
+                  <BorderPane fx:id="bpVistoria">
+                     <center>
+                        <Pane fx:id="pVistoria" maxHeight="2084.0" maxWidth="1140.0" minHeight="2084.0" minWidth="1140.0" prefHeight="2084.0" prefWidth="1140.0" styleClass="classFontSize" stylesheets="@../css/application.css">
                            <children>
-                              <Label layoutX="55.0" layoutY="13.0" text="Endereço: " />
-                              <Label fx:id="lblVisEnd" layoutX="113.0" layoutY="8.0" prefHeight="25.0" prefWidth="719.0">
-                                 <font>
-                                    <Font name="System Bold" size="12.0" />
-                                 </font>
-                              </Label>
+                              <Pane layoutX="143.0" layoutY="41.0" prefHeight="40.0" prefWidth="886.0" style="-fx-background-color: #E9E9E9;">
+                                 <children>
+                                    <Label layoutX="55.0" layoutY="13.0" text="Endereço: " />
+                                    <Label fx:id="lblVisEnd" layoutX="113.0" layoutY="8.0" prefHeight="25.0" prefWidth="719.0">
+                                       <font>
+                                          <Font name="System Bold" size="12.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </Pane>
+                              <Pane layoutX="112.0" layoutY="178.0" prefHeight="253.0" prefWidth="918.0">
+                                 <children>
+                                    <Button fx:id="btnNovo" layoutX="51.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnNovoHab" prefHeight="22.0" prefWidth="76.0" text="Novo" />
+                                    <Button fx:id="btnSalvar" layoutX="138.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnSalvarHab" prefHeight="22.0" prefWidth="76.0" text="Salvar" />
+                                    <Button fx:id="btnEditar" layoutX="225.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnEditarHab" prefHeight="22.0" prefWidth="76.0" text="Editar" />
+                                    <Button fx:id="btnExcluir" layoutX="312.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnExcluirHab" prefHeight="22.0" prefWidth="76.0" text="Excluir" />
+                                    <Button fx:id="btnCancelar" layoutX="399.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnCancelarHab" prefHeight="22.0" prefWidth="76.0" text="Cancelar" />
+                                    <Button fx:id="btnPesquisar" layoutX="792.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnPesquisarHab" prefHeight="22.0" prefWidth="76.0" text="Pesquisar" />
+                                    <TextField fx:id="tfPesquisar" layoutX="486.0" layoutY="14.0" prefHeight="23.0" prefWidth="295.0" />
+                                    <TableView fx:id="tvVistoria" layoutX="14.0" layoutY="52.0" prefHeight="185.0" prefWidth="889.0">
+                                       <columns>
+                                          <TableColumn fx:id="tcNumero" prefWidth="409.0" text="Número" />
+                                          <TableColumn fx:id="tcSEI" minWidth="0.0" prefWidth="232.0" text="SEI" />
+                                          <TableColumn fx:id="tcData" prefWidth="232.0" text="Data da Fiscalização" />
+                                       </columns>
+                                    </TableView>
+                                 </children>
+                              </Pane>
+                              <Pane layoutX="242.0" layoutY="98.0" prefHeight="79.0" prefWidth="636.0">
+                                 <children>
+                                    <Label layoutX="14.0" layoutY="10.0" text="Número do ato: " />
+                                    <TextField fx:id="tfAto" layoutX="114.0" layoutY="6.0" prefHeight="25.0" prefWidth="87.0" promptText="12/2018" />
+                                    <TextField fx:id="tfAtoSEI" layoutX="266.0" layoutY="6.0" prefHeight="25.0" prefWidth="87.0" promptText="0077941" />
+                                    <Label layoutX="213.0" layoutY="10.0" text="n° SEI: " />
+                                    <Label layoutX="366.0" layoutY="10.0" text="Data da Fiscalização: " />
+                                    <DatePicker fx:id="dpDataFiscalizacao" layoutX="502.0" layoutY="6.0" prefHeight="25.0" prefWidth="110.0" promptText="01/01/0000" />
+                                    <DatePicker fx:id="dpDataCriacaoAto" layoutX="331.0" layoutY="45.0" prefHeight="25.0" prefWidth="110.0" promptText="01/01/0000" />
+                                    <Label layoutX="180.0" layoutY="49.0" text="Data de Criação do Ato: " />
+                                 </children>
+                              </Pane>
+                              <Pane layoutX="225.0" layoutY="436.0" prefHeight="25.0" prefWidth="667.0">
+                                 <children>
+                                    <Label layoutX="14.0" layoutY="4.0" text="Infrações: " />
+                                    <CheckBox fx:id="checkInfra1" layoutX="82.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkInfraHab" text="Inciso I" />
+                                    <CheckBox fx:id="checkInfra2" layoutX="163.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkInfraHab" text="Inciso II" />
+                                    <CheckBox fx:id="checkInfra3" layoutX="243.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkInfraHab" text="Inciso III" />
+                                    <CheckBox fx:id="checkInfra4" layoutX="326.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkInfraHab" text="Inciso IV" />
+                                    <CheckBox fx:id="checkInfra5" layoutX="412.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkInfraHab" text="Inciso V" />
+                                    <CheckBox fx:id="checkInfra6" layoutX="495.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkInfraHab" text="Inciso VI" />
+                                    <CheckBox fx:id="checkInfra7" layoutX="582.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkInfraHab" text="Inciso VII" />
+                                 </children>
+                              </Pane>
+                              <Pane layoutX="215.0" layoutY="472.0" prefHeight="25.0" prefWidth="685.0">
+                                 <children>
+                                    <Label layoutX="11.0" layoutY="4.0" text="Penalidades: " />
+                                    <CheckBox fx:id="checkPena1" layoutX="96.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkPenaHab" text="Inciso I" />
+                                    <CheckBox fx:id="checkPena2" layoutX="176.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkPenaHab" text="Inciso II" />
+                                    <CheckBox fx:id="checkPena3" layoutX="258.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkPenaHab" text="Inciso III" />
+                                    <CheckBox fx:id="checkPena4" layoutX="341.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkPenaHab" text="Inciso IV" />
+                                    <CheckBox fx:id="checkPena5" layoutX="427.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkPenaHab" text="Inciso V" />
+                                    <CheckBox fx:id="checkPena6" layoutX="509.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkPenaHab" text="Inciso VI" />
+                                    <CheckBox fx:id="checkPena7" layoutX="596.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkPenaHab" text="Inciso VII" />
+                                 </children>
+                              </Pane>
+                              <Pane layoutX="144.0" layoutY="508.0" prefHeight="25.0" prefWidth="861.0">
+                                 <children>
+                                    <Label layoutX="9.0" layoutY="4.0" text="Atenuantes: " />
+                                    <CheckBox fx:id="checkAten1" layoutX="91.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAtenHab" text="Inciso I" />
+                                    <CheckBox fx:id="checkAten2" layoutX="171.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAtenHab" text="Inciso II" />
+                                    <CheckBox fx:id="checkAten3" layoutX="252.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAtenHab" text="Inciso III" />
+                                    <CheckBox fx:id="checkAten4" layoutX="335.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAtenHab" text="Inciso IV" />
+                                    <CheckBox fx:id="checkAten5" layoutX="420.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAtenHab" text="Inciso V" />
+                                    <CheckBox fx:id="checkAten6" layoutX="503.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAtenHab" text="Inciso VI" />
+                                    <CheckBox fx:id="checkAten7" layoutX="590.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAtenHab" text="Inciso VII" />
+                                    <CheckBox fx:id="checkAten8" layoutX="679.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAtenHab" text="Inciso VIII" />
+                                    <CheckBox fx:id="checkAten9" layoutX="772.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAtenHab" text="Inciso IX" />
+                                 </children>
+                              </Pane>
+                              <Pane layoutX="217.0" layoutY="545.0" prefHeight="25.0" prefWidth="693.0">
+                                 <children>
+                                    <Label layoutX="18.0" layoutY="5.0" text="Agravantes: " />
+                                    <CheckBox fx:id="checkAgra1" layoutX="99.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAgraHab" text="a);" />
+                                    <CheckBox fx:id="checkAgra2" layoutX="148.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAgraHab" text="b); " />
+                                    <CheckBox fx:id="checkAgra3" layoutX="200.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAgraHab" text="c); " />
+                                    <CheckBox fx:id="checkAgra4" layoutX="250.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAgraHab" text="d); " />
+                                    <CheckBox fx:id="checkAgra6" layoutX="353.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAgraHab" text="f); " />
+                                    <CheckBox fx:id="checkAgra7" layoutX="401.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAgraHab" text="g); " />
+                                    <CheckBox fx:id="checkAgra8" layoutX="453.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAgraHab" text="h); " />
+                                    <CheckBox fx:id="checkAgra9" layoutX="504.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAgraHab" text="i); " />
+                                    <CheckBox fx:id="checkAgra10" layoutX="551.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAgraHab" text="j); " />
+                                    <CheckBox fx:id="checkAgra11" layoutX="599.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAgraHab" text="k); " />
+                                    <CheckBox fx:id="checkAgra12" layoutX="649.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAgraHab" text="l); " />
+                                    <CheckBox fx:id="checkAgra5" layoutX="302.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAgraHab" text="e); " />
+                                 </children>
+                              </Pane>
+                              <Button fx:id="btnPesquisarObjeto" layoutX="1032.0" layoutY="697.0" mnemonicParsing="false" onAction="#btnPesqObjHab" text="?" />
+                              <Button fx:id="btnPesquisarApresentacao" layoutX="1032.0" layoutY="919.0" mnemonicParsing="false" onAction="#btnPesApHab" text="?" />
+                              <Label layoutX="145.0" layoutY="597.0" prefHeight="17.0" prefWidth="82.0" text="OBJETO " />
+                              <Label layoutX="142.0" layoutY="823.0" prefHeight="17.0" prefWidth="117.0" text="APRESENTAÇÃO" />
+                              <Label layoutX="142.0" layoutY="1054.0" prefHeight="17.0" prefWidth="79.0" text="RELATO" />
+                              <Label layoutX="142.0" layoutY="1760.0" prefHeight="17.0" prefWidth="195.0" text="RECOMENDAÇÕES" />
+                              <Button fx:id="btnAjudaRelatorio" layoutX="1032.0" layoutY="1416.0" mnemonicParsing="false" onAction="#btnAjudaRelatorioHab" text="?" />
+                              <Button fx:id="btnRecomendacoes" layoutX="1032.0" layoutY="1859.0" mnemonicParsing="false" onAction="#btnRecomendacoesHab" text="?" />
+                              <Pane fx:id="paneRelato" layoutX="142.0" layoutY="1079.0" prefHeight="673.0" prefWidth="800.0" />
+                              <Pane fx:id="paneRecomendacao" layoutX="142.0" layoutY="1785.0" prefHeight="200.0" prefWidth="800.0" />
+                              <Button fx:id="btnRelatorio" layoutX="1060.0" layoutY="270.0" mnemonicParsing="false" onAction="#btnRelatorioHab" prefHeight="32.0" prefWidth="32.0" />
+                              <Pane layoutX="1029.0" layoutY="436.0" prefHeight="144.0" prefWidth="32.0">
+                                 <children>
+                                    <Button fx:id="btnIfracoes" layoutX="6.0" layoutY="4.0" mnemonicParsing="false" onAction="#btnInfracoesHab" text="?" />
+                                    <Button fx:id="btnPenalidades" layoutX="6.0" layoutY="40.0" mnemonicParsing="false" onAction="#btnPenalidadesHab" text="?" />
+                                    <Button fx:id="btnAtenuantes" layoutX="6.0" layoutY="76.0" mnemonicParsing="false" onAction="#btnAtenuantesHab" text="?" />
+                                    <Button fx:id="btnAgravantes" layoutX="6.0" layoutY="113.0" mnemonicParsing="false" onAction="#btnAgravantesHab" text="?" />
+                                 </children>
+                              </Pane>
+                              <Pane fx:id="paneApresentacao" layoutX="142.0" layoutY="848.0" prefHeight="200.0" prefWidth="800.0" />
+                              <Pane fx:id="paneObjeto" layoutX="142.0" layoutY="619.0" prefHeight="200.0" prefWidth="800.0" />
                            </children>
                         </Pane>
-                        <Pane layoutX="112.0" layoutY="178.0" prefHeight="171.0" prefWidth="918.0">
-                           <children>
-                              <Button fx:id="btnNovo" layoutX="51.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnNovoHab" prefHeight="22.0" prefWidth="76.0" text="Novo" />
-                              <Button fx:id="btnSalvar" layoutX="138.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnSalvarHab" prefHeight="22.0" prefWidth="76.0" text="Salvar" />
-                              <Button fx:id="btnEditar" layoutX="225.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnEditarHab" prefHeight="22.0" prefWidth="76.0" text="Editar" />
-                              <Button fx:id="btnExcluir" layoutX="312.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnExcluirHab" prefHeight="22.0" prefWidth="76.0" text="Excluir" />
-                              <Button fx:id="btnCancelar" layoutX="399.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnCancelarHab" prefHeight="22.0" prefWidth="76.0" text="Cancelar" />
-                              <Button fx:id="btnPesquisar" layoutX="792.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnPesquisarHab" prefHeight="22.0" prefWidth="76.0" text="Pesquisar" />
-                              <TextField fx:id="tfPesquisar" layoutX="486.0" layoutY="14.0" prefHeight="23.0" prefWidth="295.0" />
-                              <TableView fx:id="tvVistoria" layoutX="14.0" layoutY="52.0" prefHeight="113.0" prefWidth="889.0">
-                                 <columns>
-                                    <TableColumn fx:id="tcNumero" prefWidth="409.0" text="Número" />
-                                    <TableColumn fx:id="tcSEI" minWidth="0.0" prefWidth="232.0" text="SEI" />
-                                    <TableColumn fx:id="tcData" prefWidth="232.0" text="Data da Fiscalização" />
-                                 </columns>
-                              </TableView>
-                           </children>
-                        </Pane>
-                        <Pane layoutX="242.0" layoutY="98.0" prefHeight="67.0" prefWidth="612.0">
-                           <children>
-                              <Label layoutX="14.0" layoutY="6.0" text="Número do ato: " />
-                              <TextField fx:id="tfAto" layoutX="113.0" layoutY="2.0" prefHeight="25.0" prefWidth="87.0" promptText="12/2018" />
-                              <TextField fx:id="tfAtoSEI" layoutX="262.0" layoutY="2.0" prefHeight="25.0" prefWidth="87.0" promptText="0077941" />
-                              <Label layoutX="212.0" layoutY="6.0" text="n° SEI: " />
-                              <Label layoutX="362.0" layoutY="6.0" text="Data da Fiscalização: " />
-                              <DatePicker fx:id="dpDataFiscalizacao" layoutX="485.0" layoutY="2.0" prefHeight="25.0" prefWidth="110.0" promptText="01/01/0000" />
-                              <DatePicker fx:id="dpDataCriacaoAto" layoutX="321.0" layoutY="41.0" prefHeight="25.0" prefWidth="110.0" promptText="01/01/0000" />
-                              <Label layoutX="180.0" layoutY="45.0" text="Data de Criação do Ato: " />
-                           </children>
-                        </Pane>
-                        <Pane layoutX="225.0" layoutY="371.0" prefHeight="25.0" prefWidth="655.0">
-                           <children>
-                              <Label layoutX="14.0" layoutY="4.0" text="Infrações: " />
-                              <CheckBox fx:id="checkInfra1" layoutX="82.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkInfraHab" text="Inciso I" />
-                              <CheckBox fx:id="checkInfra2" layoutX="163.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkInfraHab" text="Inciso II" />
-                              <CheckBox fx:id="checkInfra3" layoutX="241.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkInfraHab" text="Inciso III" />
-                              <CheckBox fx:id="checkInfra4" layoutX="322.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkInfraHab" text="Inciso IV" />
-                              <CheckBox fx:id="checkInfra5" layoutX="404.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkInfraHab" text="Inciso V" />
-                              <CheckBox fx:id="checkInfra6" layoutX="484.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkInfraHab" text="Inciso VI" />
-                              <CheckBox fx:id="checkInfra7" layoutX="569.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkInfraHab" text="Inciso VII" />
-                           </children>
-                        </Pane>
-                        <Pane layoutX="215.0" layoutY="407.0" prefHeight="25.0" prefWidth="655.0">
-                           <children>
-                              <Label layoutX="11.0" layoutY="4.0" text="Penalidades: " />
-                              <CheckBox fx:id="checkPena1" layoutX="93.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkPenaHab" text="Inciso I" />
-                              <CheckBox fx:id="checkPena2" layoutX="173.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkPenaHab" text="Inciso II" />
-                              <CheckBox fx:id="checkPena3" layoutX="252.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkPenaHab" text="Inciso III" />
-                              <CheckBox fx:id="checkPena4" layoutX="332.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkPenaHab" text="Inciso IV" />
-                              <CheckBox fx:id="checkPena5" layoutX="415.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkPenaHab" text="Inciso V" />
-                              <CheckBox fx:id="checkPena6" layoutX="495.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkPenaHab" text="Inciso VI" />
-                              <CheckBox fx:id="checkPena7" layoutX="580.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkPenaHab" text="Inciso VII" />
-                           </children>
-                        </Pane>
-                        <Pane layoutX="144.0" layoutY="443.0" prefHeight="25.0" prefWidth="817.0">
-                           <children>
-                              <Label layoutX="9.0" layoutY="4.0" text="Atenuantes: " />
-                              <CheckBox fx:id="checkAten1" layoutX="91.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAtenHab" text="Inciso I" />
-                              <CheckBox fx:id="checkAten2" layoutX="171.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAtenHab" text="Inciso II" />
-                              <CheckBox fx:id="checkAten3" layoutX="250.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAtenHab" text="Inciso III" />
-                              <CheckBox fx:id="checkAten4" layoutX="331.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAtenHab" text="Inciso IV" />
-                              <CheckBox fx:id="checkAten5" layoutX="414.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAtenHab" text="Inciso V" />
-                              <CheckBox fx:id="checkAten6" layoutX="494.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAtenHab" text="Inciso VI" />
-                              <CheckBox fx:id="checkAten7" layoutX="579.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAtenHab" text="Inciso VII" />
-                              <CheckBox fx:id="checkAten8" layoutX="658.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAtenHab" text="Inciso VIII" />
-                              <CheckBox fx:id="checkAten9" layoutX="743.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAtenHab" text="Inciso IX" />
-                           </children>
-                        </Pane>
-                        <Pane layoutX="199.0" layoutY="482.0" prefHeight="25.0" prefWidth="650.0">
-                           <children>
-                              <Label layoutX="18.0" layoutY="5.0" text="Agravantes: " />
-                              <CheckBox fx:id="checkAgra1" layoutX="98.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAgraHab" text="a);" />
-                              <CheckBox fx:id="checkAgra2" layoutX="143.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAgraHab" text="b); " />
-                              <CheckBox fx:id="checkAgra3" layoutX="192.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAgraHab" text="c); " />
-                              <CheckBox fx:id="checkAgra4" layoutX="239.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAgraHab" text="d); " />
-                              <CheckBox fx:id="checkAgra6" layoutX="336.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAgraHab" text="f); " />
-                              <CheckBox fx:id="checkAgra7" layoutX="381.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAgraHab" text="g); " />
-                              <CheckBox fx:id="checkAgra8" layoutX="430.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAgraHab" text="h); " />
-                              <CheckBox fx:id="checkAgra9" layoutX="478.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAgraHab" text="i); " />
-                              <CheckBox fx:id="checkAgra10" layoutX="522.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAgraHab" text="j); " />
-                              <CheckBox fx:id="checkAgra11" layoutX="567.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAgraHab" text="k); " />
-                              <CheckBox fx:id="checkAgra12" layoutX="614.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAgraHab" text="l); " />
-                              <CheckBox fx:id="checkAgra5" layoutX="288.0" layoutY="4.0" mnemonicParsing="false" onAction="#checkAgraHab" text="e); " />
-                           </children>
-                        </Pane>
-                        <Button fx:id="btnPesquisarObjeto" layoutX="989.0" layoutY="619.0" mnemonicParsing="false" onAction="#btnPesqObjHab" text="?" />
-                        <Button fx:id="btnPesquisarApresentacao" layoutX="989.0" layoutY="841.0" mnemonicParsing="false" onAction="#btnPesApHab" text="?" />
-                        <Label layoutX="145.0" layoutY="519.0" text="OBJETO " />
-                        <Label layoutX="142.0" layoutY="741.0" text="APRESENTAÇÃO" />
-                        <Label layoutX="142.0" layoutY="962.0" text="RELATO" />
-                        <Label layoutX="142.0" layoutY="1657.0" prefHeight="17.0" prefWidth="107.0" text="RECOMENDAÇÕES" />
-                        <Button fx:id="btnAjudaRelatorio" layoutX="989.0" layoutY="1367.0" mnemonicParsing="false" onAction="#btnAjudaRelatorioHab" text="?" />
-                        <Button fx:id="btnRecomendacoes" layoutX="989.0" layoutY="1758.0" mnemonicParsing="false" onAction="#btnRecomendacoesHab" text="?" />
-                        <Pane fx:id="paneRelato" layoutX="142.0" layoutY="980.0" prefHeight="673.0" prefWidth="800.0" />
-                        <Pane fx:id="paneRecomendacao" layoutX="142.0" layoutY="1675.0" prefHeight="200.0" prefWidth="800.0" />
-                        <Button fx:id="btnRelatorio" layoutX="1060.0" layoutY="270.0" mnemonicParsing="false" onAction="#btnRelatorioHab" prefHeight="32.0" prefWidth="32.0" />
-                        <Pane layoutX="983.0" layoutY="367.0" prefHeight="144.0" prefWidth="32.0">
-                           <children>
-                              <Button fx:id="btnIfracoes" layoutX="6.0" layoutY="4.0" mnemonicParsing="false" onAction="#btnInfracoesHab" text="?" />
-                              <Button fx:id="btnPenalidades" layoutX="6.0" layoutY="40.0" mnemonicParsing="false" onAction="#btnPenalidadesHab" text="?" />
-                              <Button fx:id="btnAtenuantes" layoutX="6.0" layoutY="76.0" mnemonicParsing="false" onAction="#btnAtenuantesHab" text="?" />
-                              <Button fx:id="btnAgravantes" layoutX="6.0" layoutY="113.0" mnemonicParsing="false" onAction="#btnAgravantesHab" text="?" />
-                           </children>
-                        </Pane>
-                        <Pane fx:id="paneApresentacao" layoutX="142.0" layoutY="758.0" prefHeight="200.0" prefWidth="800.0" />
-                        <Pane fx:id="paneObjeto" layoutX="142.0" layoutY="535.0" prefHeight="200.0" prefWidth="800.0" />
-                     </children>
-                  </Pane>
+                     </center>
+                  </BorderPane>
                </children>
             </AnchorPane>
          </content>

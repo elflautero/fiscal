@@ -8,71 +8,76 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="apEnd" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="676.0" prefWidth="1140.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabEnderecoController">
+<AnchorPane fx:id="apEnd" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="676.0" prefWidth="1140.0" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TabEnderecoController">
    <children>
       <ScrollPane fx:id="spEnd" prefHeight="682.0" prefWidth="1140.0">
         <content>
           <AnchorPane fx:id="apEndInt" minHeight="0.0" minWidth="0.0" prefHeight="850.0" prefWidth="1127.0">
                <children>
-                  <Pane fx:id="pEndereco" prefHeight="682.0" prefWidth="1140.0">
-                     <children>
-                        <Pane fx:id="pEndForm" layoutX="103.0" layoutY="29.0" prefHeight="441.0" prefWidth="934.0">
+                  <BorderPane fx:id="bpEndereco" maxHeight="1200.0" maxWidth="1140.0" minHeight="1200.0" minWidth="1140.0" prefHeight="1200.0" prefWidth="1140.0">
+                     <top>
+                        <Pane fx:id="pEndereco" maxHeight="682.0" maxWidth="1140.0" minHeight="682.0" minWidth="1140.0" prefHeight="682.0" prefWidth="1140.0" BorderPane.alignment="CENTER">
                            <children>
-                              <TextField fx:id="tfEnd" layoutX="23.0" layoutY="83.0" prefHeight="25.0" prefWidth="446.0" />
-                              <ChoiceBox fx:id="cbEndRA" layoutX="481.0" layoutY="83.0" prefHeight="25.0" prefWidth="140.0" />
-                              <TextField fx:id="tfEndCep" layoutX="633.0" layoutY="82.0" prefHeight="25.0" prefWidth="100.0" />
-                              <TextField fx:id="tfEndCid" layoutX="745.0" layoutY="82.0" prefHeight="25.0" prefWidth="100.0" />
-                              <ChoiceBox fx:id="cbEndUF" layoutX="857.0" layoutY="81.0" prefHeight="25.0" prefWidth="55.0" />
-                              <Label layoutX="25.0" layoutY="63.0" text="Endereço do  Empreendimento:" />
-                              <Label layoutX="482.0" layoutY="65.0" text="RA:" />
-                              <Label layoutX="634.0" layoutY="65.0" text="Cep:" />
-                              <Label layoutX="746.0" layoutY="65.0" text="Cidade:" />
-                              <Label layoutX="858.0" layoutY="63.0" text="UF:" />
-                              <TextField fx:id="tfLinkEnd" layoutX="94.0" layoutY="121.0" prefHeight="25.0" prefWidth="668.0" promptText="Inserir link do GoogleMaps..." />
-                              <TextField fx:id="tfEndLat" layoutX="288.0" layoutY="162.0" prefHeight="25.0" prefWidth="140.0" promptText="-15.7754084" />
-                              <TextField fx:id="tfEndLon" layoutX="533.0" layoutY="162.0" prefHeight="25.0" prefWidth="140.0" promptText="-47.9411395" />
-                              <Label layoutX="194.0" layoutY="166.0" text="Coordenadas X:" />
-                              <Label layoutX="439.0" layoutY="166.0" text="Coordenadas Y:" />
-                              <Pane layoutX="58.0" layoutY="189.0" prefHeight="47.0" prefWidth="819.0">
+                              <Pane layoutX="103.0" layoutY="29.0" prefHeight="457.0" prefWidth="934.0" styleClass="classFontSize" stylesheets="@../css/application.css">
                                  <children>
-                                    <Button fx:id="btnEndNovo" layoutX="8.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnEndNovoHab" prefHeight="22.0" prefWidth="76.0" text="Novo" />
-                                    <Button fx:id="btnEndSalvar" layoutX="93.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnSalvarHab" prefHeight="22.0" prefWidth="76.0" text="Salvar" />
-                                    <Button fx:id="btnEndEditar" layoutX="176.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnEndEditarHab" prefHeight="22.0" prefWidth="76.0" text="Editar" />
-                                    <Button fx:id="btnEndExc" layoutX="260.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnEndExcHab" prefHeight="22.0" prefWidth="76.0" text="Excluir" />
-                                    <Button fx:id="btnEndCan" layoutX="344.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnEndCanHab" prefHeight="22.0" prefWidth="76.0" text="Cancelar" />
-                                    <Button fx:id="btnEndPesq" layoutX="724.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnEndPesqHab" prefHeight="22.0" prefWidth="76.0" text="Pesquisar" />
-                                    <TextField fx:id="tfEndPesq" layoutX="426.0" layoutY="11.0" prefHeight="23.0" prefWidth="295.0" />
+                                    <TextField fx:id="tfEnd" layoutX="24.0" layoutY="86.0" prefHeight="25.0" prefWidth="446.0" />
+                                    <ChoiceBox fx:id="cbEndRA" layoutX="482.0" layoutY="86.0" prefHeight="25.0" prefWidth="140.0" />
+                                    <TextField fx:id="tfEndCep" layoutX="637.0" layoutY="86.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <TextField fx:id="tfEndCid" layoutX="746.0" layoutY="86.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <ChoiceBox fx:id="cbEndUF" layoutX="853.0" layoutY="86.0" prefHeight="25.0" prefWidth="55.0" />
+                                    <Label layoutX="23.0" layoutY="63.0" prefHeight="17.0" prefWidth="292.0" text="Endereço do  Empreendimento:" />
+                                    <Label layoutX="482.0" layoutY="65.0" prefHeight="17.0" prefWidth="100.0" text="RA:" />
+                                    <Label layoutX="637.0" layoutY="65.0" prefHeight="17.0" prefWidth="60.0" text="Cep:" />
+                                    <Label layoutX="746.0" layoutY="65.0" prefHeight="17.0" prefWidth="80.0" text="Cidade:" />
+                                    <Label layoutX="853.0" layoutY="64.0" prefHeight="17.0" prefWidth="45.0" text="UF:" />
+                                    <TextField fx:id="tfLinkEnd" layoutX="94.0" layoutY="127.0" prefHeight="25.0" prefWidth="668.0" promptText="Inserir link do GoogleMaps..." />
+                                    <TextField fx:id="tfEndLat" layoutX="269.0" layoutY="168.0" prefHeight="25.0" prefWidth="140.0" promptText="-15.7754084" />
+                                    <TextField fx:id="tfEndLon" layoutX="534.0" layoutY="168.0" prefHeight="25.0" prefWidth="140.0" promptText="-47.9411395" />
+                                    <Label layoutX="158.0" layoutY="172.0" prefHeight="17.0" prefWidth="100.0" text="Coordenadas X:" />
+                                    <Label layoutX="423.0" layoutY="172.0" prefHeight="17.0" prefWidth="100.0" text="Coordenadas Y:" />
+                                    <Pane layoutX="58.0" layoutY="204.0" prefHeight="47.0" prefWidth="833.0">
+                                       <children>
+                                          <Button fx:id="btnEndNovo" layoutX="8.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnEndNovoHab" prefHeight="22.0" prefWidth="76.0" text="Novo" />
+                                          <Button fx:id="btnEndSalvar" layoutX="95.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnSalvarHab" prefHeight="22.0" prefWidth="76.0" text="Salvar" />
+                                          <Button fx:id="btnEndEditar" layoutX="182.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnEndEditarHab" prefHeight="22.0" prefWidth="76.0" text="Editar" />
+                                          <Button fx:id="btnEndExc" layoutX="269.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnEndExcHab" prefHeight="22.0" prefWidth="76.0" text="Excluir" />
+                                          <Button fx:id="btnEndCan" layoutX="357.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnEndCanHab" prefHeight="22.0" prefWidth="76.0" text="Cancelar" />
+                                          <Button fx:id="btnEndPesq" layoutX="750.0" layoutY="11.0" mnemonicParsing="false" onAction="#btnEndPesqHab" prefHeight="22.0" prefWidth="76.0" text="Pesquisar" />
+                                          <TextField fx:id="tfEndPesq" layoutX="444.0" layoutY="11.0" prefHeight="23.0" prefWidth="295.0" />
+                                       </children>
+                                    </Pane>
+                                    <Button fx:id="btnEndLatLon" layoutX="775.0" layoutY="127.0" mnemonicParsing="false" onAction="#btnEndLatLonHab" prefHeight="25.0" prefWidth="69.0" text="Lat Lon" />
+                                    <TableView fx:id="tvLista" layoutX="22.0" layoutY="261.0" prefHeight="185.0" prefWidth="889.0">
+                                       <columns>
+                                          <TableColumn fx:id="tcDesEnd" prefWidth="409.0" text="Endereço" />
+                                          <TableColumn fx:id="tcEndRA" minWidth="0.0" prefWidth="232.0" text="RA" />
+                                          <TableColumn fx:id="tcEndCid" prefWidth="232.0" text="CEP" />
+                                       </columns>
+                                    </TableView>
+                                    <Button fx:id="btnEndMaps" layoutX="687.0" layoutY="164.0" mnemonicParsing="false" onAction="#btnEndMapsHab" prefHeight="34.0" prefWidth="34.0" />
+                                    <Label fx:id="lblEndereco" layoutX="207.0" layoutY="38.0" prefHeight="17.0" prefWidth="252.0" />
+                                    <Pane layoutX="26.0" layoutY="3.0" prefHeight="40.0" prefWidth="886.0" style="-fx-background-color: #E9E9E9;">
+                                       <children>
+                                          <Label fx:id="lblDoc" layoutX="113.0" layoutY="8.0" prefHeight="25.0" prefWidth="721.0">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </Label>
+                                          <Label layoutX="31.0" layoutY="7.0" prefHeight="26.0" prefWidth="79.0" text="Documento:" />
+                                          <Button fx:id="btnEndCoord" layoutX="842.0" layoutY="3.0" mnemonicParsing="false" onAction="#btnEndCoordHab" prefHeight="27.0" prefWidth="32.0" />
+                                       </children>
+                                    </Pane>
                                  </children>
                               </Pane>
-                              <Button fx:id="btnEndLatLon" layoutX="775.0" layoutY="121.0" mnemonicParsing="false" onAction="#btnEndLatLonHab" prefHeight="25.0" prefWidth="69.0" text="Lat Lon" />
-                              <TableView fx:id="tvLista" layoutX="22.0" layoutY="243.0" prefHeight="185.0" prefWidth="889.0">
-                                 <columns>
-                                    <TableColumn fx:id="tcDesEnd" prefWidth="409.0" text="Endereço" />
-                                    <TableColumn fx:id="tcEndRA" minWidth="0.0" prefWidth="232.0" text="RA" />
-                                    <TableColumn fx:id="tcEndCid" prefWidth="232.0" text="CEP" />
-                                 </columns>
-                              </TableView>
-                              <Button fx:id="btnEndMaps" layoutX="686.0" layoutY="158.0" mnemonicParsing="false" onAction="#btnEndMapsHab" prefHeight="34.0" prefWidth="34.0" />
-                              <Label fx:id="lblEndereco" layoutX="207.0" layoutY="38.0" prefHeight="17.0" prefWidth="252.0" />
-                              <Pane layoutX="26.0" layoutY="3.0" prefHeight="40.0" prefWidth="886.0" style="-fx-background-color: #E9E9E9;">
-                                 <children>
-                                    <Label fx:id="lblDoc" layoutX="108.0" layoutY="8.0" prefHeight="25.0" prefWidth="729.0">
-                                       <font>
-                                          <Font name="System Bold" size="12.0" />
-                                       </font>
-                                    </Label>
-                                    <Label layoutX="31.0" layoutY="7.0" prefHeight="26.0" prefWidth="72.0" text="Documento:" />
-                                    <Button fx:id="btnEndCoord" layoutX="842.0" layoutY="3.0" mnemonicParsing="false" onAction="#btnEndCoordHab" prefHeight="27.0" prefWidth="32.0" />
-                                 </children>
-                              </Pane>
+                              <Pane fx:id="pEndMap" layoutX="124.0" layoutY="491.0" prefHeight="500.0" prefWidth="889.0" />
                            </children>
                         </Pane>
-                        <Pane fx:id="pEndMap" layoutX="126.0" layoutY="455.0" prefHeight="500.0" prefWidth="889.0" />
-                     </children>
-                  </Pane>
+                     </top>
+                  </BorderPane>
                </children>
             </AnchorPane>
         </content>

@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -34,13 +35,13 @@ public class Main extends Application {
         
         stage.setX(primaryScreenBounds.getMinX());
         stage.setY(primaryScreenBounds.getMinY());
-       // stage.setWidth(primaryScreenBounds.getWidth());
-        //stage.setHeight(primaryScreenBounds.getHeight());
-        
+        stage.setWidth(primaryScreenBounds.getWidth());
+        stage.setHeight(primaryScreenBounds.getHeight());
+        stage.getIcons().add(new Image("/images/aguaIcon.png"));
         
         // teste no notebook
-        stage.setWidth(1366);
-        stage.setHeight(768);
+        //stage.setWidth(1366);
+        //stage.setHeight(768);
         
         // limites de tamanho do stage
         stage.setMinHeight(768);

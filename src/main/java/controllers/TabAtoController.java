@@ -47,6 +47,7 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
@@ -445,6 +446,7 @@ public class TabAtoController implements Initializable{
 	
 	@FXML Pane pAto;
 	@FXML AnchorPane apAtoInt;
+	@FXML BorderPane bpAto;
 	
 	
 	// INITIALIZE //
@@ -532,28 +534,25 @@ public class TabAtoController implements Initializable{
 			}
 		});
 		
+		
+		// redimensionamento da tab ato
+		AnchorPane.setTopAnchor(spAto, 0.0);
+	    AnchorPane.setLeftAnchor(spAto, 0.0);
+		AnchorPane.setRightAnchor(spAto, 0.0);
+	    AnchorPane.setBottomAnchor(spAto, 35.0);
+	    
+	    apAtoInt.setMaxHeight(1200);
+	    apAtoInt.setMinHeight(1200);
+	    
+	
 		apAto.widthProperty().addListener((obs, oldVal, newVal) -> {
 	    	
-			// cálculo do layout para redimensionamento
-			Double widNewVal = Math.pow((Double) newVal/70, (Double) newVal/1000);
-			// posicionamento dos panes redimensionando a tela
-			AnchorPane.setLeftAnchor(pAto, widNewVal);
-	      
-			// redimensionamento scroolPane
-			spAto.setMinWidth((Double)newVal);
-			spAto.setMaxWidth((Double)newVal);
-	        // valor mínimo de altura scroolPane
-			apAtoInt.setMinHeight(1200.0);  // spDemanda.getHeight() * 1.2
-	       
+			bpAto.setMaxWidth((Double) newVal);
+			bpAto.setMinWidth((Double) newVal);
+			
 	    });
 		
-		apAto.heightProperty().addListener((obs, oldVal, newVal) -> {
-	    	
-	       spAto.setMinHeight((Double)newVal - 30);
-	       spAto.setMaxHeight((Double)newVal - 30);
-	       
-	       
-	    });
+		
 	}
 	
 	ObservableList<AtoTabela> obsList;

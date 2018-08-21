@@ -27,6 +27,7 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import tabela.InterferenciaTabela;
 import tabela.UsuarioTabela;
@@ -591,9 +592,11 @@ public class TabUsuarioController implements Initializable {
 			}
 	
 	@FXML AnchorPane apUsuario;
+	@FXML AnchorPane apUsInt;
 	@FXML ScrollPane spUsuario;
-	@FXML Pane pInterGeral;
+	
 	@FXML Pane pUsuario;
+	@FXML BorderPane bpUsuario;
 	
 	
 	//-- INITIALIZE --//
@@ -621,45 +624,26 @@ public class TabUsuarioController implements Initializable {
 		
 		modularBotoesInicial ();
 		
-		/*
-		spUsuario.widthProperty().addListener((obs, oldVal, newVal) -> {
-	    	
-	        Double widNewVal = (double) newVal * 0.15;
-	        AnchorPane.setLeftAnchor(pInterGeral, widNewVal);
-	        
-	    });
-	    */
 		
-		/*
 		AnchorPane.setTopAnchor(spUsuario, 0.0);
-	    AnchorPane.setRightAnchor(spUsuario, 0.0);
 	    AnchorPane.setLeftAnchor(spUsuario, 0.0);
-	    AnchorPane.setBottomAnchor(spUsuario, 0.0);
-	    */
-		
+		AnchorPane.setRightAnchor(spUsuario, 0.0);
+	    AnchorPane.setBottomAnchor(spUsuario, 35.0);
+	    
+	    apUsInt.setMaxHeight(1200);
+	    apUsInt.setMinHeight(1200);
+	    
+	
 		apUsuario.widthProperty().addListener((obs, oldVal, newVal) -> {
 	    	
-			// cálculo do layout para redimensionamento
-			Double widNewVal = Math.pow((Double) newVal/70, (Double) newVal/1000);
-			// posicionamento dos panes redimensionando a tela
-			AnchorPane.setLeftAnchor(pUsuario, widNewVal);
-	      
-			// redimensionamento scroolPane
-			spUsuario.setMinWidth((Double)newVal);
-			spUsuario.setMaxWidth((Double)newVal);
-	        // valor mínimo de altura scroolPane
-			apUsuario.setMinHeight(1200.0);  // spDemanda.getHeight() * 1.2
-	       
+			bpUsuario.setMaxWidth((Double) newVal);
+			bpUsuario.setMinWidth((Double) newVal);
+			
+			
+			
 	    });
 		
-		apUsuario.heightProperty().addListener((obs, oldVal, newVal) -> {
-	    	
-	       spUsuario.setMinHeight((Double)newVal - 30);
-	       spUsuario.setMaxHeight((Double)newVal - 30);
-	       
-	       
-	    });
-	    
+		
 		
 	}
 	

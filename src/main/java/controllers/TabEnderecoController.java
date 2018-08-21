@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
-import javax.print.attribute.standard.PDLOverrideSupported;
-
 import dao.EnderecoDao;
 import entity.Demanda;
 import entity.Endereco;
@@ -807,8 +805,11 @@ public class TabEnderecoController implements Initializable {
 	
 	@FXML ScrollPane spEnd;
 	@FXML AnchorPane apEndInt;
-	@FXML Pane pEndForm;
+	
 	@FXML Pane pEndereco;
+	@FXML BorderPane bpEndereco;
+	
+
 	
 	
 	//-- INITIALIZE --//
@@ -841,34 +842,24 @@ public class TabEnderecoController implements Initializable {
 		
 		btnEndCoord.setGraphic(new ImageView(imgEndCoord));
 		
-		/*
-		AnchorPane.setTopAnchor(spEnd, 0.0);
-	    AnchorPane.setRightAnchor(spEnd, 0.0);
-	    AnchorPane.setLeftAnchor(spEnd, 0.0);
-	    AnchorPane.setBottomAnchor(spEnd, 30.0);
-	    
-	    */
 		
-	    apEnd.widthProperty().addListener((obs, oldVal, newVal) -> {
-	    	
-	        Double widNewVal = Math.pow((Double) newVal/70, (Double) newVal/1000);
-	  
-	        AnchorPane.setLeftAnchor(pEndereco, widNewVal);
-	        //AnchorPane.setLeftAnchor(pEndMap, widNewVal + 13);
-	        
-	        spEnd.setMinWidth((Double)newVal);
-		    spEnd.setMaxWidth((Double)newVal);
-	        
-	        apEndInt.setMinHeight(1200.0);
-	        
-	    });
-	    
-	    apEnd.heightProperty().addListener((obs, oldVal, newVal) -> {
-	    	
-		       spEnd.setMinHeight((Double)newVal - 30);
-		       spEnd.setMaxHeight((Double)newVal - 30);
-		       
-		    });
+		// redimensionamento da tab ato
+				AnchorPane.setTopAnchor(spEnd, 0.0);
+			    AnchorPane.setLeftAnchor(spEnd, 0.0);
+				AnchorPane.setRightAnchor(spEnd, 0.0);
+			    AnchorPane.setBottomAnchor(spEnd, 35.0);
+			    
+			    apEndInt.setMaxHeight(1200);
+			    apEndInt.setMinHeight(1200);
+			    
+			
+				apEnd.widthProperty().addListener((obs, oldVal, newVal) -> {
+			    	
+					bpEndereco.setMaxWidth((Double) newVal);
+					bpEndereco.setMinWidth((Double) newVal);
+					
+			    });
+				
 	    
 	    
 	    
@@ -896,7 +887,7 @@ public class TabEnderecoController implements Initializable {
 	
 	WebView wv1;
 	WebEngine webEng;
-	@FXML Pane pEndMap;
+	@FXML Pane pEndMap = new Pane();
 	
 	public void abrirMapa (String strMarcador) {
 		
@@ -904,26 +895,17 @@ public class TabEnderecoController implements Initializable {
 		webEng = wv1.getEngine();
 		webEng.load(getClass().getResource("/html/enderecoMap.html").toExternalForm());
 			
-		wv1.setPrefSize(902,485);
+		wv1.setPrefSize(889,500);
 		wv1.getEngine();
 	
-		//BorderPane root = new BorderPane();
-		//root.setCenter(wv1);
-		//root.setPrefSize(934, 500);
-		//root.setLayoutY(410);
-		//root.setLayoutX(127);
-		
 		pEndMap.getChildren().add(wv1);
-		
+		pEndMap.setLayoutX(124.0);
 		
 		webEng.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
             if (Worker.State.SUCCEEDED.equals(newValue)) {
             	webEng.executeScript(strMarcador);
             }
         });
-		
-		System.out.println("pane layout x " + pEndMap.getLayoutX());
-		System.out.println("tabela layout x " + pEndForm.getLayoutX());
 		
 	}
 	
@@ -934,16 +916,17 @@ public class TabEnderecoController implements Initializable {
 		webEng = wv1.getEngine();
 		webEng.loadContent(strHTMLMap);
 		
-		wv1.setPrefSize(700,500);
+		wv1.setPrefSize(888,500);
 		wv1.getEngine();
 	
 		BorderPane root = new BorderPane();
 		root.setCenter(wv1);
-		root.setPrefSize(700, 420);
-		root.setLayoutY(395);
-		root.setLayoutX(220);
+		root.setPrefSize(888, 420);
+		//root.setLayoutY(395);
+		//root.setLayoutX(220);
 		
 		pEndCoord.getChildren().add(root);
+		//pEndCoord.setLayoutX(118.0);
 	
 		webEng.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
             if (Worker.State.SUCCEEDED.equals(newValue)) {

@@ -213,10 +213,13 @@ public class TabNavegadorController implements Initializable{
 			    stage.setScene(scene);
 			    stage.setMaximized(false);
 			    stage.setResizable(false);
-			    stage.setX(1030.0);
-			    stage.setY(550.0);
-			   
-			    stage.setAlwaysOnTop(true); 
+			    stage.setTitle("Documentos SEI");
+			    stage.getIcons().add(new Image("/images/docCap.png"));
+			    					
+			    System.out.println();
+			    System.out.println(apNavegador.getWidth());
+			    
+			    stage.setAlwaysOnTop(true); // sempre por cima das outras telas
 			    stage.show();
 			
 			    //--  https://docs.oracle.com/javafx/2/ui_controls/ListViewSample.java.html  --// 
@@ -368,10 +371,11 @@ public class TabNavegadorController implements Initializable{
 			navegarWeb(); 
 		});
 		
+		
 		AnchorPane.setTopAnchor(spNavegador, 0.0);
 	    AnchorPane.setRightAnchor(spNavegador, 0.0);
 	    AnchorPane.setLeftAnchor(spNavegador, 0.0);
-	    AnchorPane.setBottomAnchor(spNavegador, 30.0);
+	    AnchorPane.setBottomAnchor(spNavegador, 35.0);
 	    
 	    spNavegador.heightProperty().addListener((observable, oldValue, newValue) -> {
            //System.out.println("altura do spNavegador " + newValue);

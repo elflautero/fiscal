@@ -18,7 +18,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
@@ -34,7 +33,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import tabela.DemandaTabela;
 
@@ -539,6 +537,8 @@ public class TabDemandaController implements Initializable {
 	@FXML ScrollPane spDemanda;
 	@FXML AnchorPane apDemInt;
 	@FXML Pane pDemanda;
+	@FXML BorderPane bpDemanda;
+	
 	
 	
 	// -- INITIALIZE -- //
@@ -558,38 +558,22 @@ public class TabDemandaController implements Initializable {
         // --- habilitar e desabilitar botões ---- //
 		modularBotoesInicial();
 		
+		// redimensionamento da tab ato
+		AnchorPane.setTopAnchor(spDemanda, 0.0);
+	    AnchorPane.setLeftAnchor(spDemanda, 0.0);
+		AnchorPane.setRightAnchor(spDemanda, 0.0);
+	    AnchorPane.setBottomAnchor(spDemanda, 35.0);
+	    
+	    apDemInt.setMaxHeight(1200);
+	    apDemInt.setMinHeight(1200);
+	    
+	
 		apDemanda.widthProperty().addListener((obs, oldVal, newVal) -> {
 	    	
-			// cálculo do layout para redimensionamento
-			Double widNewVal = Math.pow((Double) newVal/70, (Double) newVal/1000);
-			// posicionamento dos panes redimensionando a tela
-			AnchorPane.setLeftAnchor(pDemanda, widNewVal);
-	      
-			// redimensionamento scroolPane
-			spDemanda.setMinWidth((Double)newVal);
-			spDemanda.setMaxWidth((Double)newVal);
-	        // valor mínimo de altura scroolPane
-			apDemInt.setMinHeight(1200.0);  // spDemanda.getHeight() * 1.2
-	       
-	       
+			bpDemanda.setMaxWidth((Double) newVal);
+			bpDemanda.setMinWidth((Double) newVal);
+			
 	    });
-		
-		apDemanda.heightProperty().addListener((obs, oldVal, newVal) -> {
-	    	
-	       spDemanda.setMinHeight((Double)newVal - 30);
-	       spDemanda.setMaxHeight((Double)newVal - 30);
-	       
-	       
-	    });
-		
-		
-		/*
-		AnchorPane.setTopAnchor(spDemanda, 0.0);
-	    AnchorPane.setRightAnchor(spDemanda, 0.0);
-	    AnchorPane.setLeftAnchor(spDemanda, 0.0);
-	    AnchorPane.setBottomAnchor(spDemanda, 30.0);
-	    
-	    */
 		
 		
 		

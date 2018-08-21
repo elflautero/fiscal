@@ -10,14 +10,20 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 public class MainController {
@@ -37,6 +43,48 @@ public class MainController {
 	    
 	    @FXML Button btnLegislacao;
 	    @FXML Button btnHome;
+	    
+	    
+	    @FXML MenuItem menuSobre;
+	    
+	    // Tela de ajuda - Sobre o programa //
+	    public void menuSobreHab (ActionEvent event) {
+	    	
+	    	String textInBold = "Java_Prof_Level";
+	    	Pane pane  = new Pane();
+	    	Label lblSobre = new  Label("Versão  1.0 - 28/08/2018"
+	    			
+	    			);
+	    	lblSobre.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+	    	
+	    	Label lblSobreInformações = new  Label (
+	    			 	"	\n"
+	    			+	"	\nMaximização da Tela (maximize)"
+	    			+ 	"	\nAumento da Fonte (font size)"
+	    						
+	    			);
+			
+	    	Group g = new Group (lblSobre, lblSobreInformações);
+	    	
+	    	pane.getChildren().addAll(g);
+	    	pane.setPrefSize(500, 400);
+	    	
+	    	
+	    	Scene scene = new Scene(pane);
+			Stage stage = new Stage(); // StageStyle.UTILITY - tirei para ver como fica, se aparece o minimizar
+			stage.setWidth(500);
+			stage.setHeight(400);
+		    stage.setScene(scene);
+		    stage.setMaximized(false);
+		    stage.setResizable(false);
+		    //stage.setX(1030.0);
+		    //stage.setY(550.0);
+		   
+		    //stage.setAlwaysOnTop(true); 
+		    stage.show();
+		
+	    }
+	    
 	    
 	    public void btnLegislacaoHab (ActionEvent event) {
 	    	

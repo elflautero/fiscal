@@ -106,7 +106,7 @@ public class TabInterfController implements Initializable {
 	@FXML Button btnIntMaps;
 	
 	// --- objeto para passar os valor pelo MainControoler para outro controller --- //
-	public Endereco eGeralInt;
+	public Endereco eGeralInt = new Endereco ();
 	
 	@FXML Button btnEndCoord;
 	@FXML Image imgEndCoord = new Image(TabVistoriaController.class.getResourceAsStream("/images/mapCoord.png"));
@@ -1088,7 +1088,7 @@ public class TabInterfController implements Initializable {
 	// adicMarcador(); 
 	public void adicMarcador () {
 		
-		System.out.println("latitude endereço " + eGeralInt.getLat_Endereco() + " e " + eGeralInt.getLon_Endereco());
+		//System.out.println("latitude endereço " + eGeralInt.getLat_Endereco() + " e " + eGeralInt.getLon_Endereco());
 		
     	if (eGeralInt.getLat_Endereco() != null  && eGeralInt.getLon_Endereco() != null ) {
         	lat = Double.parseDouble(eGeralInt.getLat_Endereco().toString());
@@ -1199,6 +1199,7 @@ public class TabInterfController implements Initializable {
 		@FXML Pane pInterTipo;
 		@FXML Pane pInterMap;
 		@FXML Pane pInterferencia;
+		@FXML BorderPane bpInterferencia;
 		
 		
 		
@@ -1253,76 +1254,24 @@ public class TabInterfController implements Initializable {
 		
 		modularBotoes ();
 		
-		/*
-		AnchorPane.setTopAnchor(spInter, 0.0);
-	    AnchorPane.setRightAnchor(spInter, 0.0);
-	    AnchorPane.setLeftAnchor(spInter, 0.0);
-	    AnchorPane.setBottomAnchor(spInter, 30.0);
-	   */
-	   
-	    apInter.widthProperty().addListener((obs, oldVal, newVal) -> {
-	    	
-	    	
-	    	Double widNewVal = Math.pow((Double) newVal/70, (Double) newVal/1000);
-	    	// panes com os formulários e mapas
-	        AnchorPane.setLeftAnchor(pInterferencia, widNewVal);
-	     // redimensionamento scroolPane
-	     	spInter.setMinWidth((Double)newVal);
-	     	spInter.setMaxWidth((Double)newVal);
-	        
-	        // para o scrool pane funcionar com a tela pequena e assim poder rolar...
-		    apIntInt.setMinHeight(1200.0);
-		    
-		    apIntInt.setMinWidth(spInter.getWidth());
-		    
-	        
-	    });
+		// redimensionamento da tab ato
+				AnchorPane.setTopAnchor(spInter, 0.0);
+			    AnchorPane.setLeftAnchor(spInter, 0.0);
+				AnchorPane.setRightAnchor(spInter, 0.0);
+			    AnchorPane.setBottomAnchor(spInter, 35.0);
+			    
+			    apIntInt.setMaxHeight(1200);
+			    apIntInt.setMinHeight(1200);
+			    
+				apInter.widthProperty().addListener((obs, oldVal, newVal) -> {
+			    	
+					bpInterferencia.setMaxWidth((Double) newVal);
+					bpInterferencia.setMinWidth((Double) newVal);
+					
+			    });
+				
 	    
-	    apInter.heightProperty().addListener((obs, oldVal, newVal) -> {
-	    	
-		       spInter.setMinHeight((Double)newVal - 30);
-		       spInter.setMaxHeight((Double)newVal - 30);
-		       
-		    });
-	    
-	    
-	    /*
-	    apInter.widthProperty().addListener((obs, oldVal, newVal) -> {
-	    	
-	    	spInter.setMinWidth((Double) newVal);
-	    	spInter.setMaxWidth((Double) newVal);
-	    	
-	    	apIntInt.setMinWidth((Double) newVal);
-	    	apIntInt.setMaxWidth((Double) newVal);
-	    	
-	    	
-	    	System.out.println("anchor pane inter  width " + newVal);
-	    });
-	    
-	    apInter.heightProperty().addListener((obs, oldVal, newVal) -> {
-	    	
-	    	Double altura = (Double) newVal - 28;
-	    	
-	    	spInter.setMinHeight((Double) altura);
-	    	spInter.setMaxHeight((Double) altura);
-	    	
-	    	apIntInt.setMinHeight((Double) newVal);
-	    	apIntInt.setMaxHeight((Double) newVal);
-	    	
-	    	System.out.println("anchor pane inter  heigth " + newVal);
-	    	System.out.println("valor da altura " + altura);
-	    	
-	    });
-	    */
-	    
-	    
-	    
-	    
-	   
-	    
-	   
-	    
-	    //apIntInt.setMinHeight(spInter.getPrefHeight() + 300);
+	  
 	   
 	}
 	
@@ -1486,7 +1435,7 @@ public class TabInterfController implements Initializable {
 		webEng = wv1.getEngine();
 		webEng.load(getClass().getResource("/html/enderecoMap.html").toExternalForm());
 		
-		wv1.setPrefSize(887,485);
+		wv1.setPrefSize(889,500);
 		wv1.getEngine();
 	
 		//root = new BorderPane();
@@ -1498,6 +1447,7 @@ public class TabInterfController implements Initializable {
 		//apIntInt.getChildren().add(root);
 		
 		pInterMap.getChildren().add(wv1);
+		//pInterMap.setLayoutX(118);
 	
 		webEng.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
             if (Worker.State.SUCCEEDED.equals(newValue)) {
@@ -1508,6 +1458,46 @@ public class TabInterfController implements Initializable {
 	}
 
 }
+
+
+
+/*
+apInter.widthProperty().addListener((obs, oldVal, newVal) -> {
+	
+	spInter.setMinWidth((Double) newVal);
+	spInter.setMaxWidth((Double) newVal);
+	
+	apIntInt.setMinWidth((Double) newVal);
+	apIntInt.setMaxWidth((Double) newVal);
+	
+	
+	System.out.println("anchor pane inter  width " + newVal);
+});
+
+apInter.heightProperty().addListener((obs, oldVal, newVal) -> {
+	
+	Double altura = (Double) newVal - 28;
+	
+	spInter.setMinHeight((Double) altura);
+	spInter.setMaxHeight((Double) altura);
+	
+	apIntInt.setMinHeight((Double) newVal);
+	apIntInt.setMaxHeight((Double) newVal);
+	
+	System.out.println("anchor pane inter  heigth " + newVal);
+	System.out.println("valor da altura " + altura);
+	
+});
+*/
+
+
+
+
+
+
+
+
+//apIntInt.setMinHeight(spInter.getPrefHeight() + 300);
 	
 
 
