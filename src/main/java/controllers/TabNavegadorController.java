@@ -1,18 +1,23 @@
 package controllers;
 
 import java.awt.List;
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javax.swing.text.TableView;
 
+import fiscalizacao.DocumentosOutorga;
+import fiscalizacao.LeitorExcel;
+import fiscalizacao.Outorga;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -22,6 +27,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
@@ -37,20 +43,24 @@ import javafx.scene.web.PopupFeatures;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebEvent;
 import javafx.scene.web.WebView;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.StringConverter;
 
 
 public class TabNavegadorController implements Initializable{
 	
 	//-- Link de entrada do navegador WebView --//
-	String link = "https://sei.df.gov.br/sip/login.php?sigla_orgao_sistema=GDF&sigla_sistema=SEI";
+	String link = "https://www.w3schools.com/howto/howto_js_popup.asp";
+			
+			//"https://sei.df.gov.br/sip/login.php?sigla_orgao_sistema=GDF&sigla_sistema=SEI";
 	
 	int contDocSei;
 	//-- Array de Strings - Documentos Capturados --//
 	String[] docsSei; // = new String [contDocSei];
 	
-	static String html;
+	public static String strHTML;
 	
 	// array list para a captura de dados dos documentos --//
 	ArrayList<String> docsList = new ArrayList<String>();
@@ -77,11 +87,16 @@ public class TabNavegadorController implements Initializable{
 	@FXML Image imgCapturar = new Image(TabNavegadorController.class.getResourceAsStream("/images/doc24.png"));
 	@FXML Image imgMostrar = new Image(TabNavegadorController.class.getResourceAsStream("/images/showDocs24.png"));
 	@FXML Image imgWeb = new Image(TabNavegadorController.class.getResourceAsStream("/images/webBrowser.png"));
+	Image imgExcel = new Image(TabNavegadorController.class.getResourceAsStream("/images/imgExcel.png"));
+	Image imgDoc = new Image(TabNavegadorController.class.getResourceAsStream("/images/imgDoc.png"));
+	Image imgAnexo = new Image(TabNavegadorController.class.getResourceAsStream("/images/imgAnexo.png"));
 	
 	WebView wv1;
 	
+	
+	
 	// numero do iframe para inserir o relatorio, TN ou AIA
-	static int numIframe;
+	public static int numIframe;
 	
 	// table view de documentos capturados do sei
 	ObservableList<String []> numDosObservable;
@@ -238,9 +253,41 @@ public class TabNavegadorController implements Initializable{
 			
 	}
 	
+		//importações para a outorga//
 	
-	//-- mÃ©todo navegar --//
+			ObservableList<Outorga> obsList;
+			
+			LeitorExcel leitorExcel = new LeitorExcel();
+			
+			ComboBox<Outorga> cbOutorga;
+			ComboBox<String> cbParecerOutorga;
+			
+			ObservableList<String> cbParecerOutorgaOpcoes;
+			
+			Boolean b = false;
+			
+			Button btnAxexo;
+			Button btnExcel;
+			Button btnTabela;
+			
+			Pane pane;
+			Pane pTabela;
+
+			Outorga outorga;
+			
+			
+			WebView webOutorgas;
+			WebEngine engOutorga;
+			
+			String strHTMLRel;
+			String strParecerDespacho = "PARECER";
+			
+			//xxxxxxxxxxxxxxxxxxxxx//
+			
+	
+	//-- metodo navegar --//
 	public void navegarWeb() {
+		
 		
 		wv1 = new WebView();
 		
@@ -249,6 +296,52 @@ public class TabNavegadorController implements Initializable{
 		wv1.minHeightProperty().bind(apNavegador.heightProperty().subtract(150));
 		
 		pBrowser.getChildren().add(wv1);
+		
+		btnAxexo = new  Button();
+		btnAxexo.setGraphic(new ImageView(imgAnexo));
+		
+		btnAxexo.setMinHeight(25);
+		btnAxexo.setMaxHeight(25);
+		
+		btnAxexo.setMaxWidth(30);
+		btnAxexo.setMinWidth(30);
+		
+		btnAxexo.setLayoutX(841);
+		
+		
+		
+		// -------- //
+		btnExcel = new Button();
+		btnExcel.setGraphic(new ImageView(imgExcel));
+		btnExcel.setLayoutX(222);
+		btnExcel.setMinHeight(25);
+		
+		
+		/*
+		// -------- //
+		btnTabela = new Button("...");
+		btnTabela.setLayoutX(310);
+		*/
+		
+		cbParecerOutorgaOpcoes = FXCollections.observableArrayList(
+    	        "PARECER",
+    	        "DESPACHOS"
+    	    ); 
+		
+		cbParecerOutorga = new ComboBox<>(cbParecerOutorgaOpcoes);
+		
+		cbParecerOutorga.setLayoutX(255);
+		cbParecerOutorga.setMinWidth(110);
+		cbParecerOutorga.setMaxWidth(110);
+		cbParecerOutorga.setValue("PARECER");
+		
+		cbOutorga = new ComboBox<>();
+		
+		cbOutorga.setLayoutX(366);
+		cbOutorga.setMinWidth(400);
+		cbOutorga.setMaxWidth(400);
+		
+		
 		
 		wv1.getEngine().setCreatePopupHandler(new Callback<PopupFeatures, WebEngine>() {
 
@@ -259,25 +352,16 @@ public class TabNavegadorController implements Initializable{
 		            wv2.setPrefWidth(1140.0);
 		            wv2.setLayoutY(35);
 		            
-		    		Button btnIframe = new Button ("Incluir");
+		    		Button btnIframe = new Button ();
+		    		btnIframe.setMinHeight(25);
+		    		
+		    		btnIframe.setLayoutX(808);
+					btnIframe.setGraphic(new ImageView(imgDoc));
+					
 		    		
 		    		System.out.println("numero  iframe " + numIframe);
-		    	
-					btnIframe.setOnAction(new EventHandler<ActionEvent>() {
-			            @Override public void handle(ActionEvent e) {
-			            	
-			        			//-- imprimir o relatório ou tn no editor do SEI --//
-								wv2.getEngine().executeScript(
-				            			"var x = document.getElementsByTagName('iframe')["+numIframe+"];"
-				            			+ "var y = x.contentDocument;" 
-										+ "y.body.innerHTML = " + html + ";"
-				            			);
-								
-			            }
-			        });
-					
-					
-					ChoiceBox<String> cbNumIframe = new ChoiceBox<String>();
+		    		
+		    		ChoiceBox<String> cbNumIframe = new ChoiceBox<String>();
 					ObservableList<String> olNumIframe = FXCollections
 						.observableArrayList(
 								"0",
@@ -286,6 +370,38 @@ public class TabNavegadorController implements Initializable{
 								"3"
 								
 								);
+					
+					cbNumIframe.setItems(olNumIframe);
+					cbNumIframe.setValue(String.valueOf(numIframe));
+					
+					cbNumIframe.setLayoutX(767);
+					
+			
+		            Group group = new Group();
+					group.getChildren().addAll(btnIframe, wv2, cbNumIframe, btnAxexo, btnExcel, cbOutorga, cbParecerOutorga);
+		    	
+					// incluir documento no sei //
+					btnIframe.setOnAction(new EventHandler<ActionEvent>() {
+			            @Override public void handle(ActionEvent e) {
+			            	
+			        			//-- imprimir o relatório ou tn no editor do SEI --//
+								wv2.getEngine().executeScript(
+				            			"var x = document.getElementsByTagName('iframe')["+numIframe+"];"
+				            			+ "var y = x.contentDocument;" 
+										+ "y.body.innerHTML = " + strHTML + ";"
+				            			);
+								
+			            }
+			        });
+					
+					// ação do botão para receber o excel
+					btnAxexo.setOnAction(new EventHandler<ActionEvent>() {
+					    public void handle(ActionEvent e) {
+					    	//abrirTabela();
+					    }
+					});
+					
+					
 					
 					// evento captura numero do choice box
 					cbNumIframe.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
@@ -296,27 +412,160 @@ public class TabNavegadorController implements Initializable{
 					      }
 					    });
 					
-					cbNumIframe.setItems(olNumIframe);
-					cbNumIframe.setValue(String.valueOf(numIframe));
+					// ação do botão para receber o excel
+					btnExcel.setOnAction(new EventHandler<ActionEvent>() {
+						
+					    public void handle(ActionEvent e) {
+					    	
+					    	
+					    	try {
+						    	// para escolher o arquivo  no computador
+						    	FileChooser fileChooser = new FileChooser();
+						        fileChooser.setTitle("Selecione a planilha");
+						        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XLS", "*.xls", "*.xlsm","*.xlsx"));        
+						        File file = fileChooser.showOpenDialog(null);
+						        
+						        //abrirTabela();
+						       
+						        leitorExcel.setEndereco(file.toString());
+						        
+						        obsList = leitorExcel.getListaOutorgas();
+						       // tvLista.setItems(obsList);
+						        
+						        cbOutorga.setItems(obsList);
+						        
+						        cbParecerOutorga.valueProperty().addListener(new ChangeListener<String>() {
+						            @Override 
+						            public void changed(ObservableValue<? extends String> ov, String oldValue, String newValue) {                
+						                strParecerDespacho = newValue;       
+						            }    
+						        });
+						        
+						        // converter o objeto outorga e uma string com o nome, tipo de outorga etc
+						        cbOutorga.setConverter(new StringConverter<Outorga>() {
+									
+									public String toString(Outorga o) {
+										
+										return o.getTipo() + "  |  " + o.getInteressado() + "  |  " + o.getTipoPoco() + "  |  " + o.getEndereco() ;
+									}
+									
+									public Outorga fromString(String string) {
+										
+										return null;
+									}
+								});
+						        
+						        // capturar o usuário escolhido no bombo box
+						        cbOutorga.valueProperty().addListener(new ChangeListener<Outorga>() {
+						            
+									@Override
+									public void changed(ObservableValue<? extends Outorga> arg, Outorga oldOut, Outorga newOut) {
+
+										webOutorgas = new WebView();
+					        			engOutorga = webOutorgas.getEngine();
+					        			
+					        			String tipo = newOut.getTipo();
+					        			
+					        			//System.out.println(newOut.getInteressado());
+					        			
+					        			if (strParecerDespacho.equals("PARECER")) {
+					        				
+					        				engOutorga.load(getClass().getResource("/html/parecerOutorgaSubterranea.html").toExternalForm());
+					        				
+					        			} else {
+					        			
+					        			
+					        				
+							        			switch (tipo) {
+							        			
+							        				case "OUTORGA SUBTERRÂNEA": 
+							        					engOutorga.load(getClass().getResource("/html/outorgaSubterranea.html").toExternalForm());
+							        					break;
+							        					
+							        					
+							        				case "OUTORGA SUBTERRÂNEA TRANSFERÊNCIA": 
+							        					engOutorga.load(getClass().getResource("/html/outorgaSubterraneaTransferencia.html").toExternalForm());
+						        						break;
+						        						
+							        				case "OUTORGA SUBTERRÂNEA INDEFERIMENTO": 
+							        					engOutorga.load(getClass().getResource("/html/outorgaSubterraneaIndeferimento.html").toExternalForm());
+						        						break;
+						        						
+							        				case "OUTORGA SUBTERRÂNEA MODIFICAÇÃO": 
+							        					engOutorga.load(getClass().getResource("/html/outorgaSubterraneoModificacao.html").toExternalForm());
+						        						break;
+						        						
+							        				case "OUTORGA SUBTERRÂNEA RENOVAÇÃO": 
+							        					engOutorga.load(getClass().getResource("/html/outorgaSubterraneaRenovacao.html").toExternalForm());
+						        						break;
+						        						
+							        				case "REGISTRO SUBTERRÂNEA": 
+							        					engOutorga.load(getClass().getResource("/html/registroSubterranea.html").toExternalForm());
+						        						break;
+						        						
+							        				case "REGISTRO SUBTERRÂNEA MODIFICAÇÃO": 
+							        					engOutorga.load(getClass().getResource("/html/registroSubterraneaModificacao.html").toExternalForm());
+						        						break;
+						        						
+							        				case "REGISTRO SUBTERRÂNEA TRANSFERÊNCIA": 
+							        					engOutorga.load(getClass().getResource("/html/registroSubterraneaTransferencia.html").toExternalForm());
+						        						break;
+
+							        			} //fim switch
+						        		
+					        			} //fim else
+					        			
+					        			
+										engOutorga.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>()
+								        {
+								            public void changed(final ObservableValue<? extends Worker.State> observableValue,
+								                                final Worker.State oldState,
+								                                final Worker.State newState)
+								            {
+								                if (newState == Worker.State.SUCCEEDED)
+								                {
+								                  
+								                	strHTMLRel = (String) engOutorga.executeScript("document.documentElement.outerHTML");
+								                
+								                	DocumentosOutorga docOut = new DocumentosOutorga();
+											    	docOut.setHtmlRel(strHTMLRel);
+											    	//docOut.criarDocumento(newOut);
+											    	
+											    	strHTML = docOut.criarDocumento(newOut);
+											    	cbNumIframe.setValue("2");
+											    	
+								                }
+								               
+								            }
+								        });
+										
+									}
+						        });
+						          
+						    	}
+					    	
+					    		catch (Exception ex) {
+					    			System.out.println("a ação foi abortada " + ex);
+					    			
+					    		} // fim do try catch
+					    }
+					    
+					    
+				    	
+					}); // fim do evento btnExcel
 					
-					cbNumIframe.setLayoutX(460);
-					cbNumIframe.setLayoutY(8);
-					
-					btnIframe.setLayoutX(502);
-					btnIframe.setLayoutY(8);
-			
-		            Group group = new Group();
-					group.getChildren().addAll(btnIframe, wv2, cbNumIframe);
-		            
-					Stage stage = new Stage(); // StageStyle.UTILITY
+					Stage stage = new Stage();
 					
 		            stage.setScene(new Scene(group));
 		            
+		            stage.setMaximized(false);
+			        stage.setResizable(false);
 		            stage.show();
 		            
 		            return wv2.getEngine();
 		      
 		        }
+		    
 		    });
 		
 
@@ -402,27 +651,5 @@ public class TabNavegadorController implements Initializable{
 
 }
 
-
-/*
-apBrowser.widthProperty().addListener((obs, oldVal, newVal) -> {
-	
-    Double widNewVal = (double) newVal * -0.2;
-   
-    //System.out.println("spNavegador " + spNavegador.getWidth());
-    //System.out.println(" ancho pane apBrowser " + apBrowser.getWidth());
-   
-   
-});
-
-// ouvinte para spNavegador
-spNavegador.widthProperty().addListener((obs, oldVal, newVal) -> {
-	
-    Double widNewVal = (double) newVal * -0.2;
-   
-    //AnchorPane.setRightAnchor(pBtnRig, widNewVal);
-    //System.out.println("ouvinte dos botoes esquerda " + widNewVal);
-   
-});
-*/
 
 

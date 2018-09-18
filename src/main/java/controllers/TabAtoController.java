@@ -875,7 +875,7 @@ public class TabAtoController implements Initializable{
 	        
 	        stage.show();
 	        
-	        TabNavegadorController.html = html;
+	        TabNavegadorController.strHTML = html;
 	        TabNavegadorController.numIframe = 0;
 			
 		}
@@ -1171,7 +1171,7 @@ public class TabAtoController implements Initializable{
 	        
 	        stage.show();
 	        
-	        TabNavegadorController.html = html;
+	        TabNavegadorController.strHTML = html;
 	        TabNavegadorController.numIframe = 2;
 				
 		}

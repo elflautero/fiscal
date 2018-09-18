@@ -1100,7 +1100,7 @@ public class TabVistoriaController implements Initializable{
         
         stage.show();
         
-        TabNavegadorController.html = html;
+        TabNavegadorController.strHTML = html;
         TabNavegadorController.numIframe = 1;
 		
 	}
