@@ -136,7 +136,7 @@ public class DocumentosOutorga {
 			html =  "\"" + html + "\"";
 			
 			//-- webview do relat�rio --//
-			
+			/*
 			WebView browser = new WebView();
 			WebEngine webEngine = browser.getEngine();
 			webEngine.loadContent(html);
@@ -144,13 +144,14 @@ public class DocumentosOutorga {
 			Scene scene = new Scene(browser);
 			
 			Stage stage = new Stage(StageStyle.UTILITY);
-			stage.setWidth(1150);
+			stage.setWidth(1000);
 			stage.setHeight(650);
 		    stage.setScene(scene);
 		    stage.setMaximized(false);
 		    stage.setResizable(false);
 		    
 		    stage.show();
+		    */
 		    
 			return html;
 		    

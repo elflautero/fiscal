@@ -35,9 +35,11 @@ public class LeitorExcel {
 		FileInputStream arquivo = null;
 				
 			try {
+				
 				arquivo = new FileInputStream(new File(endereco));
+				
 			} catch (FileNotFoundException e1) {
-				// TODO Auto-generated catch block
+				
 				e1.printStackTrace();
 			}
 				 
@@ -45,7 +47,9 @@ public class LeitorExcel {
 	        XSSFWorkbook workbook = null;
 	        
 						try {
+							
 							workbook = new XSSFWorkbook(arquivo);
+							
 						} catch (IOException e1) {
 							
 							e1.printStackTrace();
@@ -440,7 +444,7 @@ public class LeitorExcel {
 			         
 			         
 			         // para tirar as  linhas sem dados da tableview //
-			         if (outorga.getInteressado() != null) {
+			         if (outorga.getInteressado() != null && !outorga.getInteressado().isEmpty()) {
 			        	 obsListaOutorgas.add(outorga);
 			         }
 			       

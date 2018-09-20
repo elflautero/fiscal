@@ -28,6 +28,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
@@ -39,6 +40,7 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.web.PopupFeatures;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebEvent;
@@ -47,6 +49,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import netscape.javascript.JSException;
 
 
 public class TabNavegadorController implements Initializable{
@@ -54,6 +57,7 @@ public class TabNavegadorController implements Initializable{
 	//-- Link de entrada do navegador WebView --//
 	String link = "https://www.w3schools.com/howto/howto_js_popup.asp";
 			
+			// "https://www.w3schools.com/howto/howto_js_popup.asp";
 			//"https://sei.df.gov.br/sip/login.php?sigla_orgao_sistema=GDF&sigla_sistema=SEI";
 	
 	int contDocSei;
@@ -397,9 +401,94 @@ public class TabNavegadorController implements Initializable{
 					// ação do botão para receber o excel
 					btnAxexo.setOnAction(new EventHandler<ActionEvent>() {
 					    public void handle(ActionEvent e) {
-					    	//abrirTabela();
+					    	
+					    	//webOutorgas = new WebView();
+				        	//engOutorga = webOutorgas.getEngine();
+					    	
+					    	try {
+				        	
+					    			engOutorga.load(getClass().getResource("/html/outorgaSubterraneaAnexo.html").toExternalForm());
+					    		}
+					        	catch (Exception e1) {
+					        		
+			                		Alert a = new Alert (Alert.AlertType.ERROR);
+			    					a.setTitle("Alerta!!!");
+			    					a.setContentText("Documento não encontrado!!! ");
+			    					System.out.println("erro btnAnexo - linha 410");
+			    					e1.printStackTrace();
+			    					
+			    					a.setHeaderText(null);
+			    					a.show();
+			                	}
+				        	
+				        	engOutorga.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>()
+					        {
+					            public void changed(final ObservableValue<? extends Worker.State> observableValue,
+					                                final Worker.State oldState,
+					                                final Worker.State newState)
+					            {
+					                if (newState == Worker.State.SUCCEEDED)
+					                {
+					                  
+					                	// capturar o html
+					                	String strHTMLAnexo = (String) engOutorga.executeScript("document.documentElement.outerHTML");
+					                
+					                	// chama o construtor para modificações no html
+					                	DocumentosOutorga docOut = new DocumentosOutorga();
+								    	docOut.setHtmlRel(strHTMLAnexo);
+								    	
+								    	// retorna o html modificado
+								    	strHTMLAnexo = docOut.criarDocumento(outorga);
+						                
+								    	// captura o html existente na parte específica do depacho
+								    	try {
+								    		
+						                wv2.getEngine().executeScript(
+												
+						                		"var z = y.body.getElementsByTagName('a')[0].innerHTML;"
+												
+						            			);
+						                
+										    	}
+								                	catch (JSException js) {
+								                		Alert a = new Alert (Alert.AlertType.ERROR);
+								    					a.setTitle("Alerta!!!");
+								    					a.setContentText("Tabela não encontrada no despacho!!! ");
+								    					
+								    					js.printStackTrace();
+								    					
+								    					a.setHeaderText(null);
+								    					a.show();
+								                	}
+								    	
+								    	
+						                // transforma a variável javascript em variável java
+						                String z = (String) wv2.getEngine().executeScript("z");
+						                
+						                // junta o que foi capturado no despacho com o html modificado
+						                String a = z + "<p>" + strHTMLAnexo;
+						                
+						                // retirar os dois pontos " e espaço que atrapalham no javascript
+						                
+						                a = a.replace("\"", "'");
+						    			a = a.replace("\n", "");
+						    			
+						    			a =  "\"" + a + "\"";
+						    			
+						    			// captura o iframe específico e adiciona tudo
+						                wv2.getEngine().executeScript(
+										"var x = document.getElementsByTagName('iframe')["+numIframe+"];"
+				            			+ "var y = x.contentDocument;"
+										+ "y.body.getElementsByTagName('a')[0].innerHTML = " + a + ";"
+				            			);
+						                
+					                }}
+					        }); // fim webengine
+					    	
+					
 					    }
-					});
+					}); // fim btnAnexo
+					 
 					
 					
 					
@@ -436,7 +525,8 @@ public class TabNavegadorController implements Initializable{
 						        
 						        cbParecerOutorga.valueProperty().addListener(new ChangeListener<String>() {
 						            @Override 
-						            public void changed(ObservableValue<? extends String> ov, String oldValue, String newValue) {                
+						            public void changed(ObservableValue<? extends String> ov, String oldValue, String newValue) {  
+						            	
 						                strParecerDespacho = newValue;       
 						            }    
 						        });
@@ -454,8 +544,64 @@ public class TabNavegadorController implements Initializable{
 										return null;
 									}
 								});
+								
 						        
-						        // capturar o usuário escolhido no bombo box
+						        cbOutorga.setCellFactory(new Callback<ListView<Outorga>,ListCell<Outorga>>(){
+						            @Override
+						            public ListCell<Outorga> call(ListView<Outorga> l){
+						                return new ListCell<Outorga>(){
+						                    @Override
+						                    protected void updateItem(Outorga o, boolean empty) {
+						                    	
+						                        super.updateItem(o, empty);
+						                        
+						                        if (o != null) {
+						                        	
+					                                setText(o.getTipo() + "  |  " + o.getInteressado() + "  |  " + o.getTipoPoco() + "  |  " + o.getEndereco());
+					                                
+					                                switch (o.getTipo()) {
+								        			
+							        				case "OUTORGA SUBTERRÂNEA": 
+							        					setTextFill(Color.BLUE);
+							        					break;
+							        					
+							        				case "OUTORGA SUBTERRÂNEA TRANSFERÊNCIA": 
+							        					setTextFill(Color.BROWN);
+							        					break;
+							        					
+							        				case "OUTORGA SUBTERRÂNEA INDEFERIMENTO": 
+							        					setTextFill(Color.BLUEVIOLET);
+							        					break;
+						        						
+							        				case "OUTORGA SUBTERRÂNEA MODIFICAÇÃO": 
+							        					setTextFill(Color.GREEN);
+							        					break;
+						        						
+							        				case "OUTORGA SUBTERRÂNEA RENOVAÇÃO": 
+							        					setTextFill(Color.DARKSLATEGREY);
+							        					break;
+						        						
+							        				case "REGISTRO SUBTERRÂNEA": 
+							        					setTextFill(Color.DARKCYAN);
+							        					break;
+						        						
+							        				case "REGISTRO SUBTERRÂNEA MODIFICAÇÃO": 
+							        					setTextFill(Color.DARKGOLDENROD);
+							        					break;
+						        						
+							        				case "REGISTRO SUBTERRÂNEA TRANSFERÊNCIA": 
+							        					setTextFill(Color.DARKSLATEBLUE);
+							        					break;	
+							        				
+					                                }
+						                        }
+					                            
+						                    }
+						                } ;
+						            }
+						        });
+						        
+						        // capturar o usuário escolhido no combobox
 						        cbOutorga.valueProperty().addListener(new ChangeListener<Outorga>() {
 						            
 									@Override
@@ -465,8 +611,8 @@ public class TabNavegadorController implements Initializable{
 					        			engOutorga = webOutorgas.getEngine();
 					        			
 					        			String tipo = newOut.getTipo();
+					        			outorga = newOut;
 					        			
-					        			//System.out.println(newOut.getInteressado());
 					        			
 					        			if (strParecerDespacho.equals("PARECER")) {
 					        				
@@ -474,8 +620,6 @@ public class TabNavegadorController implements Initializable{
 					        				
 					        			} else {
 					        			
-					        			
-					        				
 							        			switch (tipo) {
 							        			
 							        				case "OUTORGA SUBTERRÂNEA": 
@@ -529,8 +673,7 @@ public class TabNavegadorController implements Initializable{
 								                
 								                	DocumentosOutorga docOut = new DocumentosOutorga();
 											    	docOut.setHtmlRel(strHTMLRel);
-											    	//docOut.criarDocumento(newOut);
-											    	
+											    
 											    	strHTML = docOut.criarDocumento(newOut);
 											    	cbNumIframe.setValue("2");
 											    	
@@ -633,14 +776,7 @@ public class TabNavegadorController implements Initializable{
            apBrowser.setMaxHeight((Double)newValue -1);
         });
 	    
-	    /*
-	    spNavegador.widthProperty().addListener((observable, oldValue, newValue) -> {
-	           System.out.println("largura do spNavegador " + newValue);
-	        });
-	        */
-		
 	    
-	   
 		btnGoogle.setGraphic(new ImageView(imgGoogle));
 		btnCapturarDocs.setGraphic(new ImageView(imgCapturar));
 		btnMostrarDocs.setGraphic(new ImageView(imgMostrar));
@@ -648,7 +784,8 @@ public class TabNavegadorController implements Initializable{
 		btnSeiTrein.setGraphic(new ImageView(imgSeiTrein));
 		btnWebBrowser.setGraphic(new ImageView(imgWeb));
 	}
-
+	
+	
 }
 
 
