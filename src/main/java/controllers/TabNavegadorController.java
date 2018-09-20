@@ -55,7 +55,7 @@ import netscape.javascript.JSException;
 public class TabNavegadorController implements Initializable{
 	
 	//-- Link de entrada do navegador WebView --//
-	String link = "https://www.w3schools.com/howto/howto_js_popup.asp";
+	String link = "https://sei.df.gov.br/sip/login.php?sigla_orgao_sistema=GDF&sigla_sistema=SEI";
 			
 			// "https://www.w3schools.com/howto/howto_js_popup.asp";
 			//"https://sei.df.gov.br/sip/login.php?sigla_orgao_sistema=GDF&sigla_sistema=SEI";
