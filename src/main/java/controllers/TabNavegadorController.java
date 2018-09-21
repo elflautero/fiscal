@@ -55,7 +55,7 @@ import netscape.javascript.JSException;
 public class TabNavegadorController implements Initializable{
 	
 	//-- Link de entrada do navegador WebView --//
-	String link = "https://sei.df.gov.br/sip/login.php?sigla_orgao_sistema=GDF&sigla_sistema=SEI";
+	String link = "https://www.w3schools.com/howto/howto_js_popup.asp";
 			
 			// "https://www.w3schools.com/howto/howto_js_popup.asp";
 			//"https://sei.df.gov.br/sip/login.php?sigla_orgao_sistema=GDF&sigla_sistema=SEI";
@@ -272,7 +272,6 @@ public class TabNavegadorController implements Initializable{
 			
 			Button btnAxexo;
 			Button btnExcel;
-			Button btnTabela;
 			
 			Pane pane;
 			Pane pTabela;
@@ -310,22 +309,15 @@ public class TabNavegadorController implements Initializable{
 		btnAxexo.setMaxWidth(30);
 		btnAxexo.setMinWidth(30);
 		
-		btnAxexo.setLayoutX(841);
+		btnAxexo.setLayoutX(858);
 		
 		
 		
 		// -------- //
 		btnExcel = new Button();
 		btnExcel.setGraphic(new ImageView(imgExcel));
-		btnExcel.setLayoutX(222);
+		btnExcel.setLayoutX(212);
 		btnExcel.setMinHeight(25);
-		
-		
-		/*
-		// -------- //
-		btnTabela = new Button("...");
-		btnTabela.setLayoutX(310);
-		*/
 		
 		cbParecerOutorgaOpcoes = FXCollections.observableArrayList(
     	        "PARECER",
@@ -334,7 +326,7 @@ public class TabNavegadorController implements Initializable{
 		
 		cbParecerOutorga = new ComboBox<>(cbParecerOutorgaOpcoes);
 		
-		cbParecerOutorga.setLayoutX(255);
+		cbParecerOutorga.setLayoutX(250);
 		cbParecerOutorga.setMinWidth(110);
 		cbParecerOutorga.setMaxWidth(110);
 		cbParecerOutorga.setValue("PARECER");
@@ -359,7 +351,7 @@ public class TabNavegadorController implements Initializable{
 		    		Button btnIframe = new Button ();
 		    		btnIframe.setMinHeight(25);
 		    		
-		    		btnIframe.setLayoutX(808);
+		    		btnIframe.setLayoutX(820);
 					btnIframe.setGraphic(new ImageView(imgDoc));
 					
 		    		
@@ -378,11 +370,10 @@ public class TabNavegadorController implements Initializable{
 					cbNumIframe.setItems(olNumIframe);
 					cbNumIframe.setValue(String.valueOf(numIframe));
 					
-					cbNumIframe.setLayoutX(767);
+					cbNumIframe.setLayoutX(773);
 					
 			
-		            Group group = new Group();
-					group.getChildren().addAll(btnIframe, wv2, cbNumIframe, btnAxexo, btnExcel, cbOutorga, cbParecerOutorga);
+		           
 		    	
 					// incluir documento no sei //
 					btnIframe.setOnAction(new EventHandler<ActionEvent>() {
@@ -689,6 +680,7 @@ public class TabNavegadorController implements Initializable{
 					    	
 					    		catch (Exception ex) {
 					    			System.out.println("a ação foi abortada " + ex);
+					    			ex.printStackTrace();
 					    			
 					    		} // fim do try catch
 					    }
@@ -696,6 +688,12 @@ public class TabNavegadorController implements Initializable{
 					    
 				    	
 					}); // fim do evento btnExcel
+					
+					
+					Group group = new Group();
+				
+					group.getChildren().addAll(btnIframe, wv2, cbNumIframe, btnAxexo, btnExcel, cbOutorga, cbParecerOutorga);
+					
 					
 					Stage stage = new Stage();
 					

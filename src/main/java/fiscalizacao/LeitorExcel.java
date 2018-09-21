@@ -229,29 +229,30 @@ public class LeitorExcel {
 							   
 						case 20:  // sub finalidade1
 			            	   
-			            	   subFinalidades [0]  = (String) cell.getStringCellValue();
-			            	  
+			            	   subFinalidades [0]  = cell.getStringCellValue();
+			            	   
 			            	   
 			            	   break;
 			            	   
 			               case 24: 
 			            	   
-			            	   subFinalidades [1]  = (String) cell.getStringCellValue();
+			            	   subFinalidades [1]  = cell.getStringCellValue();
+			            	   //System.out.println("sub fin 1 " + subFinalidades [0] + " e " + subFinalidades [1]);
 			            	   break;  
 			            	   
 							case 28:
 							            	   
-								subFinalidades [2]  = (String) cell.getStringCellValue();
+								subFinalidades [2]  = cell.getStringCellValue();
 			            	   break; 
 							            	   
 							case 32: 
 								   
-								subFinalidades [3]  = (String) cell.getStringCellValue();
+								subFinalidades [3]  = cell.getStringCellValue();
 							   break; 
 								   
 							case 36: 
 								   
-								subFinalidades [4]  = (String) cell.getStringCellValue();
+								subFinalidades [4]  = cell.getStringCellValue();
 								
 								
 							   outorga.setSubfinalidade(subFinalidades);
