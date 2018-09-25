@@ -7,14 +7,19 @@ public class Outorga {
 		
 		private String [] finalidade;
 		private String [] subfinalidade;
-		private int [] demanda;
+		private Double [] demanda;
+		private Double [] demandaIN;
 		
 		private String processo;
 		private String cpfCNPJ;
 		private String bacia;
 		private String uh;
+		
 		private Double lat;
 		private Double lng;
+		
+		
+
 		private String endereco;
 		
 		
@@ -22,33 +27,33 @@ public class Outorga {
 		private int [] vazaoDia;
 		private int [] tempoCaptacao;
 		
-		private String tipo;
+		private String tipoOutorga; // outorga, registro, modificação etc
 		
 		private String subsistema;
-		private int profundidade;
-		private int nivelEstatico;
-		private int nivelDinamico;
-		private int vazaoMedia;
-		private int vazaoBombeamento;
+		private Double profundidade;
+		private Double nivelEstatico;
+		private Double nivelDinamico;
+		private Double vazaoMedia;
+		private Double vazaoBombeamento;
 
-		private int vazaoExplotavel;
+		private Double vazaoExplotavel;
 		private int numeroDePocos;
-		private int vazaoTotalOutorgavel;
-		private int porcentagemUtilizada;
-		private int volumeDisponivelAtual;
-		private int volumeDiponivelSuficiente;
+		private Double vazaoTotalOutorgavel;
+		private Double porcentagemUtilizada;
+		private Double volumeDisponivelAtual;
+		private String volumeDiponivelSuficiente;
 		
 		
 		
 		// construtor padr�o
 		public Outorga () { }
         
-		
+		/*
 		// construtor completo
 	    public Outorga (
 	    		String interessado, String tipoPoco, String [] finalidade, String processo, 
 	    		String cpfCNPJ, String bacia, String uh, Double lat, Double lng,
-	    		int [] vazaoHora, int [] vazaoDia, int [] tempoCaptacao, String endereco, String tipo) {
+	    		int [] vazaoHora, int [] vazaoDia, int [] tempoCaptacao, String endereco, String tipoOutorga) {
 	    	
 	        super();
 	         
@@ -66,10 +71,10 @@ public class Outorga {
 	 		this.vazaoDia = vazaoDia;
 	 		this.tempoCaptacao = tempoCaptacao;
 	 		this.endereco = endereco;
-	 		this.tipo = tipo; // tipo de outorga (outorga subterr�nea, outorga subterr�nea indeferimento, registro subterr�nea...)
+	 		this.tipoOutorga = tipoOutorga; // tipo de outorga (outorga subterr�nea, outorga subterr�nea indeferimento, registro subterr�nea...)
 	 		
 	     }
-	    
+	    */
 	    
 		public String getEndereco() {
 			return endereco;
@@ -96,6 +101,17 @@ public class Outorga {
 		public void setTipoPoco(String tipoPoco) {
 			this.tipoPoco = tipoPoco;
 		}
+		
+		public String getTipoOutorga() {
+			return tipoOutorga;
+		}
+
+
+		public void setTipoOutorga(String tipoOutorga) {
+			this.tipoOutorga = tipoOutorga;
+		}
+
+		
 
 		public String[] getFinalidade() {
 			return finalidade;
@@ -116,12 +132,12 @@ public class Outorga {
 		}
 
 
-		public int[] getDemanda() {
+		public Double[] getDemanda() {
 			return demanda;
 		}
 
 
-		public void setDemanda(int [] demanda) {
+		public void setDemanda(Double[] demanda) {
 			this.demanda = demanda;
 		}
 
@@ -198,16 +214,6 @@ public class Outorga {
 			this.tempoCaptacao = tempoCaptacao;
 		}
 		
-		public String getTipo() {
-			return tipo;
-		}
-
-
-		public void setTipo(String tipo) {
-			this.tipo = tipo;
-		}
-
-
 		public String getSubsistema() {
 			return subsistema;
 		}
@@ -218,52 +224,52 @@ public class Outorga {
 		}
 
 
-		public int getProfundidade() {
+		public Double getProfundidade() {
 			return profundidade;
 		}
 
 
-		public void setProfundidade(int profundidade) {
+		public void setProfundidade(Double profundidade) {
 			this.profundidade = profundidade;
 		}
 
 
-		public int getNivelEstatico() {
+		public Double getNivelEstatico() {
 			return nivelEstatico;
 		}
 
 
-		public void setNivelEstatico(int nivelEstatico) {
+		public void setNivelEstatico(Double nivelEstatico) {
 			this.nivelEstatico = nivelEstatico;
 		}
 
 
-		public int getNivelDinamico() {
+		public Double getNivelDinamico() {
 			return nivelDinamico;
 		}
 
 
-		public void setNivelDinamico(int nivelDinamico) {
+		public void setNivelDinamico(Double nivelDinamico) {
 			this.nivelDinamico = nivelDinamico;
 		}
 
 
-		public int getVazaoMedia() {
+		public Double getVazaoMedia() {
 			return vazaoMedia;
 		}
 
 
-		public void setVazaoMedia(int vazaoMedia) {
+		public void setVazaoMedia(Double vazaoMedia) {
 			this.vazaoMedia = vazaoMedia;
 		}
 
 
-		public int getVazaoBombeamento() {
+		public Double getVazaoBombeamento() {
 			return vazaoBombeamento;
 		}
 
 
-		public void setVazaoBombeamento(int vazaoBombeamento) {
+		public void setVazaoBombeamento(Double vazaoBombeamento) {
 			this.vazaoBombeamento = vazaoBombeamento;
 		}
 
@@ -271,12 +277,12 @@ public class Outorga {
 		
 
 
-		public int getVazaoExplotavel() {
+		public Double getVazaoExplotavel() {
 			return vazaoExplotavel;
 		}
 
 
-		public void setVazaoExplotavel(int vazaoExplotavel) {
+		public void setVazaoExplotavel(Double vazaoExplotavel) {
 			this.vazaoExplotavel = vazaoExplotavel;
 		}
 
@@ -291,46 +297,54 @@ public class Outorga {
 		}
 
 
-		public int getVazaoTotalOutorgavel() {
+		public Double getVazaoTotalOutorgavel() {
 			return vazaoTotalOutorgavel;
 		}
 
 
-		public void setVazaoTotalOutorgavel(int vazaoTotalOutorgavel) {
+		public void setVazaoTotalOutorgavel(Double vazaoTotalOutorgavel) {
 			this.vazaoTotalOutorgavel = vazaoTotalOutorgavel;
 		}
 
 
-		public int getPorcentagemUtilizada() {
+		public Double getPorcentagemUtilizada() {
 			return porcentagemUtilizada;
 		}
 
 
-		public void setPorcentagemUtilizada(int porcentagemUtilizada) {
+		public void setPorcentagemUtilizada(Double porcentagemUtilizada) {
 			this.porcentagemUtilizada = porcentagemUtilizada;
 		}
 
 
-		public int getVolumeDisponivelAtual() {
+		public Double getVolumeDisponivelAtual() {
 			return volumeDisponivelAtual;
 		}
 
 
-		public void setVolumeDisponivelAtual(int volumeDisponivelAtual) {
+		public void setVolumeDisponivelAtual(Double volumeDisponivelAtual) {
 			this.volumeDisponivelAtual = volumeDisponivelAtual;
 		}
 
 
-		public int getVolumeDiponivelSuficiente() {
+		public String getVolumeDiponivelSuficiente() {
 			return volumeDiponivelSuficiente;
 		}
 
 
-		public void setVolumeDiponivelSuficiente(int volumeDiponivelSuficiente) {
+		public void setVolumeDiponivelSuficiente(String volumeDiponivelSuficiente) {
 			this.volumeDiponivelSuficiente = volumeDiponivelSuficiente;
 		}
 
 
+		public Double[] getDemandaIN() {
+			return demandaIN;
+		}
+
+
+		public void setDemandaIN(Double[] demandaIN) {
+			this.demandaIN = demandaIN;
+		}
 
 	
 	    

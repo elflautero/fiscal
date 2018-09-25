@@ -3,6 +3,7 @@ package controllers;
 import java.awt.List;
 import java.io.File;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -270,7 +271,7 @@ public class TabNavegadorController implements Initializable{
 			
 			Boolean b = false;
 			
-			Button btnAxexo;
+			Button btnAnexo;
 			Button btnExcel;
 			
 			Pane pane;
@@ -300,16 +301,16 @@ public class TabNavegadorController implements Initializable{
 		
 		pBrowser.getChildren().add(wv1);
 		
-		btnAxexo = new  Button();
-		btnAxexo.setGraphic(new ImageView(imgAnexo));
+		btnAnexo = new  Button();
+		btnAnexo.setGraphic(new ImageView(imgAnexo));
 		
-		btnAxexo.setMinHeight(25);
-		btnAxexo.setMaxHeight(25);
+		btnAnexo.setMinHeight(26);
+		//btnAxexo.setMaxHeight(25);
 		
-		btnAxexo.setMaxWidth(30);
-		btnAxexo.setMinWidth(30);
+		//btnAxexo.setMaxWidth(30);
+		//btnAxexo.setMinWidth(30);
 		
-		btnAxexo.setLayoutX(858);
+		btnAnexo.setLayoutX(858);
 		
 		
 		
@@ -321,6 +322,7 @@ public class TabNavegadorController implements Initializable{
 		
 		cbParecerOutorgaOpcoes = FXCollections.observableArrayList(
     	        "PARECER",
+    	        "PARECER DESCOBERTO",
     	        "DESPACHOS"
     	    ); 
 		
@@ -336,8 +338,6 @@ public class TabNavegadorController implements Initializable{
 		cbOutorga.setLayoutX(366);
 		cbOutorga.setMinWidth(400);
 		cbOutorga.setMaxWidth(400);
-		
-		
 		
 		wv1.getEngine().setCreatePopupHandler(new Callback<PopupFeatures, WebEngine>() {
 
@@ -390,7 +390,7 @@ public class TabNavegadorController implements Initializable{
 			        });
 					
 					// ação do botão para receber o excel
-					btnAxexo.setOnAction(new EventHandler<ActionEvent>() {
+					btnAnexo.setOnAction(new EventHandler<ActionEvent>() {
 					    public void handle(ActionEvent e) {
 					    	
 					    	//webOutorgas = new WebView();
@@ -518,7 +518,8 @@ public class TabNavegadorController implements Initializable{
 						            @Override 
 						            public void changed(ObservableValue<? extends String> ov, String oldValue, String newValue) {  
 						            	
-						                strParecerDespacho = newValue;       
+						                strParecerDespacho = newValue; 
+						                System.out.println("string strparecer despacho " + newValue);
 						            }    
 						        });
 						        
@@ -527,7 +528,7 @@ public class TabNavegadorController implements Initializable{
 									
 									public String toString(Outorga o) {
 										
-										return o.getTipo() + "  |  " + o.getInteressado() + "  |  " + o.getTipoPoco() + "  |  " + o.getEndereco() ;
+										return o.getTipoOutorga() + "  |  " + o.getInteressado() + "  |  " + o.getTipoPoco() + "  |  " + o.getEndereco() ;
 									}
 									
 									public Outorga fromString(String string) {
@@ -548,9 +549,9 @@ public class TabNavegadorController implements Initializable{
 						                        
 						                        if (o != null) {
 						                        	
-					                                setText(o.getTipo() + "  |  " + o.getInteressado() + "  |  " + o.getTipoPoco() + "  |  " + o.getEndereco());
+					                                setText(o.getProcesso() + "  |  " + o.getTipoPoco() + "  |  " + o.getTipoOutorga() + "  |  " +  o.getInteressado() + "  |  " + o.getEndereco());
 					                                
-					                                switch (o.getTipo()) {
+					                                switch (o.getTipoOutorga()) {
 								        			
 							        				case "OUTORGA SUBTERRÂNEA": 
 							        					setTextFill(Color.BLUE);
@@ -582,6 +583,14 @@ public class TabNavegadorController implements Initializable{
 						        						
 							        				case "REGISTRO SUBTERRÂNEA TRANSFERÊNCIA": 
 							        					setTextFill(Color.DARKSLATEBLUE);
+							        					break;
+							        					
+							        				case "OUTORGA SUBTERRÂNEA PRÉVIA": 
+							        					setTextFill(Color.MEDIUMSLATEBLUE);
+							        					break;	
+							        					
+							        				case "OUTORGA SUBTERRÂNEA PRÉVIA INDEFERIMENTO": 
+							        					setTextFill(Color.CRIMSON);
 							        					break;	
 							        				
 					                                }
@@ -601,52 +610,65 @@ public class TabNavegadorController implements Initializable{
 										webOutorgas = new WebView();
 					        			engOutorga = webOutorgas.getEngine();
 					        			
-					        			String tipo = newOut.getTipo();
 					        			outorga = newOut;
 					        			
 					        			
 					        			if (strParecerDespacho.equals("PARECER")) {
 					        				
 					        				engOutorga.load(getClass().getResource("/html/parecerOutorgaSubterranea.html").toExternalForm());
+					        			}
 					        				
-					        			} else {
+					        				else if (strParecerDespacho.equals("PARECER DESCOBERTO")) {
+					        					
+					        					engOutorga.load(getClass().getResource("/html/parecerDescobertoOutorgaSubterranea.html").toExternalForm());
+					        				}
+					        				
+					        					else {
 					        			
-							        			switch (tipo) {
-							        			
-							        				case "OUTORGA SUBTERRÂNEA": 
-							        					engOutorga.load(getClass().getResource("/html/outorgaSubterranea.html").toExternalForm());
-							        					break;
-							        					
-							        					
-							        				case "OUTORGA SUBTERRÂNEA TRANSFERÊNCIA": 
-							        					engOutorga.load(getClass().getResource("/html/outorgaSubterraneaTransferencia.html").toExternalForm());
-						        						break;
-						        						
-							        				case "OUTORGA SUBTERRÂNEA INDEFERIMENTO": 
-							        					engOutorga.load(getClass().getResource("/html/outorgaSubterraneaIndeferimento.html").toExternalForm());
-						        						break;
-						        						
-							        				case "OUTORGA SUBTERRÂNEA MODIFICAÇÃO": 
-							        					engOutorga.load(getClass().getResource("/html/outorgaSubterraneoModificacao.html").toExternalForm());
-						        						break;
-						        						
-							        				case "OUTORGA SUBTERRÂNEA RENOVAÇÃO": 
-							        					engOutorga.load(getClass().getResource("/html/outorgaSubterraneaRenovacao.html").toExternalForm());
-						        						break;
-						        						
-							        				case "REGISTRO SUBTERRÂNEA": 
-							        					engOutorga.load(getClass().getResource("/html/registroSubterranea.html").toExternalForm());
-						        						break;
-						        						
-							        				case "REGISTRO SUBTERRÂNEA MODIFICAÇÃO": 
-							        					engOutorga.load(getClass().getResource("/html/registroSubterraneaModificacao.html").toExternalForm());
-						        						break;
-						        						
-							        				case "REGISTRO SUBTERRÂNEA TRANSFERÊNCIA": 
-							        					engOutorga.load(getClass().getResource("/html/registroSubterraneaTransferencia.html").toExternalForm());
-						        						break;
-
-							        			} //fim switch
+								        			switch (newOut.getTipoOutorga()) {
+								        			
+								        				case "OUTORGA SUBTERRÂNEA": 
+								        					engOutorga.load(getClass().getResource("/html/outorgaSubterranea.html").toExternalForm());
+								        					break;
+								        					
+								        					
+								        				case "OUTORGA SUBTERRÂNEA TRANSFERÊNCIA": 
+								        					engOutorga.load(getClass().getResource("/html/outorgaSubterraneaTransferencia.html").toExternalForm());
+							        						break;
+							        						
+								        				case "OUTORGA SUBTERRÂNEA INDEFERIMENTO": 
+								        					engOutorga.load(getClass().getResource("/html/outorgaSubterraneaIndeferimento.html").toExternalForm());
+							        						break;
+							        						
+								        				case "OUTORGA SUBTERRÂNEA MODIFICAÇÃO": 
+								        					engOutorga.load(getClass().getResource("/html/outorgaSubterraneoModificacao.html").toExternalForm());
+							        						break;
+							        						
+								        				case "OUTORGA SUBTERRÂNEA RENOVAÇÃO": 
+								        					engOutorga.load(getClass().getResource("/html/outorgaSubterraneaRenovacao.html").toExternalForm());
+							        						break;
+							        						
+								        				case "REGISTRO SUBTERRÂNEA": 
+								        					engOutorga.load(getClass().getResource("/html/registroSubterranea.html").toExternalForm());
+							        						break;
+							        						
+								        				case "REGISTRO SUBTERRÂNEA MODIFICAÇÃO": 
+								        					engOutorga.load(getClass().getResource("/html/registroSubterraneaModificacao.html").toExternalForm());
+							        						break;
+							        						
+								        				case "REGISTRO SUBTERRÂNEA TRANSFERÊNCIA": 
+								        					engOutorga.load(getClass().getResource("/html/registroSubterraneaTransferencia.html").toExternalForm());
+							        						break;
+							        						
+								        				case "OUTORGA SUBTERRÂNEA PRÉVIA": 
+								        					engOutorga.load(getClass().getResource("/html/outorgaPreviaSubterranea.html").toExternalForm());
+							        						break;
+							        						
+								        				case "OUTORGA SUBTERRÂNEA PRÉVIA INDEFERIMENTO": 
+								        					engOutorga.load(getClass().getResource("/html/outorgaPreviaSubterraneaIndeferimento.html").toExternalForm());
+							        						break;
+	
+								        			} //fim switch
 						        		
 					        			} //fim else
 					        			
@@ -692,7 +714,7 @@ public class TabNavegadorController implements Initializable{
 					
 					Group group = new Group();
 				
-					group.getChildren().addAll(btnIframe, wv2, cbNumIframe, btnAxexo, btnExcel, cbOutorga, cbParecerOutorga);
+					group.getChildren().addAll(btnIframe, wv2, cbNumIframe, btnAnexo, btnExcel, cbOutorga, cbParecerOutorga);
 					
 					
 					Stage stage = new Stage();

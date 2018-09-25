@@ -50,7 +50,7 @@ public class DocumentosOutorga {
 			try { docHtml.select("pontoCapLng").prepend(outorga.getLng().toString());} catch (Exception e) {docHtml.select("pontoCapLng").prepend("");};
 			
 			
-			// VAZ�O LITROS HORA
+			// VAZAO LITROS HORA
 			try { docHtml.select("vazJanLH").prepend(String.valueOf(outorga.getVazaoHora()[0]));} catch (Exception e) {docHtml.select("vazJanLH").prepend("");};
 			try { docHtml.select("vazFevLH").prepend(String.valueOf(outorga.getVazaoHora()[1]));} catch (Exception e) {docHtml.select("vazFevLH").prepend("");};
 			try { docHtml.select("vazMarLH").prepend(String.valueOf(outorga.getVazaoHora()[2]));} catch (Exception e) {docHtml.select("vazMarLH").prepend("");};
@@ -65,7 +65,7 @@ public class DocumentosOutorga {
 			try { docHtml.select("vazNovLH").prepend(String.valueOf(outorga.getVazaoHora()[10]));} catch (Exception e) {docHtml.select("vazNovLH").prepend("");};
 			try { docHtml.select("vazDezLH").prepend(String.valueOf(outorga.getVazaoHora()[11]));} catch (Exception e) {docHtml.select("vazDezLH").prepend("");};
 			
-			// TEMPO DE CAPTA��O
+			// TEMPO DE CAPTACAO
 			try { docHtml.select("tJAN").prepend(String.valueOf(outorga.getTempoCaptacao()[0]));} catch (Exception e) {docHtml.select("tJAN").prepend("");};
 			try { docHtml.select("tFEV").prepend(String.valueOf(outorga.getTempoCaptacao()[1]));} catch (Exception e) {docHtml.select("tFEV").prepend("");};
 			try { docHtml.select("tMAR").prepend(String.valueOf(outorga.getTempoCaptacao()[2]));} catch (Exception e) {docHtml.select("tMAR").prepend("");};
@@ -81,7 +81,7 @@ public class DocumentosOutorga {
 			try { docHtml.select("tDEZ").prepend(String.valueOf(outorga.getTempoCaptacao()[11]));} catch (Exception e) {docHtml.select("tDEZ").prepend("");};
 			
 			
-			// VAZ�O LITROS DIA
+			// VAZAO LITROS DIA
 			try { docHtml.select("vazJanLD").prepend(String.valueOf(outorga.getVazaoDia()[0]));} catch (Exception e) {docHtml.select("vazJanLD").prepend("");};
 			try { docHtml.select("vazFevLD").prepend(String.valueOf(outorga.getVazaoDia()[1]));} catch (Exception e) {docHtml.select("vazFevLD").prepend("");};
 			try { docHtml.select("vazMarLD").prepend(String.valueOf(outorga.getVazaoDia()[2]));} catch (Exception e) {docHtml.select("vazMarLD").prepend("");};
@@ -96,12 +96,13 @@ public class DocumentosOutorga {
 			try { docHtml.select("vazNovLD").prepend(String.valueOf(outorga.getVazaoDia()[10]));} catch (Exception e) {docHtml.select("vazNovLD").prepend("");};
 			try { docHtml.select("vazDezLD").prepend(String.valueOf(outorga.getVazaoDia()[11]));} catch (Exception e) {docHtml.select("vazDezLD").prepend("");};
 			
-			try { docHtml.select("subsistema").prepend(String.valueOf(outorga.getSubsistema()));} catch (Exception e) {docHtml.select("subsistema").prepend("");};
-			try { docHtml.select("vazaoMedia").prepend(String.valueOf(outorga.getVazaoMedia()));} catch (Exception e) {docHtml.select("vazaoMedia").prepend("");};
-			try { docHtml.select("vazaoBombeamento").prepend(String.valueOf(outorga.getVazaoBombeamento()));} catch (Exception e) {docHtml.select("vazaoBombeamento").prepend("");};
-			try { docHtml.select("profundidade").prepend((String.valueOf(outorga.getProfundidade())));} catch (Exception e) {docHtml.select("profundidade").prepend("");};
-			try { docHtml.select("nivelEstatico").prepend((String.valueOf(outorga.getNivelEstatico())));} catch (Exception e) {docHtml.select("nivelEstatico").prepend("");};
-			try { docHtml.select("nivelDinamico").prepend((String.valueOf(outorga.getNivelDinamico())));} catch (Exception e) {docHtml.select("nivelDinamico").prepend("");};
+			try { docHtml.select("subsistema").prepend(outorga.getSubsistema());} catch (Exception e) {docHtml.select("subsistema").prepend("");};
+			
+			try { docHtml.select("vazaoMedia").prepend(String.format("%.2f", outorga.getVazaoMedia()));} catch (Exception e) {docHtml.select("vazaoMedia").prepend("");};
+			try { docHtml.select("vazaoBombeamento").prepend(String.format("%.2f", outorga.getVazaoBombeamento()));} catch (Exception e) {docHtml.select("vazaoBombeamento").prepend("");};
+			try { docHtml.select("profundidade").prepend(String.format("%.2f", outorga.getProfundidade()));} catch (Exception e) {docHtml.select("profundidade").prepend("");};
+			try { docHtml.select("nivelEstatico").prepend(String.format("%.2f", outorga.getNivelEstatico()));} catch (Exception e) {docHtml.select("nivelEstatico").prepend("");};
+			try { docHtml.select("nivelDinamico").prepend(String.format("%.2f", outorga.getNivelDinamico()));} catch (Exception e) {docHtml.select("nivelDinamico").prepend("");};
 			
 			
 			try { docHtml.select("subfinalidade1").prepend(outorga.getSubfinalidade()[0]);} catch (Exception e) {docHtml.select("subfinalidade1").prepend("");};
@@ -110,18 +111,31 @@ public class DocumentosOutorga {
 			try { docHtml.select("subfinalidade4").prepend(outorga.getSubfinalidade()[3]);} catch (Exception e) {docHtml.select("subfinalidade4").prepend("");};
 			try { docHtml.select("subfinalidade5").prepend(outorga.getSubfinalidade()[4]);} catch (Exception e) {docHtml.select("subfinalidade5").prepend("");};
 			
-			try { docHtml.select("demanda1").prepend(String.valueOf(outorga.getDemanda()[0]));} catch (Exception e) {docHtml.select("demanda1").prepend("");};
-			try { docHtml.select("demanda2").prepend(String.valueOf(outorga.getDemanda()[1]));} catch (Exception e) {docHtml.select("demanda2").prepend("");};
-			try { docHtml.select("demanda3").prepend(String.valueOf(outorga.getDemanda()[2]));} catch (Exception e) {docHtml.select("demanda3").prepend("");};
-			try { docHtml.select("demanda4").prepend(String.valueOf(outorga.getDemanda()[3]));} catch (Exception e) {docHtml.select("demanda4").prepend("");};
-			try { docHtml.select("demanda5").prepend(String.valueOf(outorga.getDemanda()[4]));} catch (Exception e) {docHtml.select("demanda5").prepend("");};
+			// DEMANDA
+			try { docHtml.select("demanda1").prepend(String.format("%.2f", outorga.getDemanda()[0]));} catch (Exception e) {docHtml.select("demanda1").prepend("");};
+			try { docHtml.select("demanda2").prepend(String.format("%.2f", outorga.getDemanda()[1]));} catch (Exception e) {docHtml.select("demanda2").prepend("");};
+			try { docHtml.select("demanda3").prepend(String.format("%.2f", outorga.getDemanda()[2]));} catch (Exception e) {docHtml.select("demanda3").prepend("");};
+			try { docHtml.select("demanda4").prepend(String.format("%.2f", outorga.getDemanda()[3]));} catch (Exception e) {docHtml.select("demanda4").prepend("");};
+			try { docHtml.select("demanda5").prepend(String.format("%.2f", outorga.getDemanda()[4]));} catch (Exception e) {docHtml.select("demanda5").prepend("");};
 			
-			try { docHtml.select("vazaoExplotavel").prepend(String.valueOf(outorga.getVazaoExplotavel()));} catch (Exception e) {docHtml.select("vazaoExplotavel").prepend("");};
+			//DEMANDA IN
+			try { docHtml.select("demandaIN1").prepend(String.format("%.2f", outorga.getDemandaIN()[0]));} catch (Exception e) {docHtml.select("demandaIN1").prepend("");};
+			try { docHtml.select("demandaIN2").prepend(String.format("%.0f", outorga.getDemandaIN()[1]));} catch (Exception e) {docHtml.select("demandaIN2").prepend("");};
+			try { docHtml.select("demandaIN3").prepend(String.format("%.2f", outorga.getDemandaIN()[2]));} catch (Exception e) {docHtml.select("demandaIN3").prepend("");};
+			try { docHtml.select("demandaIN4").prepend(String.format("%.2f", outorga.getDemandaIN()[3]));} catch (Exception e) {docHtml.select("demandaIN4").prepend("");};
+			try { docHtml.select("demandaIN5").prepend(String.format("%.2f", outorga.getDemandaIN()[4]));} catch (Exception e) {docHtml.select("demandaIN5").prepend("");};
+			
+			// VAZAO EXPLOTAVEL, N POCOS ...
+			
+			
+			
+			try { docHtml.select("vazaoExplotavel").prepend(String.format("%.0f", outorga.getVazaoExplotavel()));} catch (Exception e) {docHtml.select("vazaoExplotavel").prepend("");};
 			try { docHtml.select("numeroDePocos").prepend(String.valueOf(outorga.getNumeroDePocos()));} catch (Exception e) {docHtml.select("numeroDePocos").prepend("");};
-			try { docHtml.select("vazaoTotalOutorgavel").prepend(String.valueOf(outorga.getVazaoTotalOutorgavel()));} catch (Exception e) {docHtml.select("vazaoTotalOutorgavel").prepend("");};
-			try { docHtml.select("porcentagemUtilizada").prepend(String.valueOf(outorga.getPorcentagemUtilizada()));} catch (Exception e) {docHtml.select("porcentagemUtilizada").prepend("");};
-			try { docHtml.select("volumeDisponivelAtual").prepend(String.valueOf(outorga.getVolumeDisponivelAtual()));} catch (Exception e) {docHtml.select("volumeDisponivelAtual").prepend("");};
-			try { docHtml.select("volumeDiponivelSuficiente").prepend(String.valueOf(outorga.getVolumeDiponivelSuficiente()));} catch (Exception e) {docHtml.select("volumeDiponivelSuficiente").prepend("");};
+			try { docHtml.select("vazaoTotalOutorgavel").prepend(String.format("%.0f", outorga.getVazaoTotalOutorgavel()));} catch (Exception e) {docHtml.select("vazaoTotalOutorgavel").prepend("");};
+			try { docHtml.select("porcentagemUtilizada").prepend(String.format("%.2f", outorga.getPorcentagemUtilizada()));} catch (Exception e) {docHtml.select("porcentagemUtilizada").prepend("");};
+			try { docHtml.select("volumeDisponivelAtual").prepend(String.format("%.0f", outorga.getVolumeDisponivelAtual()));} catch (Exception e) {docHtml.select("volumeDisponivelAtual").prepend("");};
+			
+			try { docHtml.select("volumeDiponivelSuficiente").prepend(outorga.getVolumeDiponivelSuficiente());} catch (Exception e) {docHtml.select("volumeDiponivelSuficiente").prepend("");};
 		
 			
 			

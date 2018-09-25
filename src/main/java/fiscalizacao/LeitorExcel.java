@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -60,6 +63,23 @@ public class LeitorExcel {
 	        XSSFSheet sheet = workbook.getSheet("ANÁLISE");
 	        
 	        Iterator<Row> rowIterator = sheet.iterator();
+	        
+	        
+	        // formatar número
+	        
+	        CellStyle style;
+	        DataFormat format = workbook.createDataFormat();
+	        
+	        style = workbook.createCellStyle();
+	        style.setDataFormat(format.getFormat("########"));
+	        
+	        
+	        /*
+	        CreationHelper createHelper = workbook.getCreationHelper();
+            
+            CellStyle dateCellStyle = workbook.createCellStyle();
+            dateCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("##.###"));
+            */
 	            
 	        while (rowIterator.hasNext()) { // iterar linhas
 	        	
@@ -71,7 +91,8 @@ public class LeitorExcel {
 		            
 		            String[] finalidades = new String [5];
 		            String[] subFinalidades = new String [5];
-		            int[] demandas = new int [5];
+		            Double [] demandas = new Double [5];
+		            Double [] demandasIN = new Double [5];
 		            
 		            int [] vazaoLH = new int [12];
 		            int [] vazaoLD = new int [12];
@@ -81,6 +102,9 @@ public class LeitorExcel {
 		            while (cellIterator.hasNext()) { // celula
 		            	
 		               Cell cell = cellIterator.next();
+		               
+		               cell.setCellStyle(style);
+		               
 		               
 		               switch (cell.getColumnIndex()) {
 		              
@@ -97,9 +121,9 @@ public class LeitorExcel {
 		               case 4: // tipo (registro, outorga, oficio
 		            	   
 		            	   try {
-		            		   outorga.setTipo(cell.getStringCellValue());}
+		            		   outorga.setTipoOutorga(cell.getStringCellValue());}
 		            	   catch (Exception e) 
-		            	   		{ outorga.setTipo(null);;}
+		            	   		{ outorga.setTipoOutorga(null);;}
 		            	   break;
 		            	   
 		               case 5: // subsistema
@@ -158,43 +182,44 @@ public class LeitorExcel {
 		            	  
 		            	   break;
 		            	   
-		               case 13: // vazao medida
+		               case 13: // vazao media
+		            	   
 		            	   
 		            	   try {
-		            		   outorga.setVazaoMedia((int) cell.getNumericCellValue());}
-		            	   catch (Exception e) {outorga.setVazaoMedia(0);}
+		            		   outorga.setVazaoMedia((Double) cell.getNumericCellValue());}
+		            	   catch (Exception e) {outorga.setVazaoMedia(0.0);}
 		            	  
 		            	   break;
 		            	   
 		               case 14: // vazao bombeamento
 		            	   
 		            	   try {
-		            		   outorga.setVazaoBombeamento((int) cell.getNumericCellValue());}
-		            	   catch (Exception e) {outorga.setVazaoBombeamento(0);}
+		            		   outorga.setVazaoBombeamento((Double) cell.getNumericCellValue());}
+		            	   catch (Exception e) {outorga.setVazaoBombeamento(0.0);}
 		            	  
 		            	   break;
 		               
 		               case 15: // profundidade
 		            	   
 		            	   try {
-		            		   outorga.setProfundidade((int) cell.getNumericCellValue());}
-		            	   catch (Exception e) {outorga.setProfundidade(0);}
+		            		   outorga.setProfundidade((Double) cell.getNumericCellValue());}
+		            	   catch (Exception e) {outorga.setProfundidade(0.0);}
 		            	  
 		            	   break;
 		                   
 		               case 16: // nivel estatico
 		            	   
 		            	   try {
-		            		   outorga.setNivelEstatico((int) cell.getNumericCellValue());}
-		            	   catch (Exception e) {outorga.setNivelEstatico(0);}
+		            		   outorga.setNivelEstatico((Double) cell.getNumericCellValue());}
+		            	   catch (Exception e) {outorga.setNivelEstatico(0.0);}
 		            	  
 		            	   break;
 		            	   
 		               case 17: // nivel dinamico
 		            	   
 		            	   try {
-		            		   outorga.setNivelDinamico((int) cell.getNumericCellValue());}
-		            	   catch (Exception e) {outorga.setNivelDinamico(0);}
+		            		   outorga.setNivelDinamico((Double) cell.getNumericCellValue());}
+		            	   catch (Exception e) {outorga.setNivelDinamico(0.0);}
 		            	  
 		            	   break;
 		            	   
@@ -263,41 +288,41 @@ public class LeitorExcel {
 							case 21:  // demandas
 				            	   
 								
-				            	   try {demandas [0]  = (int) cell.getNumericCellValue();}
+				            	   try {demandas [0]  = (Double) cell.getNumericCellValue();}
 				            	   	catch (Exception e) {
-				            	   		demandas[0] = 0;
+				            	   		demandas[0] = 0.0;
 				            	   	}
 				            	   break;
 				            	   
 							case 25: // finalidade2
 				            	   
-								try {demandas [1]  = (int) cell.getNumericCellValue();}
+								try {demandas [1]  = (Double) cell.getNumericCellValue();}
 			            	   	catch (Exception e) {
-			            	   		demandas[1] = 0;
+			            	   		demandas[1] = 0.0;
 			            	   	} 
 								 break;
 				            	   
 							case 29: // finalidade2
 								            	   
-								try {demandas [2]  = (int) cell.getNumericCellValue();}
+								try {demandas [2]  = (Double) cell.getNumericCellValue();}
 			            	   	catch (Exception e) {
-			            	   		demandas[2] = 0;
+			            	   		demandas[2] = 0.0;
 			            	   	}
 				            	   break; 
 								            	   
 							case 33: // finalidade2
 									   
-								try {demandas [3]  = (int) cell.getNumericCellValue();}
+								try {demandas [3]  = (Double) cell.getNumericCellValue();}
 			            	   	catch (Exception e) {
-			            	   		demandas[3] = 0;
+			            	   		demandas[3] = 0.0;
 			            	   	}
 								   break; 
 									   
 							case 37: // finalidade2
 									   
-								try {demandas [4]  = (int) cell.getNumericCellValue();}
+								try {demandas [4]  = (Double) cell.getNumericCellValue();}
 			            	   	catch (Exception e) {
-			            	   		demandas[4] = 0;
+			            	   		demandas[4] = 0.0;
 			            	   	}
 									
 									
@@ -305,12 +330,59 @@ public class LeitorExcel {
 								   
 								break; 
 								
+							// DEMANDA //   
+							case 22:  // demandas
+				            	   
+								
+				            	   try {demandasIN [0]  = (Double) cell.getNumericCellValue();}
+				            	   	catch (Exception e) {
+				            	   		demandasIN[0] = 0.0;
+				            	   	}
+				            	   break;
+				            	   
+							case 26: // finalidade2
+				            	   
+								try {demandasIN [1]  = (Double) cell.getNumericCellValue();}
+			            	   	catch (Exception e) {
+			            	   		demandasIN[1] = 0.0;
+			            	   	} 
+								 break;
+				            	   
+							case 30: // finalidade2
+								            	   
+								try {demandasIN [2]  = (Double) cell.getNumericCellValue();}
+			            	   	catch (Exception e) {
+			            	   		demandasIN[2] = 0.0;
+			            	   	}
+				            	   break; 
+								            	   
+							case 34: // finalidade2
+									   
+								try {demandasIN [3]  = (Double) cell.getNumericCellValue();}
+			            	   	catch (Exception e) {
+			            	   		demandasIN[3] = 0.0;
+			            	   	}
+								   break; 
+									   
+							case 38: // finalidade2
+									   
+								try {demandasIN [4]  = (Double) cell.getNumericCellValue();}
+			            	   	catch (Exception e) {
+			            	   		demandasIN[4] = 0.0;
+			            	   	}
+									
+									
+								outorga.setDemandaIN(demandasIN);
+								   
+								break;		
+									
 						case 89: // vazao explotavel
 					            	   
 					            	   try {
-					            		   outorga.setVazaoExplotavel((int) cell.getNumericCellValue());}
+					            		   outorga.setVazaoExplotavel((Double) cell.getNumericCellValue());}
 					            	   catch (Exception e) {
-					            		   outorga.setVazaoExplotavel(0);}
+					            		   outorga.setVazaoExplotavel(0.0);}
+					            	   
 					            	   break;
 					            	   
 						case 90: // numero pocos
@@ -321,36 +393,37 @@ public class LeitorExcel {
 			            		   outorga.setNumeroDePocos(0);}
 			            	   break;
 			            	   
-						case 91: // vazao explotavel
+						case 91: // vazao outorgavel
 			            	   
 			            	   try {
-			            		   outorga.setVazaoTotalOutorgavel((int) cell.getNumericCellValue());}
+			            		   outorga.setVazaoTotalOutorgavel((Double) cell.getNumericCellValue());}
 			            	   catch (Exception e) {
-			            		   outorga.setVazaoTotalOutorgavel(0);}
+			            		   outorga.setVazaoTotalOutorgavel(0.0);}
 			            	   break;
 			            	   
-						case 92: // vazao explotavel
+						case 92: // porcentagem utilizada
 			            	   
 			            	   try {
-			            		   outorga.setPorcentagemUtilizada((int) cell.getNumericCellValue());}
+			            		   outorga.setPorcentagemUtilizada((Double) cell.getNumericCellValue());}
 			            	   catch (Exception e) {
-			            		   outorga.setPorcentagemUtilizada(0);}
+			            		   outorga.setPorcentagemUtilizada(0.0);}
 			            	   break;
 			            	   
-						case 93: // vazao explotavel
+						case 93: // volume disponível atual
 			            	   
 			            	   try {
-			            		   outorga.setVolumeDiponivelSuficiente((int) cell.getNumericCellValue());}
+			            		   outorga.setVolumeDisponivelAtual(cell.getNumericCellValue());}
 			            	   catch (Exception e) {
-			            		   outorga.setVolumeDiponivelSuficiente(0);}
+			            		   outorga.setVolumeDisponivelAtual(0.0);
+			            	   }
 			            	   break;
 			            	   
-						case 94: // vazao explotavel
+						case 94: // volume suficiente
 			            	   
 			            	   try {
-			            		   outorga.setVolumeDiponivelSuficiente((int) cell.getNumericCellValue());}
+			            		   outorga.setVolumeDiponivelSuficiente( cell.getStringCellValue());}
 			            	   catch (Exception e) {
-			            		   outorga.setVolumeDiponivelSuficiente(0);}
+			            		   outorga.setVolumeDiponivelSuficiente(null);}
 			            	   break;
 			            	     
 						case 97: // bacia 
