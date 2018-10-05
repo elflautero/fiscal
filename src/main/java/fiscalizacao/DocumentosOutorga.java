@@ -104,14 +104,14 @@ public class DocumentosOutorga {
 			try { docHtml.select("nivelEstatico").prepend(String.format("%.2f", outorga.getNivelEstatico()));} catch (Exception e) {docHtml.select("nivelEstatico").prepend("");};
 			try { docHtml.select("nivelDinamico").prepend(String.format("%.2f", outorga.getNivelDinamico()));} catch (Exception e) {docHtml.select("nivelDinamico").prepend("");};
 			
-			
+			// SUBFINALIDADE
 			try { docHtml.select("subfinalidade1").prepend(outorga.getSubfinalidade()[0]);} catch (Exception e) {docHtml.select("subfinalidade1").prepend("");};
 			try { docHtml.select("subfinalidade2").prepend(outorga.getSubfinalidade()[1]);} catch (Exception e) {docHtml.select("subfinalidade2").prepend("");};
 			try { docHtml.select("subfinalidade3").prepend(outorga.getSubfinalidade()[2]);} catch (Exception e) {docHtml.select("subfinalidade3").prepend("");};
 			try { docHtml.select("subfinalidade4").prepend(outorga.getSubfinalidade()[3]);} catch (Exception e) {docHtml.select("subfinalidade4").prepend("");};
 			try { docHtml.select("subfinalidade5").prepend(outorga.getSubfinalidade()[4]);} catch (Exception e) {docHtml.select("subfinalidade5").prepend("");};
 			
-			// DEMANDA
+			// DEMANDA 
 			try { docHtml.select("demanda1").prepend(String.format("%.2f", outorga.getDemanda()[0]));} catch (Exception e) {docHtml.select("demanda1").prepend("");};
 			try { docHtml.select("demanda2").prepend(String.format("%.2f", outorga.getDemanda()[1]));} catch (Exception e) {docHtml.select("demanda2").prepend("");};
 			try { docHtml.select("demanda3").prepend(String.format("%.2f", outorga.getDemanda()[2]));} catch (Exception e) {docHtml.select("demanda3").prepend("");};
@@ -120,7 +120,7 @@ public class DocumentosOutorga {
 			
 			//DEMANDA IN
 			try { docHtml.select("demandaIN1").prepend(String.format("%.2f", outorga.getDemandaIN()[0]));} catch (Exception e) {docHtml.select("demandaIN1").prepend("");};
-			try { docHtml.select("demandaIN2").prepend(String.format("%.0f", outorga.getDemandaIN()[1]));} catch (Exception e) {docHtml.select("demandaIN2").prepend("");};
+			try { docHtml.select("demandaIN2").prepend(String.format("%.2f", outorga.getDemandaIN()[1]));} catch (Exception e) {docHtml.select("demandaIN2").prepend("");};
 			try { docHtml.select("demandaIN3").prepend(String.format("%.2f", outorga.getDemandaIN()[2]));} catch (Exception e) {docHtml.select("demandaIN3").prepend("");};
 			try { docHtml.select("demandaIN4").prepend(String.format("%.2f", outorga.getDemandaIN()[3]));} catch (Exception e) {docHtml.select("demandaIN4").prepend("");};
 			try { docHtml.select("demandaIN5").prepend(String.format("%.2f", outorga.getDemandaIN()[4]));} catch (Exception e) {docHtml.select("demandaIN5").prepend("");};

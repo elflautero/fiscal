@@ -56,7 +56,7 @@ import netscape.javascript.JSException;
 public class TabNavegadorController implements Initializable{
 	
 	//-- Link de entrada do navegador WebView --//
-	String link = "https://sei.df.gov.br/sip/login.php?sigla_orgao_sistema=GDF&sigla_sistema=SEI";
+	String link = "https://www.w3schools.com/howto/howto_js_popup.asp";
 			
 			// "https://www.w3schools.com/howto/howto_js_popup.asp";
 			//"https://sei.df.gov.br/sip/login.php?sigla_orgao_sistema=GDF&sigla_sistema=SEI";
@@ -261,7 +261,8 @@ public class TabNavegadorController implements Initializable{
 		//importações para a outorga//
 	
 			ObservableList<Outorga> obsList;
-			
+
+	        
 			LeitorExcel leitorExcel = new LeitorExcel();
 			
 			ComboBox<Outorga> cbOutorga;
@@ -322,7 +323,7 @@ public class TabNavegadorController implements Initializable{
 		
 		cbParecerOutorgaOpcoes = FXCollections.observableArrayList(
     	        "PARECER",
-    	        "PARECER DESCOBERTO",
+    	        "PARECER PRÉVIA",
     	        "DESPACHOS"
     	    ); 
 		
@@ -505,13 +506,11 @@ public class TabNavegadorController implements Initializable{
 						        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XLS", "*.xls", "*.xlsm","*.xlsx"));        
 						        File file = fileChooser.showOpenDialog(null);
 						        
-						        //abrirTabela();
-						       
+						        
 						        leitorExcel.setEndereco(file.toString());
 						        
 						        obsList = leitorExcel.getListaOutorgas();
-						       // tvLista.setItems(obsList);
-						        
+						       
 						        cbOutorga.setItems(obsList);
 						        
 						        cbParecerOutorga.valueProperty().addListener(new ChangeListener<String>() {
@@ -618,11 +617,13 @@ public class TabNavegadorController implements Initializable{
 					        				engOutorga.load(getClass().getResource("/html/parecerOutorgaSubterranea.html").toExternalForm());
 					        			}
 					        				
-					        				else if (strParecerDespacho.equals("PARECER DESCOBERTO")) {
+					        				 
+					        				else if (strParecerDespacho.equals("PARECER PRÉVIA")) {
 					        					
-					        					engOutorga.load(getClass().getResource("/html/parecerDescobertoOutorgaSubterranea.html").toExternalForm());
+					        					engOutorga.load(getClass().getResource("/html/parecerPreviaSubterranea.html").toExternalForm());
 					        				}
-					        				
+					        			
+							        				
 					        					else {
 					        			
 								        			switch (newOut.getTipoOutorga()) {
@@ -702,7 +703,7 @@ public class TabNavegadorController implements Initializable{
 					    	
 					    		catch (Exception ex) {
 					    			System.out.println("a ação foi abortada " + ex);
-					    			ex.printStackTrace();
+					    			//ex.printStackTrace();
 					    			
 					    		} // fim do try catch
 					    }
@@ -777,6 +778,9 @@ public class TabNavegadorController implements Initializable{
 	//-- INITIALIZE --//
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+		
+		
+		obsList = FXCollections.observableArrayList();
 		
 		// -- inicitalizar o mapa -- //
 		Platform.runLater(() ->{

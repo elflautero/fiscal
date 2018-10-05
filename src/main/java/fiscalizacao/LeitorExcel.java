@@ -285,7 +285,7 @@ public class LeitorExcel {
 								   break; 
 								   
 							// DEMANDA //   
-							case 21:  // demandas
+							case 21:  
 				            	   
 								
 				            	   try {demandas [0]  = (Double) cell.getNumericCellValue();}
@@ -294,7 +294,7 @@ public class LeitorExcel {
 				            	   	}
 				            	   break;
 				            	   
-							case 25: // finalidade2
+							case 25: 
 				            	   
 								try {demandas [1]  = (Double) cell.getNumericCellValue();}
 			            	   	catch (Exception e) {
@@ -302,7 +302,7 @@ public class LeitorExcel {
 			            	   	} 
 								 break;
 				            	   
-							case 29: // finalidade2
+							case 29: 
 								            	   
 								try {demandas [2]  = (Double) cell.getNumericCellValue();}
 			            	   	catch (Exception e) {
@@ -330,7 +330,7 @@ public class LeitorExcel {
 								   
 								break; 
 								
-							// DEMANDA //   
+							// DEMANDA IN 02 //   
 							case 22:  // demandas
 				            	   
 								
