@@ -298,7 +298,8 @@ public class TabNavegadorController implements Initializable{
 		
 		// redimensionar navegador de acordo com a tela
 		wv1.minWidthProperty().bind(apNavegador.widthProperty().subtract(35));
-		wv1.minHeightProperty().bind(apNavegador.heightProperty().subtract(150));
+		wv1.minHeightProperty().bind(apNavegador.heightProperty().subtract(100));
+		AnchorPane.setLeftAnchor(pBrowser, 10.0);
 		
 		pBrowser.getChildren().add(wv1);
 		
@@ -310,7 +311,7 @@ public class TabNavegadorController implements Initializable{
 		
 		//btnAxexo.setMaxWidth(30);
 		//btnAxexo.setMinWidth(30);
-		
+	
 		btnAnexo.setLayoutX(858);
 		
 		
@@ -390,13 +391,16 @@ public class TabNavegadorController implements Initializable{
 			            }
 			        });
 					
+					
+					
 					// ação do botão para receber o excel
 					btnAnexo.setOnAction(new EventHandler<ActionEvent>() {
+						
+						String [] arrayTabelas = new String [3];
+						
 					    public void handle(ActionEvent e) {
 					    	
-					    	//webOutorgas = new WebView();
-				        	//engOutorga = webOutorgas.getEngine();
-					    	
+					    	// ler html com anexos //
 					    	try {
 				        	
 					    			engOutorga.load(getClass().getResource("/html/outorgaSubterraneaAnexo.html").toExternalForm());
@@ -406,42 +410,62 @@ public class TabNavegadorController implements Initializable{
 			                		Alert a = new Alert (Alert.AlertType.ERROR);
 			    					a.setTitle("Alerta!!!");
 			    					a.setContentText("Documento não encontrado!!! ");
-			    					System.out.println("erro btnAnexo - linha 410");
-			    					e1.printStackTrace();
-			    					
 			    					a.setHeaderText(null);
 			    					a.show();
+			    					
+			    					e1.printStackTrace();
 			                	}
-				        	
+					    	
+				        	// pegar a leitura do html depois de processado pelo engine //
 				        	engOutorga.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>()
-					        {
-					            public void changed(final ObservableValue<? extends Worker.State> observableValue,
-					                                final Worker.State oldState,
-					                                final Worker.State newState)
-					            {
-					                if (newState == Worker.State.SUCCEEDED)
-					                {
-					                  
-					                	// capturar o html
-					                	String strHTMLAnexo = (String) engOutorga.executeScript("document.documentElement.outerHTML");
-					                
-					                	// chama o construtor para modificações no html
-					                	DocumentosOutorga docOut = new DocumentosOutorga();
-								    	docOut.setHtmlRel(strHTMLAnexo);
-								    	
-								    	// retorna o html modificado
-								    	strHTMLAnexo = docOut.criarDocumento(outorga);
-						                
-								    	// captura o html existente na parte específica do depacho
-								    	try {
-								    		
-						                wv2.getEngine().executeScript(
+					        
+					        	{
+						            public void changed(final ObservableValue<? extends Worker.State> observableValue,
+						                                final Worker.State oldState,
+						                                final Worker.State newState)
+						            {
+						                if (newState == Worker.State.SUCCEEDED)
+						                	
+						                {
+						                  
+						                	// capturar o html lido em tempo, pois demora um pouco para o engine processar...
+						                	String strHTMLAnexo = (String) engOutorga.executeScript("document.documentElement.outerHTML");
+						                	
+						                	// chama o construtor para modificações no html
+						                	DocumentosOutorga docOut = new DocumentosOutorga();
+									    	docOut.setHtmlRel(strHTMLAnexo);
+									    	
+									    	// retorna o html modificado de acordo com o usuário selecionado
+									    	strHTMLAnexo = docOut.criarDocumento(outorga);
+									    	
+									    	// repartir as tabelas do anexo em três strings
+									    	int a1 = strHTMLAnexo.indexOf("<aaa>");
+									    	int a2 = strHTMLAnexo.lastIndexOf("<aaa>");
+									    	
+									    	int b1 = strHTMLAnexo.indexOf("<bbb>");
+									    	int b2 = strHTMLAnexo.lastIndexOf("<bbb>");
+									    	
+									    	int c1 = strHTMLAnexo.indexOf("<ccc>");
+									    	int c2 = strHTMLAnexo.lastIndexOf("<ccc>");
+									    	
+									    	arrayTabelas [0] = strHTMLAnexo.substring(a1,a2);
+									    	arrayTabelas [1] = strHTMLAnexo.substring(b1,b2);
+									    	arrayTabelas [2] = strHTMLAnexo.substring(c1,c2);
+									    	
+									    	
+									    	
+									    	// captura o html existente na parte específica do depacho
+									    	try {
+									    		
+							                wv2.getEngine().executeScript(
+													
+							                		"var tab1 = y.body.getElementsByTagName('a')[0].innerHTML;"
+												+ 	"var tab2 = y.body.getElementsByTagName('a')[1].innerHTML;"
+							                	+ 	"var tab3 = y.body.getElementsByTagName('a')[2].innerHTML;"
 												
-						                		"var z = y.body.getElementsByTagName('a')[0].innerHTML;"
-												
-						            			);
-						                
-										    	}
+							            			);
+							                
+											    	}
 								                	catch (JSException js) {
 								                		Alert a = new Alert (Alert.AlertType.ERROR);
 								    					a.setTitle("Alerta!!!");
@@ -455,30 +479,45 @@ public class TabNavegadorController implements Initializable{
 								    	
 								    	
 						                // transforma a variável javascript em variável java
-						                String z = (String) wv2.getEngine().executeScript("z");
+						                String tab1 = (String) wv2.getEngine().executeScript("tab1") + "<p>" + arrayTabelas [0];
+						                String tab2 = (String) wv2.getEngine().executeScript("tab2") + "<p>" + arrayTabelas [1];
+						                String tab3 = (String) wv2.getEngine().executeScript("tab3") + "<p>" + arrayTabelas [2];
 						                
-						                // junta o que foi capturado no despacho com o html modificado
-						                String a = z + "<p>" + strHTMLAnexo;
 						                
 						                // retirar os dois pontos " e espaço que atrapalham no javascript
 						                
-						                a = a.replace("\"", "'");
-						    			a = a.replace("\n", "");
+						                tab1 = tab1.replace("\"", "'");
+						                tab1 = tab1.replace("\n", "");
+						    			tab1 =  "\"" + tab1 + "\"";
 						    			
-						    			a =  "\"" + a + "\"";
-						    			
+						                tab2 = tab2.replace("\"", "'");
+						                tab2 = tab2.replace("\n", "");
+						    			tab2 =  "\"" + tab2 + "\"";
+						                
+						                tab3 = tab3.replace("\"", "'");
+						                tab3 = tab3.replace("\n", "");
+						    			tab3 =  "\"" + tab3 + "\"";
+						                
+						    			// No caso dos Despachos, não precisa das duas primeiras tabelas do parecer
+						                if (cbParecerOutorga.getValue().equals("DESPACHOS")) {
+						                	tab1 = "''";
+						                	tab2 = "''";
+						                }
+						                
 						    			// captura o iframe específico e adiciona tudo
 						                wv2.getEngine().executeScript(
 										"var x = document.getElementsByTagName('iframe')["+numIframe+"];"
 				            			+ "var y = x.contentDocument;"
-										+ "y.body.getElementsByTagName('a')[0].innerHTML = " + a + ";"
+										+ "y.body.getElementsByTagName('a')[0].innerHTML = " + tab1 + ";"
+										+ "y.body.getElementsByTagName('a')[1].innerHTML = " + tab2 + ";"
+										+ "y.body.getElementsByTagName('a')[2].innerHTML = " + tab3 + ";"
 				            			);
 						                
 					                }}
 					        }); // fim webengine
 					    	
-					
 					    }
+					   
 					}); // fim btnAnexo
 					 
 					
@@ -712,10 +751,15 @@ public class TabNavegadorController implements Initializable{
 				    	
 					}); // fim do evento btnExcel
 					
-					
+					Pane pp = new Pane ();
+					pp.setPrefSize(1140, 27);
+					pp.setStyle("-fx-background-color: transparent;");
+					pp.getChildren().addAll(btnIframe, cbNumIframe, btnAnexo, btnExcel, cbOutorga, cbParecerOutorga);
 					Group group = new Group();
+					
+					group.getChildren().addAll(pp, wv2);
 				
-					group.getChildren().addAll(btnIframe, wv2, cbNumIframe, btnAnexo, btnExcel, cbOutorga, cbParecerOutorga);
+					//group.getChildren().addAll(btnIframe, wv2, cbNumIframe, btnAnexo, btnExcel, cbOutorga, cbParecerOutorga);
 					
 					
 					Stage stage = new Stage();
@@ -794,10 +838,10 @@ public class TabNavegadorController implements Initializable{
 	    AnchorPane.setBottomAnchor(spNavegador, 35.0);
 	    
 	    spNavegador.heightProperty().addListener((observable, oldValue, newValue) -> {
-           //System.out.println("altura do spNavegador " + newValue);
-           
+         
            apBrowser.setMinHeight((Double)newValue -1);
            apBrowser.setMaxHeight((Double)newValue -1);
+           
         });
 	    
 	    
@@ -812,5 +856,17 @@ public class TabNavegadorController implements Initializable{
 	
 }
 
+
+/*
+  wv2.getEngine().executeScript(
+													
+							                		"var tab1 = try {y.body.getElementsByTagName('a')[0].innerHTML;} catch(err){tab1 = '';}"
+												+ 	"var tab2 = try {y.body.getElementsByTagName('a')[1].innerHTML;} catch(err){tab2 = '';}"
+							                	+ 	"var tab3 = y.body.getElementsByTagName('a')[2].innerHTML;} catch(err){tab3 = '';}"
+												
+							            			);
+							                
+											    	}
+ */
 
 
